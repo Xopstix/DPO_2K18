@@ -5,5 +5,4 @@ package Vistas;
  */
 public class VistaPrincipal {
 
-    private int num;
 }
