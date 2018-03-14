@@ -24,7 +24,7 @@ public class VistaPrincipal extends JFrame {
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
         JList<JButton> userProjects = new JList<JButton>();     //Clase que contendra la info de la DB
-        JList<JButton> sharedProjects = new JList<JButton>();   // Hayq ue llenarlo aún
+        JList<JButton> sharedProjects = new JList<JButton>();
 
 
 
