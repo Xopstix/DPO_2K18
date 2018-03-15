@@ -1,4 +1,4 @@
-package Vistas;
+package vista;
 
 /**
  * Created by xaviamorcastillo on 12/3/18.
