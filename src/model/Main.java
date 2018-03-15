@@ -3,6 +3,7 @@ package model;
 import controlador.ClientController;
 import network.ServerCommunication;
 import vista.AuthenticationView;
+import vista.VistaPrincipal;
 
 import javax.swing.*;
 
@@ -20,6 +21,7 @@ public class Main {
             public void run() {
 
                 AuthenticationView authenticationView = new AuthenticationView();                  //vista de autenticación
+                VistaPrincipal vistaPrincipal = new VistaPrincipal();
                 ProjectManager projectManager = new ProjectManager();                              //modelo
                 //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
 
@@ -28,6 +30,7 @@ public class Main {
                 authenticationView.registerController(clientController);    //Relación controlador --> vista
 
                 authenticationView.setVisible(true);        //Se hace visible la vista de autenticación
+                vistaPrincipal.setVisible(true);
             }
         });
     }
