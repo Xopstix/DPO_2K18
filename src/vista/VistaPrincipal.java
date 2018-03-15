@@ -1,4 +1,4 @@
-package Vistas;
+package vista;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class VistaPrincipal extends JFrame {
         this.getContentPane().add(jpLists, BorderLayout.CENTER);
         this.getContentPane().add(jpButtons, BorderLayout.NORTH);
 
-        this.setSize(1024, 920);
+        this.setSize(600, 250);
         this.setTitle("MarksManagement");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
