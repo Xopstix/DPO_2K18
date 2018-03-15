@@ -1,6 +1,5 @@
-package model;
-
 import controlador.ClientController;
+import model.ProjectManager;
 import network.ServerCommunication;
 import vista.AuthenticationView;
 import vista.VistaPrincipal;
