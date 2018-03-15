@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by xaviamorcastillo on 12/3/18.
+ * Created by xavipargela on 12/3/18.
  */
 public class VistaPrincipal extends JFrame {
 
