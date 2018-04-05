@@ -126,7 +126,7 @@ public class AuthenticationView extends JFrame{
      * Procedimiento que conecta el controlador con la vista
      * @param controller controlador
      */
-    public void registerController(ClientController controller, WindowListener windowListener){
+    public void registerController(ClientController controller){
 
         jbSignIn.setActionCommand("SIGNIN");
         jbSignIn.addActionListener(controller);
@@ -137,7 +137,7 @@ public class AuthenticationView extends JFrame{
         jbLogOut.setActionCommand("LOGOUT");
         jbLogOut.addActionListener(controller);
 
-        addWindowListener(windowListener);
+        //addWindowListener(windowListener);
     }
 
     public String getUsername(){

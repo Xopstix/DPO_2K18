@@ -1,5 +1,6 @@
 package network;
 
+import model.ProjectManager;
 import model.Usuari;
 
 import java.io.*;
@@ -14,10 +15,12 @@ public class ServerCommunication extends Thread{
     private Socket socket;
     private ObjectOutputStream oos;
     private boolean running;
+    private ProjectManager projectManager;
 
+    public ServerCommunication(ProjectManager projectManager){
 
-    public ServerCommunication(){
         running = false;
+        this.projectManager = projectManager;
     }
 
     /**
@@ -39,15 +42,13 @@ public class ServerCommunication extends Thread{
      */
     public synchronized void run(){
         try{
-
-            Usuari usuari = new Usuari();
-            usuari.setNom("Marc");
-
             oos = new ObjectOutputStream(socket.getOutputStream());
 
             while(running){
 
-                oos.writeObject(usuari);
+                oos.writeObject(projectManager);
+
+                endConnection();
             }
 
         }catch (IOException ioe){
