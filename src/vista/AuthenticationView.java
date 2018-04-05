@@ -1,6 +1,7 @@
 package vista;
 
 import controlador.ClientController;
+import controlador.WindowListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -125,7 +126,7 @@ public class AuthenticationView extends JFrame{
      * Procedimiento que conecta el controlador con la vista
      * @param controller controlador
      */
-    public void registerController(ClientController controller){
+    public void registerController(ClientController controller, WindowListener windowListener){
 
         jbSignIn.setActionCommand("SIGNIN");
         jbSignIn.addActionListener(controller);
@@ -135,6 +136,8 @@ public class AuthenticationView extends JFrame{
 
         jbLogOut.setActionCommand("LOGOUT");
         jbLogOut.addActionListener(controller);
+
+        addWindowListener(windowListener);
     }
 
     public String getUsername(){

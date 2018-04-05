@@ -1,4 +1,5 @@
 import controlador.ClientController;
+import controlador.WindowListener;
 import model.ProjectManager;
 import network.ServerCommunication;
 import vista.AuthenticationView;
@@ -22,11 +23,11 @@ public class Main {
                 AuthenticationView authenticationView = new AuthenticationView();                  //vista de autenticación
                 VistaPrincipal vistaPrincipal = new VistaPrincipal();
                 ProjectManager projectManager = new ProjectManager();                              //modelo
-                //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
-
+                ServerCommunication serverCommunication = new ServerCommunication(); //network
+                serverCommunication.startConnection();
                 ClientController clientController= new ClientController(authenticationView, projectManager);    //controlador
 
-                authenticationView.registerController(clientController);    //Relación controlador --> vista
+                authenticationView.registerController(clientController, new WindowListener(serverCommunication));    //Relación controlador --> vista
 
                 authenticationView.setVisible(true);        //Se hace visible la vista de autenticación
                 vistaPrincipal.setVisible(true);
