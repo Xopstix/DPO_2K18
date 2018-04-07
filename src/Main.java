@@ -1,4 +1,5 @@
 import controlador.ClientController;
+import controlador.WindowListener;
 import model.ProjectManager;
 import network.ServerCommunication;
 import vista.AuthenticationView;
@@ -23,6 +24,7 @@ public class Main {
                 VistaPrincipal vistaPrincipal = new VistaPrincipal();
                 ProjectManager projectManager = new ProjectManager();                              //modelo
                 //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
+                //serverCommunication.startConnection();
 
                 ClientController clientController= new ClientController(authenticationView, projectManager);    //controlador
 

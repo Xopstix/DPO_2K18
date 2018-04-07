@@ -1,6 +1,7 @@
 package vista;
 
 import controlador.ClientController;
+import controlador.WindowListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -135,6 +136,8 @@ public class AuthenticationView extends JFrame{
 
         jbLogOut.setActionCommand("LOGOUT");
         jbLogOut.addActionListener(controller);
+
+        //addWindowListener(windowListener);
     }
 
     public String getUsername(){
