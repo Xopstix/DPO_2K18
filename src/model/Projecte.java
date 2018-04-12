@@ -2,6 +2,7 @@ package model;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Tablero del proyecto
@@ -10,10 +11,10 @@ import java.io.Serializable;
 public class Projecte implements Serializable{
 
     private String name;
-    private Usuari[] membres;
-    private Columna[] columnes;
+    private ArrayList<Usuari> membres;
+    private ArrayList<Columna> columnes;
     private Image background;
-    private Etiqueta[] etiquetes;
+    private ArrayList<Etiqueta> etiquetes;
 
     public String getName() {
         return name;
@@ -23,19 +24,19 @@ public class Projecte implements Serializable{
         this.name = name;
     }
 
-    public Usuari[] getMembres() {
+    public ArrayList<Usuari> getMembres() {
         return membres;
     }
 
-    public void setMembres(Usuari[] membres) {
+    public void setMembres(ArrayList<Usuari> membres) {
         this.membres = membres;
     }
 
-    public Columna[] getColumnes() {
+    public ArrayList<Columna> getColumnes() {
         return columnes;
     }
 
-    public void setColumnes(Columna[] columnes) {
+    public void setColumnes(ArrayList<Columna> columnes) {
         this.columnes = columnes;
     }
 
@@ -47,11 +48,11 @@ public class Projecte implements Serializable{
         this.background = background;
     }
 
-    public Etiqueta[] getEtiquetes() {
+    public ArrayList<Etiqueta> getEtiquetes() {
         return etiquetes;
     }
 
-    public void setEtiquetes(Etiqueta[] etiquetes) {
+    public void setEtiquetes(ArrayList<Etiqueta> etiquetes) {
         this.etiquetes = etiquetes;
     }
 }

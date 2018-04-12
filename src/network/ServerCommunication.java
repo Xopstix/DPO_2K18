@@ -1,9 +1,12 @@
 package network;
 
+import config.Config;
+import config.ObjectFile;
 import model.ProjectManager;
-import model.Usuari;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -26,10 +29,16 @@ public class ServerCommunication extends Thread{
     /**
      * Es connecta al servidor
      */
-    public void startConnection(){
+    public void startConnection() throws FileNotFoundException {
+
+        Config data;
+        ObjectFile objData = new ObjectFile();
+
+        data = objData.readData();
+
         running = true;
         try{
-            socket = new Socket("localhost", 12345);
+            socket = new Socket(data.getIp(), data.getPort());
             this.start();
 
         }catch (IOException ioe){
