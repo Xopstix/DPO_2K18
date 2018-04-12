@@ -1,8 +1,7 @@
 package controlador;
 
 import model.ProjectManager;
-import network.ServerCommunication;
-import vista.AuthenticationView;
+import views.AuthenticationView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +14,6 @@ public class ClientController implements ActionListener{
 
     private AuthenticationView authenticationView;      //Vista de autenticación
     private ProjectManager projectManager;              //Modelo
-    //private ServerCommunication serverCommunication;
 
     /**
      * Constructor del controlador que se encarga de poner las condiciones de inicio a partir de la vista y
@@ -23,11 +21,10 @@ public class ClientController implements ActionListener{
      * @param authenticationView vista de autenticación
      * @param projectManager     modelo
      */
-    public ClientController(AuthenticationView authenticationView, ProjectManager projectManager) {
+    public ClientController(AuthenticationView authenticationView, ProjectManager projectManager){
 
         this.authenticationView = authenticationView;
         this.projectManager = projectManager;
-        //this.serverCommunication = serverCommunication;
     }
 
     /**
@@ -48,10 +45,6 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getPassword());   //A la contraseña se le asigna
                                                                                             //la contraseña introducida
-
-            ServerCommunication serverCommunication = new ServerCommunication(projectManager);
-
-            serverCommunication.startConnection();
         }
         if (e.getActionCommand().equals("SIGNUP")) {       //Si se quiere registrarse
 
@@ -86,9 +79,6 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getContrasenya());    //A la contraseña se le asigna la contraseña introducida
 
-                ServerCommunication serverCommunication = new ServerCommunication(projectManager);
-
-                serverCommunication.startConnection();
             }
         }
         if (e.getActionCommand().equals("LOGOUT")){ //Si se quiere salir del programa

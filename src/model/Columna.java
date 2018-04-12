@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Columna
@@ -10,7 +11,7 @@ public class Columna implements Serializable{
 
     private String nom;
     private int ordre;
-    private Tasca[] tasques;
+    private ArrayList<Tasca> tasques;
 
     public String getNom() {
         return nom;
@@ -28,11 +29,11 @@ public class Columna implements Serializable{
         this.ordre = ordre;
     }
 
-    public Tasca[] getTasques() {
+    public ArrayList<Tasca> getTasques() {
         return tasques;
     }
 
-    public void setTasques(Tasca[] tasques) {
+    public void setTasques(ArrayList<Tasca> tasques) {
         this.tasques = tasques;
     }
 }

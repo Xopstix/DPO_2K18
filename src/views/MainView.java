@@ -1,4 +1,4 @@
-package vista;
+package views;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,14 +6,14 @@ import java.awt.*;
 /**
  * Created by xaviamorcastillo on 12/3/18.
  */
-public class VistaPrincipal extends JFrame {
+public class MainView extends JFrame {
 
     private JButton jbNew;
     private JButton jbUser;
     private JScrollPane jsc1;
     private JScrollPane jsc2;
 
-    public VistaPrincipal(){
+    public MainView(){
 
         JButton jbNew = new JButton("New Project");
         JButton jbUser = new JButton("User");

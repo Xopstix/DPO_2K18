@@ -1,7 +1,6 @@
-package vista;
+package views;
 
 import controlador.ClientController;
-import controlador.WindowListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Esta clase se encarga de gestionar lo que tiene que ver con la vista de autenticación
+ * Esta clase se encarga de gestionar lo que tiene que ver con la views de autenticación
  * Created by Marc on 13/3/18.
  */
 public class AuthenticationView extends JFrame{
@@ -123,7 +122,7 @@ public class AuthenticationView extends JFrame{
     }
 
     /**
-     * Procedimiento que conecta el controlador con la vista
+     * Procedimiento que conecta el controlador con la views
      * @param controller controlador
      */
     public void registerController(ClientController controller){

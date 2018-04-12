@@ -1,9 +1,8 @@
 import controlador.ClientController;
 import controlador.WindowListener;
 import model.ProjectManager;
-import network.ServerCommunication;
-import vista.AuthenticationView;
-import vista.VistaPrincipal;
+import views.AuthenticationView;
+import views.MainView;
 
 import javax.swing.*;
 
@@ -20,18 +19,18 @@ public class Main {
             @Override
             public void run() {
 
-                AuthenticationView authenticationView = new AuthenticationView();                  //vista de autenticación
-                VistaPrincipal vistaPrincipal = new VistaPrincipal();
+                AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
+                MainView mainView = new MainView();
                 ProjectManager projectManager = new ProjectManager();                              //modelo
                 //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                 //serverCommunication.startConnection();
 
                 ClientController clientController= new ClientController(authenticationView, projectManager);    //controlador
 
-                authenticationView.registerController(clientController);    //Relación controlador --> vista
+                authenticationView.registerController(clientController);    //Relación controlador --> views
 
-                authenticationView.setVisible(true);        //Se hace visible la vista de autenticación
-                vistaPrincipal.setVisible(true);
+                authenticationView.setVisible(true);        //Se hace visible la views de autenticación
+                mainView.setVisible(true);
             }
         });
     }
