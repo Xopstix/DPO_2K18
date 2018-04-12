@@ -1,12 +1,10 @@
 package network;
 
-import config.Config;
-import config.ObjectFile;
 import model.ProjectManager;
+import model.Usuari;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import javax.swing.*;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -17,8 +15,11 @@ public class ServerCommunication extends Thread{
 
     private Socket socket;
     private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+    private DataInputStream dis;
     private boolean running;
     private ProjectManager projectManager;
+    private String msg;
 
     public ServerCommunication(ProjectManager projectManager){
 
@@ -29,16 +30,10 @@ public class ServerCommunication extends Thread{
     /**
      * Es connecta al servidor
      */
-    public void startConnection() throws FileNotFoundException {
-
-        Config data;
-        ObjectFile objData = new ObjectFile();
-
-        data = objData.readData();
-
+    public void startConnection(){
         running = true;
         try{
-            socket = new Socket(data.getIp(), data.getPort());
+            socket = new Socket("localhost", 12345);
             this.start();
 
         }catch (IOException ioe){
@@ -52,15 +47,19 @@ public class ServerCommunication extends Thread{
     public synchronized void run(){
         try{
             oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            dis = new DataInputStream(socket.getInputStream());
 
             while(running){
 
                 oos.writeObject(projectManager);
+                msg = dis.readUTF();
+                JOptionPane.showMessageDialog(null, msg);
 
                 endConnection();
             }
 
-        }catch (IOException ioe){
+        }catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
@@ -72,4 +71,7 @@ public class ServerCommunication extends Thread{
         running = false;
         interrupt();
     }
+
+
+
 }
