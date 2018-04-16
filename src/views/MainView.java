@@ -24,17 +24,39 @@ public class MainView extends JFrame {
     private JScrollPane jsc2;
     private JList userProjects;
     private JList sharedProjects;
+
     private DefaultListModel<String> dataUser;
     private DefaultListModel<String> dataShared;
-
     private JList<String> stringsUser;
     private JList<String> stringsShared;
 
+    private JLabel jlProjectName;
+    private JTextField jtfProjectName;
+    private JLabel jlContributors;
+    private JScrollPane jscContributors;
+    private JButton jbCreate;
+    private JButton jbCancel;
+
+    private JList<String> contributors;
+    private DefaultListModel<String> dataContributors;
+
     public MainView() {
+
+        initHome();
+        this.setSize(600, 250);
+        this.setTitle("MarksManagement");
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    private void initHome() {
+
+        this.getContentPane().removeAll();
         initComponents();
         initListeners();
         initDragDrop();
     }
+
     public void initComponents(){
 
         // Esta lista habra que cogerla de la base de datos directamente
@@ -117,11 +139,8 @@ public class MainView extends JFrame {
 
         this.getContentPane().add(jpLists, BorderLayout.CENTER);
         this.getContentPane().add(jpButtons, BorderLayout.NORTH);
+        validate();
 
-        this.setSize(600, 250);
-        this.setTitle("MarksManagement");
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private void showPopupMenu() {
@@ -137,7 +156,7 @@ public class MainView extends JFrame {
         menuItem1.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                goHome();
+                initHome();
             }
         });
         popup.add(menuItem1);
@@ -151,7 +170,7 @@ public class MainView extends JFrame {
         menuItem2.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                newProjectView();
+                initNewProjectView();
             }
         });
         popup.add(menuItem2);
@@ -173,10 +192,83 @@ public class MainView extends JFrame {
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
-    private void goHome() {
-    }
+    private void initNewProjectView() {
 
-    private void newProjectView() {
+        this.getContentPane().removeAll();
+
+        jbNew = new JButton("New Project");
+
+        jbUser = new JButton("User");
+
+        jbUser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                showPopupMenu();
+            }
+        });
+
+        JPanel jpButtons = new JPanel(new BorderLayout());
+
+        jpButtons.add(jbNew, BorderLayout.LINE_START);
+
+        jpButtons.add(jbUser, BorderLayout.LINE_END);
+
+        jlProjectName = new JLabel("Insert a name for your project:");
+        jtfProjectName = new JTextField("Project name");
+        jtfProjectName.setColumns(20);
+
+        jlContributors = new JLabel("Contributors:");
+        // Esta lista habra que cogerla de la base de datos directamente
+        dataContributors = new DefaultListModel<>();
+        dataContributors.addElement("Item1");
+        dataContributors.addElement("Item2");
+        dataContributors.addElement("Item3");
+        dataContributors.addElement("Item4");
+        dataContributors.addElement("Item5");
+        dataContributors.addElement("Item6");
+        dataContributors.addElement("Item7");
+        dataContributors.addElement("Item8");
+        dataContributors.addElement("Item9");
+        dataContributors.addElement("Item10");
+        dataContributors.addElement("Item11");
+        dataContributors.addElement("Item12");
+
+
+        contributors = new JList<>(dataContributors);
+        contributors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        contributors.setLayoutOrientation(JList.VERTICAL);
+
+        jscContributors = new JScrollPane();
+        jscContributors.setViewportView(contributors);
+        jscContributors.setBorder(BorderFactory.createEmptyBorder());
+        jscContributors.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jscContributors.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jbCreate = new JButton("Create");
+        jbCancel = new JButton("Cancel");
+
+        JPanel jpName = new JPanel(new FlowLayout());
+        jpName.add(jlProjectName);
+        jpName.add(jtfProjectName);
+
+        JPanel jpContributors = new JPanel(new BorderLayout());
+        jpContributors.add(jlContributors, BorderLayout.NORTH);
+        jpContributors.add(jscContributors, BorderLayout.CENTER);
+
+        JPanel jpButtonsBottom = new JPanel(new FlowLayout());
+        jpButtonsBottom.add(jbCreate);
+        jpButtonsBottom.add(jbCancel);
+
+        JPanel jpAux = new JPanel(new BorderLayout());
+        jpAux.add(jpName, BorderLayout.NORTH);
+        jpAux.add(jpContributors, BorderLayout.CENTER);
+        jpAux.add(jpButtonsBottom, BorderLayout.SOUTH);
+
+        JPanel jpAux2 = new JPanel(new BorderLayout());
+        jpAux2.add(jpButtons, BorderLayout.NORTH);
+        jpAux2.add(jpAux, BorderLayout.CENTER);
+
+        getContentPane().add(jpAux2);
+        validate();
 
     }
 
