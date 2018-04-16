@@ -35,6 +35,7 @@ public class MainView extends JFrame {
     }
     public void initComponents(){
 
+        // Esta lista habra que cogerla de la base de datos directamente
         data = new DefaultListModel<>();
         data.addElement("Item1");
         data.addElement("Item2");
@@ -46,6 +47,8 @@ public class MainView extends JFrame {
         jbNew = new JButton("New Project");
 
         jbUser = new JButton("User");
+
+
 
         jbUser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -155,6 +158,8 @@ public class MainView extends JFrame {
                 Logout();
             }
         });
+
+
         popup.add(menuItem3);
 
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
