@@ -18,6 +18,7 @@ import java.io.IOException;
  */
 public class MainView extends JFrame {
 
+
     private JButton jbNew;
     private JButton jbUser;
     private JScrollPane jsc1;
