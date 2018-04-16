@@ -24,9 +24,11 @@ public class MainView extends JFrame {
     private JScrollPane jsc2;
     private JList userProjects;
     private JList sharedProjects;
-    private DefaultListModel<String> data;
+    private DefaultListModel<String> dataUser;
+    private DefaultListModel<String> dataShared;
 
-    private JList<String> strings;
+    private JList<String> stringsUser;
+    private JList<String> stringsShared;
 
     public MainView() {
         initComponents();
@@ -36,19 +38,25 @@ public class MainView extends JFrame {
     public void initComponents(){
 
         // Esta lista habra que cogerla de la base de datos directamente
-        data = new DefaultListModel<>();
-        data.addElement("Item1");
-        data.addElement("Item2");
-        data.addElement("Item3");
-        data.addElement("Item4");
+        dataUser = new DefaultListModel<>();
+        dataUser.addElement("Item1");
+        dataUser.addElement("Item2");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item4");
 
-        strings = new JList<String>(data);
+        stringsUser = new JList<String>(dataUser);
+
+        dataShared = new DefaultListModel<>();
+        dataShared.addElement("Item1");
+        dataShared.addElement("Item2");
+        dataShared.addElement("Item3");
+        dataShared.addElement("Item4");
+
+        stringsShared = new JList<String>(dataShared);
 
         jbNew = new JButton("New Project");
 
         jbUser = new JButton("User");
-
-
 
         jbUser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -70,12 +78,12 @@ public class MainView extends JFrame {
 
             @Override
             public int getSize() {
-                return strings.getModel().getSize();
+                return stringsUser.getModel().getSize();
             }
 
             @Override
             public Object getElementAt(int i) {
-                return strings.getModel().getElementAt(i);
+                return stringsUser.getModel().getElementAt(i);
             }
         });
 
@@ -83,12 +91,12 @@ public class MainView extends JFrame {
 
             @Override
             public int getSize() {
-                return strings.getModel().getSize();
+                return stringsShared.getModel().getSize();
             }
 
             @Override
             public Object getElementAt(int i) {
-                return strings.getModel().getElementAt(i);
+                return stringsShared.getModel().getElementAt(i);
             }
         });
 
@@ -222,9 +230,9 @@ public class MainView extends JFrame {
             public void exportDone( JComponent comp, Transferable trans, int action ) {
                 if (action==MOVE) {
                     if (beforeIndex) {
-                        data.remove(index + 1);
+                        dataUser.remove(index + 1);
                     }else{
-                        data.remove(index);
+                        dataUser.remove(index);
                     }
                     jsc1.updateUI();
                 }
@@ -242,7 +250,7 @@ public class MainView extends JFrame {
                     // convert data to string
                     String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
                     JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
-                    data.add(dl.getIndex(), s);
+                    dataUser.add(dl.getIndex(), s);
                     beforeIndex = dl.getIndex() < index ? true : false;
                     return true;
                 }
@@ -251,10 +259,59 @@ public class MainView extends JFrame {
             }
         });
 
-        pack();
-
         sharedProjects.setDragEnabled(true);
         sharedProjects.setDropMode(DropMode.INSERT);
+        sharedProjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        sharedProjects.setTransferHandler(new TransferHandler() {
+
+            int index;
+            boolean beforeIndex = false;
+
+            @Override
+            public int getSourceActions(JComponent comp) {
+                return COPY_OR_MOVE;
+            }
+
+            @Override
+            public Transferable createTransferable(JComponent comp) {
+                index = sharedProjects.getSelectedIndex();
+                return new StringSelection ((String) sharedProjects.getSelectedValue());
+            }
+
+            @Override
+            public void exportDone( JComponent comp, Transferable trans, int action ) {
+                if (action==MOVE) {
+                    if (beforeIndex) {
+                        dataShared.remove(index + 1);
+                    }else{
+                        dataShared.remove(index);
+                    }
+                    jsc2.updateUI();
+                }
+            }
+
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport support) {
+                // data of type string?
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferHandler.TransferSupport support) {
+                try {
+                    // convert data to string
+                    String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                    JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
+                    dataShared.add(dl.getIndex(), s);
+                    beforeIndex = dl.getIndex() < index ? true : false;
+                    return true;
+                }
+                catch (UnsupportedFlavorException | IOException e) {}
+                return false;
+            }
+        });
+
     }
 
     private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
