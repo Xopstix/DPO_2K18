@@ -126,7 +126,7 @@ public class MainView extends JFrame {
         menuItem1.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                newProjectView();
+                goHome();
             }
         });
         popup.add(menuItem1);
@@ -158,6 +158,9 @@ public class MainView extends JFrame {
         popup.add(menuItem3);
 
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
+    }
+
+    private void goHome() {
     }
 
     private void newProjectView() {
