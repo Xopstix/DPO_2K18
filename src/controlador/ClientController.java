@@ -1,11 +1,13 @@
 package controlador;
 
+import config.Config;
 import model.ProjectManager;
 import network.ServerCommunication;
 import views.AuthenticationView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 /**
  * Esta clase es el controlador, que se encarga de modificar la vista a partir de los datos del modelo
@@ -15,6 +17,7 @@ public class ClientController implements ActionListener{
 
     private AuthenticationView authenticationView;      //Vista de autenticación
     private ProjectManager projectManager;              //Modelo
+    private Config data;
     //private ServerCommunication serverCommunication;
 
     /**
@@ -23,10 +26,11 @@ public class ClientController implements ActionListener{
      * @param authenticationView vista de autenticación
      * @param projectManager     modelo
      */
-    public ClientController(AuthenticationView authenticationView, ProjectManager projectManager) {
+    public ClientController(AuthenticationView authenticationView, ProjectManager projectManager, Config data) {
 
         this.authenticationView = authenticationView;
         this.projectManager = projectManager;
+        this.data = data;
         //this.serverCommunication = serverCommunication;
     }
 
@@ -51,7 +55,11 @@ public class ClientController implements ActionListener{
 
             ServerCommunication serverCommunication = new ServerCommunication(projectManager);
 
-            serverCommunication.startConnection();
+            try {
+                serverCommunication.startConnection();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
         }
         if (e.getActionCommand().equals("SIGNUP")) {       //Si se quiere registrarse
 
@@ -88,7 +96,11 @@ public class ClientController implements ActionListener{
 
                 ServerCommunication serverCommunication = new ServerCommunication(projectManager);
 
-                serverCommunication.startConnection();
+                try {
+                    serverCommunication.startConnection();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
 
             }
         }

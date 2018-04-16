@@ -1,9 +1,12 @@
+import config.Config;
+import config.ObjectFile;
 import controlador.ClientController;
 import model.ProjectManager;
 import views.AuthenticationView;
 import views.MainView;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 
 /**
  * Classe principal del programa cliente (La parte del server no está acabada, por eso está comentada)
@@ -13,23 +16,33 @@ public class Main {
 
     public static void main(String[] args){
 
+
         SwingUtilities.invokeLater(new Runnable() {
 
             @Override
             public void run() {
 
-                AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
-                MainView mainView = new MainView();
-                ProjectManager projectManager = new ProjectManager();                              //modelo
-                //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
-                //serverCommunication.startConnection();
+                Config data;
+                ObjectFile objData = new ObjectFile();
 
-                ClientController clientController= new ClientController(authenticationView, projectManager);    //controlador
+                try {
+                    data = objData.readData();
 
-                authenticationView.registerController(clientController);    //Relación controlador --> views
+                    AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
+                    MainView mainView = new MainView();
+                    ProjectManager projectManager = new ProjectManager();                              //modelo
+                    //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
+                    //serverCommunication.startConnection();
 
-                authenticationView.setVisible(true);        //Se hace visible la views de autenticación
-                mainView.setVisible(true);
+                    ClientController clientController= new ClientController(authenticationView, projectManager, data);    //controlador
+
+                    authenticationView.registerController(clientController);    //Relación controlador --> views
+
+                    authenticationView.setVisible(true);        //Se hace visible la views de autenticación
+                    mainView.setVisible(true);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
