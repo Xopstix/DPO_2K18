@@ -118,33 +118,46 @@ public class MainView extends JFrame {
         final JPopupMenu popup = new JPopupMenu();
 
         // New project menu item
-
-        JMenuItem menuItem = new JMenuItem("New Project...", new ImageIcon(((new ImageIcon("icons/addProject_icon.png"))
-                .getImage()).getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH)));
-        menuItem.setMnemonic(KeyEvent.VK_P);
-        menuItem.getAccessibleContext().setAccessibleDescription(
-                "New Project");
-        menuItem.addActionListener(new ActionListener() {
+        JMenuItem menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem1.setMnemonic(KeyEvent.VK_P);
+        menuItem1.getAccessibleContext().setAccessibleDescription(
+                "Go to the Home screen");
+        menuItem1.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 newProjectView();
             }
         });
-        popup.add(menuItem);
+        popup.add(menuItem1);
 
-        // New File menu item
-        menuItem = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
-                .getImage()).getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH)));
-        menuItem.setMnemonic(KeyEvent.VK_P);
-        menuItem.addActionListener(new ActionListener() {
+        // New project menu item
+        JMenuItem menuItem2 = new JMenuItem("New Project", new ImageIcon(((new ImageIcon("icons/addProject_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem2.setMnemonic(KeyEvent.VK_P);
+        menuItem2.getAccessibleContext().setAccessibleDescription(
+                "Create a New Project");
+        menuItem2.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                newProjectView();
+            }
+        });
+        popup.add(menuItem2);
+
+        // Logout menu item
+        JMenuItem menuItem3 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem3.setMnemonic(KeyEvent.VK_P);
+        menuItem3.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 Logout();
             }
         });
+        popup.add(menuItem3);
 
-        popup.add(menuItem);
-        popup.show(jbUser, -95, jbUser.getBounds().y + jbUser.getBounds().height);
+        popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
     private void newProjectView() {
