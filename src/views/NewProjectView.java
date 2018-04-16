@@ -1,6 +1,7 @@
 package views;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 /**
@@ -11,7 +12,6 @@ public class NewProjectView extends JFrame{
     private JLabel jlProjectName;
     private JTextField jtfProjectName;
     private JLabel jlContributors;
-    private JScrollPane jscContributors;
     private JList<String> contributors;
     private JButton jbCreate;
     private JButton jbCancel;
@@ -25,9 +25,9 @@ public class NewProjectView extends JFrame{
 
     private void initComponents() {
 
-        jlProjectName = new JLabel("Insert a Name for your project:");
+        jlProjectName = new JLabel("Insert a name for your project:");
         jtfProjectName = new JTextField("Project name");
-        jtfProjectName.setColumns(10);
+        jtfProjectName.setColumns(20);
 
         jlContributors = new JLabel("Select the contributors to this project:");
         // Esta lista habra que cogerla de la base de datos directamente
@@ -39,24 +39,25 @@ public class NewProjectView extends JFrame{
 
         contributors = new JList<>(data);
 
-        jscContributors = new JScrollPane();
-        jscContributors.add(contributors);
-        jscContributors.setPreferredSize(new Dimension(300,100));
-
         jbCreate = new JButton("Create");
         jbCancel = new JButton("Cancel");
 
-        JPanel jpName = new JPanel(new GridLayout(2,1));
+        JPanel jpName = new JPanel(new FlowLayout());
         jpName.add(jlProjectName);
         jpName.add(jtfProjectName);
 
         JPanel jpContributors = new JPanel(new BorderLayout());
-        jpContributors.add(jlContributors, BorderLayout.NORTH);
-        jpContributors.add(jscContributors, BorderLayout.CENTER);
+        jpContributors.add(jlContributors, BorderLayout.CENTER);
+        jpContributors.add(contributors, BorderLayout.SOUTH);
+
+        JPanel jpButtons = new JPanel(new FlowLayout());
+        jpButtons.add(jbCreate);
+        jpButtons.add(jbCancel);
 
         JPanel jpAux = new JPanel(new GridLayout(3,1));
         jpAux.add(jpName);
         jpAux.add(jpContributors);
+        jpAux.add(jpButtons);
 
         getContentPane().add(jpAux);
 
