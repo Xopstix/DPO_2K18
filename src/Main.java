@@ -1,5 +1,4 @@
 import controlador.ClientController;
-import controlador.WindowListener;
 import model.ProjectManager;
 import views.AuthenticationView;
 import views.MainView;
