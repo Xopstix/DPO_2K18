@@ -4,7 +4,7 @@ import controlador.ClientController;
 import model.ProjectManager;
 import views.AuthenticationView;
 import views.MainView;
-import views.NewProject;
+import views.NewProjectView;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
@@ -31,7 +31,7 @@ public class Main {
 
                     AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
                     MainView mainView = new MainView();
-                    NewProject newProject = new NewProject();
+                    NewProjectView newProjectView = new NewProjectView();
                     ProjectManager projectManager = new ProjectManager();                              //modelo
                     //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                     //serverCommunication.startConnection();
@@ -42,7 +42,7 @@ public class Main {
 
                     authenticationView.setVisible(true);        //Se hace visible la views de autenticación
                     mainView.setVisible(true);
-                    newProject.setVisible(true);
+                    newProjectView.setVisible(true);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
