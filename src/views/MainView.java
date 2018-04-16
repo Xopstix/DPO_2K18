@@ -215,6 +215,7 @@ public class MainView extends JFrame {
                 return support.isDataFlavorSupported(DataFlavor.stringFlavor);
             }
 
+
             @Override
             public boolean importData(TransferHandler.TransferSupport support) {
                 try {
