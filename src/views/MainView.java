@@ -18,7 +18,6 @@ import java.io.IOException;
  */
 public class MainView extends JFrame {
 
-
     private JButton jbNew;
     private JButton jbUser;
     private JScrollPane jsc1;
@@ -119,7 +118,9 @@ public class MainView extends JFrame {
         final JPopupMenu popup = new JPopupMenu();
 
         // New project menu item
-        JMenuItem menuItem = new JMenuItem("New Project...", new ImageIcon("addProject_icon.png"));
+
+        JMenuItem menuItem = new JMenuItem("New Project...", new ImageIcon(((new ImageIcon("icons/addProject_icon.png"))
+                .getImage()).getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH)));
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.getAccessibleContext().setAccessibleDescription(
                 "New Project");
@@ -132,7 +133,8 @@ public class MainView extends JFrame {
         popup.add(menuItem);
 
         // New File menu item
-        menuItem = new JMenuItem("Logout", new ImageIcon("logout_icon.png"));
+        menuItem = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+                .getImage()).getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH)));
         menuItem.setMnemonic(KeyEvent.VK_P);
         menuItem.addActionListener(new ActionListener() {
 
@@ -142,7 +144,7 @@ public class MainView extends JFrame {
         });
 
         popup.add(menuItem);
-        popup.show(jbUser, -70, jbUser.getBounds().y + jbUser.getBounds().height);
+        popup.show(jbUser, -95, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
     private void newProjectView() {
@@ -182,6 +184,7 @@ public class MainView extends JFrame {
         userProjects.setTransferHandler(new TransferHandler() {
 
             int index;
+            boolean beforeIndex = false;
 
             @Override
             public int getSourceActions(JComponent comp) {
@@ -197,7 +200,11 @@ public class MainView extends JFrame {
             @Override
             public void exportDone( JComponent comp, Transferable trans, int action ) {
                 if (action==MOVE) {
-                    data.remove(index + 1);
+                    if (beforeIndex) {
+                        data.remove(index + 1);
+                    }else{
+                        data.remove(index);
+                    }
                     jsc1.updateUI();
                 }
             }
@@ -215,6 +222,7 @@ public class MainView extends JFrame {
                     String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
                     JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
                     data.add(dl.getIndex(), s);
+                    beforeIndex = dl.getIndex() < index ? true : false;
                     return true;
                 }
                 catch (UnsupportedFlavorException | IOException e) {}
