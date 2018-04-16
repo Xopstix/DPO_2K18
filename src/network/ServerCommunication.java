@@ -1,5 +1,7 @@
 package network;
 
+import config.Config;
+import config.ObjectFile;
 import model.ProjectManager;
 import model.Usuari;
 
@@ -30,10 +32,18 @@ public class ServerCommunication extends Thread{
     /**
      * Es connecta al servidor
      */
-    public void startConnection(){
+    public void startConnection() throws FileNotFoundException {
+
+        Config data;
+        ObjectFile objData = new ObjectFile();
+
+        data = objData.readData();
+
         running = true;
         try{
-            socket = new Socket("localhost", 12345);
+            System.out.println(data.getIp() + data.getPort());
+            socket = new Socket(data.getIp(), data.getPort());
+            //socket = new Socket("localhost", 12345);
             this.start();
 
         }catch (IOException ioe){
