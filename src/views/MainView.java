@@ -8,9 +8,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -33,18 +32,28 @@ public class MainView extends JFrame {
     private JLabel jlProjectName;
     private JTextField jtfProjectName;
     private JLabel jlContributors;
+    private JTextField jtfContributors;
     private JScrollPane jscContributors;
+    private JLabel jlSelected;
+    private JScrollPane jscSelected;
+    private JLabel jlBackground;
+    private JButton jbBackground;
     private JButton jbCreate;
     private JButton jbCancel;
+
+    private JFileChooser jfChooser;
 
     private JList<String> contributors;
     private DefaultListModel<String> dataContributors;
 
+    private JList<String> selected;
+    private DefaultListModel<String> dataSelected;
+
     public MainView() {
 
         initHome();
-        this.setSize(600, 250);
-        this.setTitle("MarksManagement");
+        this.setSize(600, 300);
+        this.setTitle("ProjectManager");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -123,8 +132,8 @@ public class MainView extends JFrame {
         });
 
         // Adición al window de los Java Components
-        userProjects.setPreferredSize(new Dimension(270,100));
-        sharedProjects.setPreferredSize(new Dimension(270,100));
+        userProjects.setPreferredSize(new Dimension(270,120));
+        sharedProjects.setPreferredSize(new Dimension(270,120));
 
         jsc1 = new JScrollPane(userProjects);
         jsc2 = new JScrollPane(sharedProjects);
@@ -214,9 +223,25 @@ public class MainView extends JFrame {
 
         jlProjectName = new JLabel("Insert a name for your project:");
         jtfProjectName = new JTextField("Project name");
-        jtfProjectName.setColumns(20);
+        jtfProjectName.setColumns(12);
+
+        jtfProjectName.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                jtfProjectName.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String text = jtfProjectName.getText();
+                if (text == "") {
+                    jtfProjectName.setText("Project Name");
+                }
+            }
+        });
 
         jlContributors = new JLabel("Contributors:");
+
         // Esta lista habra que cogerla de la base de datos directamente
         dataContributors = new DefaultListModel<>();
         dataContributors.addElement("Item1");
@@ -232,16 +257,65 @@ public class MainView extends JFrame {
         dataContributors.addElement("Item11");
         dataContributors.addElement("Item12");
 
-
         contributors = new JList<>(dataContributors);
         contributors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         contributors.setLayoutOrientation(JList.VERTICAL);
+        contributors.setBorder(BorderFactory.createEmptyBorder());
+
+        contributors.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent arg0) {
+                int selectedIx = contributors.getSelectedIndex();
+                boolean exist = false;
+                for (int i = 0; i < dataSelected.getSize(); i++) {
+                    if (dataSelected.get(i) == dataContributors.getElementAt(selectedIx)) {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist){
+                    dataSelected.add(dataSelected.getSize(), dataContributors.getElementAt(selectedIx));
+                }
+            }
+        });
 
         jscContributors = new JScrollPane();
         jscContributors.setViewportView(contributors);
         jscContributors.setBorder(BorderFactory.createEmptyBorder());
         jscContributors.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jscContributors.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jlSelected = new JLabel("Selected Contributors:");
+        dataSelected = new DefaultListModel<>();
+
+        selected = new JList<>(dataSelected);
+        selected.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selected.setLayoutOrientation(JList.VERTICAL);
+        selected.setBorder(BorderFactory.createEmptyBorder());
+
+        selected.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent arg0) {
+                int selectedIndex = selected.getSelectedIndex();
+                String selectedValue = selected.getSelectedValue();
+
+                for(int i = 0; i < dataSelected.getSize(); i++) {
+                    if (dataSelected.getElementAt(i) == selectedValue) {
+                        dataSelected.removeElement(selectedValue);
+                        System.out.println(selectedIndex);
+                        break;
+                    }
+                }
+            }
+        });
+
+        jscSelected = new JScrollPane();
+        jscSelected.setViewportView(selected);
+        jscSelected.setBorder(BorderFactory.createEmptyBorder());
+        jscSelected.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jscSelected.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         jbCreate = new JButton("Create");
         jbCancel = new JButton("Cancel");
@@ -253,15 +327,42 @@ public class MainView extends JFrame {
         JPanel jpContributors = new JPanel(new BorderLayout());
         jpContributors.add(jlContributors, BorderLayout.NORTH);
         jpContributors.add(jscContributors, BorderLayout.CENTER);
+        jpContributors.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+
+        JPanel jpSelected = new JPanel(new BorderLayout());
+        jpSelected.add(jlSelected, BorderLayout.NORTH);
+        jpSelected.add(jscSelected, BorderLayout.CENTER);
+        jpSelected.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
+
+        JPanel jpContributorsTotal = new JPanel(new GridLayout(1,2));
+        jpContributorsTotal.add(jpContributors);
+        jpContributorsTotal.add(jpSelected);
 
         JPanel jpButtonsBottom = new JPanel(new FlowLayout());
         jpButtonsBottom.add(jbCreate);
         jpButtonsBottom.add(jbCancel);
 
+        jlBackground = new JLabel("Choose a background for your project:");
+        jbBackground = new JButton("Browse");
+
+        JPanel jpBackground = new JPanel(new FlowLayout());
+        jpBackground.add(jlBackground);
+        jpBackground.add(jbBackground);
+
+        jbBackground.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                showBrowseMenu();
+            }
+        });
+
+        JPanel jpAux3 = new JPanel(new BorderLayout());
+        jpAux3.add(jpBackground, BorderLayout.CENTER);
+        jpAux3.add(jpButtonsBottom, BorderLayout.SOUTH);
+
         JPanel jpAux = new JPanel(new BorderLayout());
         jpAux.add(jpName, BorderLayout.NORTH);
-        jpAux.add(jpContributors, BorderLayout.CENTER);
-        jpAux.add(jpButtonsBottom, BorderLayout.SOUTH);
+        jpAux.add(jpContributorsTotal, BorderLayout.CENTER);
+        jpAux.add(jpAux3, BorderLayout.SOUTH);
 
         JPanel jpAux2 = new JPanel(new BorderLayout());
         jpAux2.add(jpButtons, BorderLayout.NORTH);
@@ -270,6 +371,18 @@ public class MainView extends JFrame {
         getContentPane().add(jpAux2);
         validate();
 
+    }
+
+    private void showBrowseMenu() {
+
+        jfChooser = new JFileChooser();
+        jfChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        jfChooser.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
+        int result = jfChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jfChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
     }
 
     private void Logout(){
@@ -417,5 +530,9 @@ public class MainView extends JFrame {
 
     }
 
+    private void containsInput(String input){
+
+
+    }
 
 }
