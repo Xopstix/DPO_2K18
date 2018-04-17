@@ -1,6 +1,7 @@
 import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
+import controlador.MainViewController;
 import model.ProjectManager;
 import views.AuthenticationView;
 import views.MainView;
@@ -35,10 +36,12 @@ public class Main {
                     //serverCommunication.startConnection();
 
                     ClientController clientController= new ClientController(authenticationView, projectManager, data);    //controlador
+                    MainViewController mainViewController = new MainViewController(mainView);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
+                    mainView.registerController(mainViewController);
 
-                    authenticationView.setVisible(true);        //Se hace visible la views de autenticación
+                    authenticationView.setVisible(false);        //Se hace visible la views de autenticación
                     mainView.setVisible(true);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

@@ -19,10 +19,29 @@ public class MainViewController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getActionCommand().equals("New_PROJECT")){
+        if (e.getActionCommand().equals("NEW_PROJECT")){
+
+            mainView.initNewProjectView();
+        }
+
+        if (e.getActionCommand().equals("POPUP")){
+
+            mainView.showPopupMenu();
+        }
+
+        if (e.getActionCommand().equals("BROWSE")){
+
+            mainView.showBrowseMenu();
+        }
+
+        if (e.getActionCommand().equals("CREATE")){
 
         }
 
+        if (e.getActionCommand().equals("CANCEL")){
+
+            mainView.initHome();
+        }
     }
 
     public MainView getMainView() {

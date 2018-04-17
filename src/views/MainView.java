@@ -1,6 +1,6 @@
 package views;
 
-import controlador.ClientController;
+import controlador.MainViewController;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -63,7 +63,7 @@ public class MainView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void initHome() {
+    public void initHome() {
 
         this.getContentPane().removeAll();
         initComponents();
@@ -71,7 +71,7 @@ public class MainView extends JFrame {
         initDragDrop();
     }
 
-    public void initComponents(){
+    private void initComponents(){
 
         // Esta lista habra que cogerla de la base de datos directamente
         dataUser = new DefaultListModel<>();
@@ -92,11 +92,11 @@ public class MainView extends JFrame {
 
         jbNew = new JButton("New Project");
 
-        jbNew.addActionListener(new ActionListener() {
+        /*jbNew.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 initNewProjectView();
             }
-        });
+        });*/
 
         jbUser = new JButton("User");
 
@@ -293,7 +293,7 @@ public class MainView extends JFrame {
 
     }
 
-    private void showPopupMenu() {
+    public void showPopupMenu() {
 
         final JPopupMenu popup = new JPopupMenu();
 
@@ -342,7 +342,7 @@ public class MainView extends JFrame {
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
-    private void initNewProjectView() {
+    public void initNewProjectView() {
 
         this.getContentPane().removeAll();
 
@@ -519,7 +519,7 @@ public class MainView extends JFrame {
 
     }
 
-    private void showBrowseMenu() {
+    public void showBrowseMenu() {
 
         jfChooser = new JFileChooser();
         jfChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -546,7 +546,7 @@ public class MainView extends JFrame {
 
     }
 
-    public void registerController(ClientController controller) {
+    public void registerController(MainViewController controller) {
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controller);
@@ -554,13 +554,14 @@ public class MainView extends JFrame {
         jbUser.setActionCommand("POPUP");
         jbUser.addActionListener(controller);
 
-        jbBackground.setActionCommand("BROWSE");
+        /*jbBackground.setActionCommand("BROWSE");
         jbBackground.addActionListener(controller);
 
         jbCreate.setActionCommand("CREATE");
         jbCreate.addActionListener(controller);
 
         jbCancel.setActionCommand("CANCEL");
-        jbCancel.addActionListener(controller);
+        jbCancel.addActionListener(controller);*/
     }
+
 }
