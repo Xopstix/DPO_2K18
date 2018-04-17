@@ -22,6 +22,7 @@ public class MainView extends JFrame {
     //Components de vista global de proyectos
     private JButton jbNew;
     private JButton jbUser;
+    private JPopupMenu popup;
     private JScrollPane jsc1;
     private JScrollPane jsc2;
     private JList userProjects;
@@ -67,12 +68,14 @@ public class MainView extends JFrame {
 
         this.getContentPane().removeAll();
         initComponents();
+        initHomeView();
         initListeners();
         initDragDrop();
     }
 
     private void initComponents(){
 
+        //Componentes Vista Home
         // Esta lista habra que cogerla de la base de datos directamente
         dataUser = new DefaultListModel<>();
         dataUser.addElement("Item1");
@@ -92,25 +95,7 @@ public class MainView extends JFrame {
 
         jbNew = new JButton("New Project");
 
-        /*jbNew.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                initNewProjectView();
-            }
-        });*/
-
         jbUser = new JButton("User");
-
-        jbUser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                showPopupMenu();
-            }
-        });
-
-        JPanel jpButtons = new JPanel(new BorderLayout());
-
-        jpButtons.add(jbNew, BorderLayout.LINE_START);
-
-        jpButtons.add(jbUser, BorderLayout.LINE_END);
 
         userProjects = new JList();     //Clase que contendra la info de la DB
         sharedProjects = new JList();
@@ -152,15 +137,154 @@ public class MainView extends JFrame {
         jsc1.setBorder(BorderFactory.createTitledBorder("Your Projects"));
         jsc2.setBorder(BorderFactory.createTitledBorder("Shared Projects"));
 
-        JPanel jpLists = new JPanel(new FlowLayout());
 
+        /*JPanel jpButtons = new JPanel(new BorderLayout());
+        jpButtons.add(jbNew, BorderLayout.LINE_START);
+        jpButtons.add(jbUser, BorderLayout.LINE_END);
+
+        JPanel jpLists = new JPanel(new FlowLayout());
+        jpLists.add(jsc1);
+        jpLists.add(jsc2);
+
+        this.getContentPane().add(jpLists, BorderLayout.CENTER);
+        this.getContentPane().add(jpButtons, BorderLayout.NORTH);
+        validate();*/
+
+        //Componentes Vista New Project
+        jbNew = new JButton("New Project");
+
+        jbUser = new JButton("User");
+
+        jbUser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                showPopupMenu();
+            }
+        });
+
+        jlProjectName = new JLabel("Insert a name for your project:");
+        jtfProjectName = new JTextField("Project name");
+        jtfProjectName.setColumns(12);
+
+        jtfProjectName.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                jtfProjectName.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String text = jtfProjectName.getText();
+                if (text == "") {
+                    jtfProjectName.setText("Project Name");
+                }
+            }
+        });
+
+        jlContributors = new JLabel("Contributors:");
+
+        // Esta lista habra que cogerla de la base de datos directamente
+        dataContributors = new DefaultListModel<>();
+        dataContributors.addElement("Item1");
+        dataContributors.addElement("Item2");
+        dataContributors.addElement("Item3");
+        dataContributors.addElement("Item4");
+        dataContributors.addElement("Item5");
+        dataContributors.addElement("Item6");
+        dataContributors.addElement("Item7");
+        dataContributors.addElement("Item8");
+        dataContributors.addElement("Item9");
+        dataContributors.addElement("Item10");
+        dataContributors.addElement("Item11");
+        dataContributors.addElement("Item12");
+
+        contributors = new JList<>(dataContributors);
+        contributors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        contributors.setLayoutOrientation(JList.VERTICAL);
+        contributors.setBorder(BorderFactory.createEmptyBorder());
+
+        contributors.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent arg0) {
+                int selectedIx = contributors.getSelectedIndex();
+                boolean exist = false;
+                for (int i = 0; i < dataSelected.getSize(); i++) {
+                    if (dataSelected.get(i) == dataContributors.getElementAt(selectedIx)) {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist){
+                    dataSelected.add(dataSelected.getSize(), dataContributors.getElementAt(selectedIx));
+                }
+            }
+        });
+
+        jscContributors = new JScrollPane();
+        jscContributors.setViewportView(contributors);
+        jscContributors.setBorder(BorderFactory.createEmptyBorder());
+        jscContributors.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jscContributors.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jlSelected = new JLabel("Selected Contributors:");
+        dataSelected = new DefaultListModel<>();
+
+        selected = new JList<>(dataSelected);
+        selected.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selected.setLayoutOrientation(JList.VERTICAL);
+        selected.setBorder(BorderFactory.createEmptyBorder());
+
+        selected.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent arg0) {
+                int selectedIndex = selected.getSelectedIndex();
+                String selectedValue = selected.getSelectedValue();
+
+                for(int i = 0; i < dataSelected.getSize(); i++) {
+                    if (dataSelected.getElementAt(i) == selectedValue) {
+                        dataSelected.removeElement(selectedValue);
+                        System.out.println(selectedIndex);
+                        break;
+                    }
+                }
+            }
+        });
+
+        jscSelected = new JScrollPane();
+        jscSelected.setViewportView(selected);
+        jscSelected.setBorder(BorderFactory.createEmptyBorder());
+        jscSelected.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jscSelected.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        jlBackground = new JLabel("Choose a background for your project:");
+        jbBackground = new JButton("Browse");
+
+        jbCreate = new JButton("Create");
+        jbCancel = new JButton("Cancel");
+        jbCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                initNewProjectView();
+            }
+        });
+
+    }
+
+    public void initHomeView(){
+
+        getContentPane().removeAll();
+
+        JPanel jpButtons = new JPanel(new BorderLayout());
+        jpButtons.add(jbNew, BorderLayout.LINE_START);
+        jpButtons.add(jbUser, BorderLayout.LINE_END);
+
+        JPanel jpLists = new JPanel(new FlowLayout());
         jpLists.add(jsc1);
         jpLists.add(jsc2);
 
         this.getContentPane().add(jpLists, BorderLayout.CENTER);
         this.getContentPane().add(jpButtons, BorderLayout.NORTH);
         validate();
-
     }
 
     private void initListeners(){
@@ -295,7 +419,7 @@ public class MainView extends JFrame {
 
     public void showPopupMenu() {
 
-        final JPopupMenu popup = new JPopupMenu();
+        popup = new JPopupMenu();
 
         // New project menu item
         JMenuItem menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
@@ -306,7 +430,7 @@ public class MainView extends JFrame {
         menuItem1.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                initHome();
+                initHomeView();
             }
         });
         popup.add(menuItem1);
@@ -335,8 +459,6 @@ public class MainView extends JFrame {
                 Logout();
             }
         });
-
-
         popup.add(menuItem3);
 
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
@@ -346,125 +468,9 @@ public class MainView extends JFrame {
 
         this.getContentPane().removeAll();
 
-        jbNew = new JButton("New Project");
-
-        jbUser = new JButton("User");
-
-        jbUser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                showPopupMenu();
-            }
-        });
-
         JPanel jpButtons = new JPanel(new BorderLayout());
-
         jpButtons.add(jbNew, BorderLayout.LINE_START);
-
         jpButtons.add(jbUser, BorderLayout.LINE_END);
-
-        jlProjectName = new JLabel("Insert a name for your project:");
-        jtfProjectName = new JTextField("Project name");
-        jtfProjectName.setColumns(12);
-
-        jtfProjectName.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                jtfProjectName.setText("");
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                String text = jtfProjectName.getText();
-                if (text == "") {
-                    jtfProjectName.setText("Project Name");
-                }
-            }
-        });
-
-        jlContributors = new JLabel("Contributors:");
-
-        // Esta lista habra que cogerla de la base de datos directamente
-        dataContributors = new DefaultListModel<>();
-        dataContributors.addElement("Item1");
-        dataContributors.addElement("Item2");
-        dataContributors.addElement("Item3");
-        dataContributors.addElement("Item4");
-        dataContributors.addElement("Item5");
-        dataContributors.addElement("Item6");
-        dataContributors.addElement("Item7");
-        dataContributors.addElement("Item8");
-        dataContributors.addElement("Item9");
-        dataContributors.addElement("Item10");
-        dataContributors.addElement("Item11");
-        dataContributors.addElement("Item12");
-
-        contributors = new JList<>(dataContributors);
-        contributors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        contributors.setLayoutOrientation(JList.VERTICAL);
-        contributors.setBorder(BorderFactory.createEmptyBorder());
-
-        contributors.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                int selectedIx = contributors.getSelectedIndex();
-                boolean exist = false;
-                for (int i = 0; i < dataSelected.getSize(); i++) {
-                    if (dataSelected.get(i) == dataContributors.getElementAt(selectedIx)) {
-                        exist = true;
-                        break;
-                    }
-                }
-                if (!exist){
-                    dataSelected.add(dataSelected.getSize(), dataContributors.getElementAt(selectedIx));
-                }
-            }
-        });
-
-        jscContributors = new JScrollPane();
-        jscContributors.setViewportView(contributors);
-        jscContributors.setBorder(BorderFactory.createEmptyBorder());
-        jscContributors.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jscContributors.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        jlSelected = new JLabel("Selected Contributors:");
-        dataSelected = new DefaultListModel<>();
-
-        selected = new JList<>(dataSelected);
-        selected.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        selected.setLayoutOrientation(JList.VERTICAL);
-        selected.setBorder(BorderFactory.createEmptyBorder());
-
-        selected.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent arg0) {
-                int selectedIndex = selected.getSelectedIndex();
-                String selectedValue = selected.getSelectedValue();
-
-                for(int i = 0; i < dataSelected.getSize(); i++) {
-                    if (dataSelected.getElementAt(i) == selectedValue) {
-                        dataSelected.removeElement(selectedValue);
-                        System.out.println(selectedIndex);
-                        break;
-                    }
-                }
-            }
-        });
-
-        jscSelected = new JScrollPane();
-        jscSelected.setViewportView(selected);
-        jscSelected.setBorder(BorderFactory.createEmptyBorder());
-        jscSelected.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jscSelected.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        jbCreate = new JButton("Create");
-        jbCancel = new JButton("Cancel");
-        jbCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                initNewProjectView();
-            }
-        });
 
         JPanel jpName = new JPanel(new FlowLayout());
         jpName.add(jlProjectName);
@@ -488,18 +494,9 @@ public class MainView extends JFrame {
         jpButtonsBottom.add(jbCreate);
         jpButtonsBottom.add(jbCancel);
 
-        jlBackground = new JLabel("Choose a background for your project:");
-        jbBackground = new JButton("Browse");
-
         JPanel jpBackground = new JPanel(new FlowLayout());
         jpBackground.add(jlBackground);
         jpBackground.add(jbBackground);
-
-        jbBackground.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                showBrowseMenu();
-            }
-        });
 
         JPanel jpAux3 = new JPanel(new BorderLayout());
         jpAux3.add(jpBackground, BorderLayout.CENTER);
@@ -554,14 +551,14 @@ public class MainView extends JFrame {
         jbUser.setActionCommand("POPUP");
         jbUser.addActionListener(controller);
 
-        /*jbBackground.setActionCommand("BROWSE");
+        jbBackground.setActionCommand("BROWSE");
         jbBackground.addActionListener(controller);
 
         jbCreate.setActionCommand("CREATE");
         jbCreate.addActionListener(controller);
 
         jbCancel.setActionCommand("CANCEL");
-        jbCancel.addActionListener(controller);*/
+        jbCancel.addActionListener(controller);
     }
 
 }

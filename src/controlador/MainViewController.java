@@ -36,11 +36,12 @@ public class MainViewController implements ActionListener {
 
         if (e.getActionCommand().equals("CREATE")){
 
+
         }
 
         if (e.getActionCommand().equals("CANCEL")){
 
-            mainView.initHome();
+            mainView.initHomeView();
         }
     }
 
