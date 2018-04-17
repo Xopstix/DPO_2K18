@@ -138,17 +138,6 @@ public class MainView extends JFrame {
         jsc2.setBorder(BorderFactory.createTitledBorder("Shared Projects"));
 
 
-        /*JPanel jpButtons = new JPanel(new BorderLayout());
-        jpButtons.add(jbNew, BorderLayout.LINE_START);
-        jpButtons.add(jbUser, BorderLayout.LINE_END);
-
-        JPanel jpLists = new JPanel(new FlowLayout());
-        jpLists.add(jsc1);
-        jpLists.add(jsc2);
-
-        this.getContentPane().add(jpLists, BorderLayout.CENTER);
-        this.getContentPane().add(jpButtons, BorderLayout.NORTH);
-        validate();*/
 
         //Componentes Vista New Project
         jbNew = new JButton("New Project");
@@ -262,11 +251,6 @@ public class MainView extends JFrame {
 
         jbCreate = new JButton("Create");
         jbCancel = new JButton("Cancel");
-        jbCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                initNewProjectView();
-            }
-        });
 
     }
 
@@ -529,6 +513,11 @@ public class MainView extends JFrame {
     }
 
     private void Logout(){
+
+    }
+
+    public void createProject(){
+
 
     }
 
