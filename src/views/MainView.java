@@ -1,5 +1,7 @@
 package views;
 
+import controlador.ClientController;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -17,6 +19,7 @@ import java.io.IOException;
  */
 public class MainView extends JFrame {
 
+    //Components de vista global de proyectos
     private JButton jbNew;
     private JButton jbUser;
     private JScrollPane jsc1;
@@ -29,6 +32,7 @@ public class MainView extends JFrame {
     private JList<String> stringsUser;
     private JList<String> stringsShared;
 
+    //Componentes de vista de crear nuevo proyecto
     private JLabel jlProjectName;
     private JTextField jtfProjectName;
     private JLabel jlContributors;
@@ -48,6 +52,7 @@ public class MainView extends JFrame {
 
     private JList<String> selected;
     private DefaultListModel<String> dataSelected;
+
 
     public MainView() {
 
@@ -86,6 +91,12 @@ public class MainView extends JFrame {
         stringsShared = new JList<String>(dataShared);
 
         jbNew = new JButton("New Project");
+
+        jbNew.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                initNewProjectView();
+            }
+        });
 
         jbUser = new JButton("User");
 
@@ -149,6 +160,136 @@ public class MainView extends JFrame {
         this.getContentPane().add(jpLists, BorderLayout.CENTER);
         this.getContentPane().add(jpButtons, BorderLayout.NORTH);
         validate();
+
+    }
+
+    private void initListeners(){
+
+        //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
+        userProjects.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent evt) {
+                jListUserValueChanged(evt);
+            }
+        });
+
+        sharedProjects.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent evt) {
+                jListSharedValueChanged(evt);
+            }
+        });
+    }
+
+    private void initDragDrop() {
+
+        userProjects.setDragEnabled(true);
+        userProjects.setDropMode(DropMode.INSERT);
+        userProjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        userProjects.setTransferHandler(new TransferHandler() {
+
+            int index;
+            boolean beforeIndex = false;
+
+            @Override
+            public int getSourceActions(JComponent comp) {
+                return COPY_OR_MOVE;
+            }
+
+            @Override
+            public Transferable createTransferable(JComponent comp) {
+                index = userProjects.getSelectedIndex();
+                return new StringSelection ((String) userProjects.getSelectedValue());
+            }
+
+            @Override
+            public void exportDone( JComponent comp, Transferable trans, int action ) {
+                if (action==MOVE) {
+                    if (beforeIndex) {
+                        dataUser.remove(index + 1);
+                    }else{
+                        dataUser.remove(index);
+                    }
+                    jsc1.updateUI();
+                }
+            }
+
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport support) {
+                // Data =? String
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferHandler.TransferSupport support) {
+                try {
+                    // Data to String
+                    String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                    JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
+                    dataUser.add(dl.getIndex(), s);
+                    beforeIndex = dl.getIndex() < index ? true : false;
+                    return true;
+                }
+                catch (UnsupportedFlavorException | IOException e) {}
+                return false;
+            }
+        });
+
+        sharedProjects.setDragEnabled(true);
+        sharedProjects.setDropMode(DropMode.INSERT);
+        sharedProjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        sharedProjects.setTransferHandler(new TransferHandler() {
+
+            int index;
+            boolean beforeIndex = false;
+
+            @Override
+            public int getSourceActions(JComponent comp) {
+                return COPY_OR_MOVE;
+            }
+
+            @Override
+            public Transferable createTransferable(JComponent comp) {
+                index = sharedProjects.getSelectedIndex();
+                return new StringSelection ((String) sharedProjects.getSelectedValue());
+            }
+
+            @Override
+            public void exportDone( JComponent comp, Transferable trans, int action ) {
+                if (action==MOVE) {
+                    if (beforeIndex) {
+                        dataShared.remove(index + 1);
+                    }else{
+                        dataShared.remove(index);
+                    }
+                    jsc2.updateUI();
+                }
+            }
+
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport support) {
+                // Data =? String
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferHandler.TransferSupport support) {
+                try {
+                    // Data to String
+                    String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                    JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
+                    dataShared.add(dl.getIndex(), s);
+                    beforeIndex = dl.getIndex() < index ? true : false;
+                    return true;
+                }
+                catch (UnsupportedFlavorException | IOException e) {}
+                return false;
+            }
+        });
 
     }
 
@@ -319,6 +460,11 @@ public class MainView extends JFrame {
 
         jbCreate = new JButton("Create");
         jbCancel = new JButton("Cancel");
+        jbCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                initNewProjectView();
+            }
+        });
 
         JPanel jpName = new JPanel(new FlowLayout());
         jpName.add(jlProjectName);
@@ -389,136 +535,6 @@ public class MainView extends JFrame {
 
     }
 
-    private void initListeners(){
-
-        //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
-        userProjects.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                jListUserValueChanged(evt);
-            }
-        });
-
-        sharedProjects.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                jListSharedValueChanged(evt);
-            }
-        });
-    }
-
-    private void initDragDrop() {
-
-        userProjects.setDragEnabled(true);
-        userProjects.setDropMode(DropMode.INSERT);
-        userProjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        userProjects.setTransferHandler(new TransferHandler() {
-
-            int index;
-            boolean beforeIndex = false;
-
-            @Override
-            public int getSourceActions(JComponent comp) {
-                return COPY_OR_MOVE;
-            }
-
-            @Override
-            public Transferable createTransferable(JComponent comp) {
-                index = userProjects.getSelectedIndex();
-                return new StringSelection ((String) userProjects.getSelectedValue());
-            }
-
-            @Override
-            public void exportDone( JComponent comp, Transferable trans, int action ) {
-                if (action==MOVE) {
-                    if (beforeIndex) {
-                        dataUser.remove(index + 1);
-                    }else{
-                        dataUser.remove(index);
-                    }
-                    jsc1.updateUI();
-                }
-            }
-
-            @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                // data of type string?
-                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
-            }
-
-            @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                try {
-                    // convert data to string
-                    String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                    JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
-                    dataUser.add(dl.getIndex(), s);
-                    beforeIndex = dl.getIndex() < index ? true : false;
-                    return true;
-                }
-                catch (UnsupportedFlavorException | IOException e) {}
-                return false;
-            }
-        });
-
-        sharedProjects.setDragEnabled(true);
-        sharedProjects.setDropMode(DropMode.INSERT);
-        sharedProjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        sharedProjects.setTransferHandler(new TransferHandler() {
-
-            int index;
-            boolean beforeIndex = false;
-
-            @Override
-            public int getSourceActions(JComponent comp) {
-                return COPY_OR_MOVE;
-            }
-
-            @Override
-            public Transferable createTransferable(JComponent comp) {
-                index = sharedProjects.getSelectedIndex();
-                return new StringSelection ((String) sharedProjects.getSelectedValue());
-            }
-
-            @Override
-            public void exportDone( JComponent comp, Transferable trans, int action ) {
-                if (action==MOVE) {
-                    if (beforeIndex) {
-                        dataShared.remove(index + 1);
-                    }else{
-                        dataShared.remove(index);
-                    }
-                    jsc2.updateUI();
-                }
-            }
-
-            @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                // data of type string?
-                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
-            }
-
-            @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                try {
-                    // convert data to string
-                    String s = (String)support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                    JList.DropLocation dl = (JList.DropLocation)support.getDropLocation();
-                    dataShared.add(dl.getIndex(), s);
-                    beforeIndex = dl.getIndex() < index ? true : false;
-                    return true;
-                }
-                catch (UnsupportedFlavorException | IOException e) {}
-                return false;
-            }
-        });
-
-    }
-
     private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
         //set text on right here
         String s = (String) userProjects.getSelectedValue();
@@ -530,9 +546,21 @@ public class MainView extends JFrame {
 
     }
 
-    private void containsInput(String input){
+    public void registerController(ClientController controller) {
 
+        jbNew.setActionCommand("NEW_PROJECT");
+        jbNew.addActionListener(controller);
 
+        jbUser.setActionCommand("POPUP");
+        jbUser.addActionListener(controller);
+
+        jbBackground.setActionCommand("BROWSE");
+        jbBackground.addActionListener(controller);
+
+        jbCreate.setActionCommand("CREATE");
+        jbCreate.addActionListener(controller);
+
+        jbCancel.setActionCommand("CANCEL");
+        jbCancel.addActionListener(controller);
     }
-
 }
