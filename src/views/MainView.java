@@ -154,11 +154,10 @@ public class MainView extends JFrame {
         jsc2.setOpaque(false);
         jsc2.getViewport().setOpaque(false);
 
-        //jsc1.setBorder(BorderFactory.createTitledBorder("Your Projects"));
-        jsc1.setBorder(BorderFactory.createTitledBorder(null, "Your Projects", TitledBorder.CENTER, TitledBorder.TOP,
+        jsc1.setBorder(BorderFactory.createTitledBorder(null, "Your Projects", TitledBorder.RIGHT, TitledBorder.TOP,
                 new Font("Arial",Font.PLAIN,12), Color.WHITE));
 
-        jsc2.setBorder(BorderFactory.createTitledBorder(null, "Shared Projects", TitledBorder.CENTER, TitledBorder.TOP,
+        jsc2.setBorder(BorderFactory.createTitledBorder(null, "Shared Projects", TitledBorder.RIGHT, TitledBorder.TOP,
                 new Font("Arial",Font.PLAIN,12), Color.WHITE));
 
 
