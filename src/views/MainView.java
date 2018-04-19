@@ -1,7 +1,13 @@
 package views;
 
-import controlador.MainViewController;
+import controlador.ClientController;
+import controlador.PopupController;
+import model.Columna;
+import model.Etiqueta;
+import model.Projecte;
+import model.Usuari;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -13,6 +19,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by xavipargela on 12/3/18.
@@ -23,6 +30,9 @@ public class MainView extends JFrame {
     private JButton jbNew;
     private JButton jbUser;
     private JPopupMenu popup;
+    private JMenuItem menuItem1;
+    private JMenuItem menuItem2;
+    private JMenuItem menuItem3;
     private JScrollPane jsc1;
     private JScrollPane jsc2;
     private JList userProjects;
@@ -37,7 +47,7 @@ public class MainView extends JFrame {
     private JLabel jlProjectName;
     private JTextField jtfProjectName;
     private JLabel jlContributors;
-    private JTextField jtfContributors;
+    //private JTextField jtfContributors;   Esto está por si ponemos un buscador
     private JScrollPane jscContributors;
     private JLabel jlSelected;
     private JScrollPane jscSelected;
@@ -68,6 +78,7 @@ public class MainView extends JFrame {
 
         this.getContentPane().removeAll();
         initComponents();
+        initComponentsProject();
         initHomeView();
         initListeners();
         initDragDrop();
@@ -92,10 +103,6 @@ public class MainView extends JFrame {
         dataShared.addElement("Item4");
 
         stringsShared = new JList<String>(dataShared);
-
-        jbNew = new JButton("New Project");
-
-        jbUser = new JButton("User");
 
         userProjects = new JList();     //Clase que contendra la info de la DB
         sharedProjects = new JList();
@@ -137,18 +144,29 @@ public class MainView extends JFrame {
         jsc1.setBorder(BorderFactory.createTitledBorder("Your Projects"));
         jsc2.setBorder(BorderFactory.createTitledBorder("Shared Projects"));
 
+        popup = new JPopupMenu();
+
+        menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem1.setMnemonic(KeyEvent.VK_P);
+        menuItem1.getAccessibleContext().setAccessibleDescription(
+                "Go to the Home screen");
+
+        menuItem2 = new JMenuItem("New Project", new ImageIcon(((new ImageIcon("icons/addProject_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem2.setMnemonic(KeyEvent.VK_P);
+        menuItem2.getAccessibleContext().setAccessibleDescription(
+                "Create a New Project");
+
+        menuItem3 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem3.setMnemonic(KeyEvent.VK_P);
 
 
         //Componentes Vista New Project
         jbNew = new JButton("New Project");
 
         jbUser = new JButton("User");
-
-        jbUser.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                showPopupMenu();
-            }
-        });
 
         jlProjectName = new JLabel("Insert a name for your project:");
         jtfProjectName = new JTextField("Project name");
@@ -251,6 +269,11 @@ public class MainView extends JFrame {
 
         jbCreate = new JButton("Create");
         jbCancel = new JButton("Cancel");
+
+    }
+
+    private void initComponentsProject(){
+
 
     }
 
@@ -403,46 +426,13 @@ public class MainView extends JFrame {
 
     public void showPopupMenu() {
 
-        popup = new JPopupMenu();
-
         // New project menu item
-        JMenuItem menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
-                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
-        menuItem1.setMnemonic(KeyEvent.VK_P);
-        menuItem1.getAccessibleContext().setAccessibleDescription(
-                "Go to the Home screen");
-        menuItem1.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                initHomeView();
-            }
-        });
         popup.add(menuItem1);
 
         // New project menu item
-        JMenuItem menuItem2 = new JMenuItem("New Project", new ImageIcon(((new ImageIcon("icons/addProject_icon.png"))
-                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
-        menuItem2.setMnemonic(KeyEvent.VK_P);
-        menuItem2.getAccessibleContext().setAccessibleDescription(
-                "Create a New Project");
-        menuItem2.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                initNewProjectView();
-            }
-        });
         popup.add(menuItem2);
 
         // Logout menu item
-        JMenuItem menuItem3 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
-                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
-        menuItem3.setMnemonic(KeyEvent.VK_P);
-        menuItem3.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                Logout();
-            }
-        });
         popup.add(menuItem3);
 
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
@@ -516,8 +506,15 @@ public class MainView extends JFrame {
 
     }
 
-    public void createProject(){
+    public void createProject() throws IOException {
 
+        Projecte newProject = new Projecte();
+
+        newProject.setName(jtfProjectName.getName());
+        newProject.setMembres(new ArrayList<Usuari>());
+        newProject.setColumnes(new ArrayList<Columna>());
+        newProject.setBackground(ImageIO.read(new File(jfChooser.getSelectedFile().getAbsolutePath())));
+        newProject.setEtiquetes(new ArrayList<Etiqueta>());
 
     }
 
@@ -532,22 +529,31 @@ public class MainView extends JFrame {
 
     }
 
-    public void registerController(MainViewController controller) {
+    public void registerController(ClientController controllerClient, PopupController controllerPopUp) {
 
         jbNew.setActionCommand("NEW_PROJECT");
-        jbNew.addActionListener(controller);
+        jbNew.addActionListener(controllerClient);
 
         jbUser.setActionCommand("POPUP");
-        jbUser.addActionListener(controller);
+        jbUser.addActionListener(controllerClient);
 
         jbBackground.setActionCommand("BROWSE");
-        jbBackground.addActionListener(controller);
+        jbBackground.addActionListener(controllerClient);
 
         jbCreate.setActionCommand("CREATE");
-        jbCreate.addActionListener(controller);
+        jbCreate.addActionListener(controllerClient);
 
         jbCancel.setActionCommand("CANCEL");
-        jbCancel.addActionListener(controller);
+        jbCancel.addActionListener(controllerClient);
+
+        menuItem1.setActionCommand("HOME");
+        menuItem1.addActionListener(controllerPopUp);
+
+        menuItem2.setActionCommand("NEW_PROJECT");
+        menuItem2.addActionListener(controllerPopUp);
+
+        menuItem3.setActionCommand("LOGOUT");
+        menuItem3.addActionListener(controllerPopUp);
     }
 
 }

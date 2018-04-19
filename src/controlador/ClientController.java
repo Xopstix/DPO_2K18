@@ -4,10 +4,12 @@ import config.Config;
 import model.ProjectManager;
 import network.ServerCommunication;
 import views.AuthenticationView;
+import views.MainView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Esta clase es el controlador, que se encarga de modificar la vista a partir de los datos del modelo
@@ -15,7 +17,8 @@ import java.io.FileNotFoundException;
  */
 public class ClientController implements ActionListener{
 
-    private AuthenticationView authenticationView;      //Vista de autenticación
+    private AuthenticationView authenticationView;//Vista de autenticación
+    private MainView mainView;
     private ProjectManager projectManager;              //Modelo
     private Config data;
     //private ServerCommunication serverCommunication;
@@ -26,9 +29,10 @@ public class ClientController implements ActionListener{
      * @param authenticationView vista de autenticación
      * @param projectManager     modelo
      */
-    public ClientController(AuthenticationView authenticationView, ProjectManager projectManager, Config data) {
+    public ClientController(AuthenticationView authenticationView, MainView mainView, ProjectManager projectManager, Config data) {
 
         this.authenticationView = authenticationView;
+        this.mainView = mainView;
         this.projectManager = projectManager;
         this.data = data;
         //this.serverCommunication = serverCommunication;
@@ -106,6 +110,36 @@ public class ClientController implements ActionListener{
         }
         if (e.getActionCommand().equals("LOGOUT")){ //Si se quiere salir del programa
             System.exit(1);                  //Se sale del programa con código 1
+        }
+
+        if (e.getActionCommand().equals("NEW_PROJECT")){
+
+            mainView.initNewProjectView();
+        }
+
+        if (e.getActionCommand().equals("POPUP")){
+
+            mainView.showPopupMenu();
+        }
+
+        if (e.getActionCommand().equals("BROWSE")){
+
+            mainView.showBrowseMenu();
+        }
+
+        if (e.getActionCommand().equals("CREATE")){
+
+            try {
+                mainView.createProject();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        if (e.getActionCommand().equals("CANCEL")){
+
+            System.out.println("polla");
+            mainView.initHomeView();
         }
     }
 }

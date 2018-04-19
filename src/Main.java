@@ -1,10 +1,11 @@
 import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
-import controlador.MainViewController;
+import controlador.PopupController;
 import model.ProjectManager;
 import views.AuthenticationView;
 import views.MainView;
+import views.VistaTest;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
@@ -35,14 +36,19 @@ public class Main {
                     //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                     //serverCommunication.startConnection();
 
-                    ClientController clientController= new ClientController(authenticationView, projectManager, data);    //controlador
-                    MainViewController mainViewController = new MainViewController(mainView);
+                    ClientController clientController = new ClientController(authenticationView, mainView, projectManager, data);    //controlador
+                    PopupController popupController = new PopupController(mainView);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
-                    mainView.registerController(mainViewController);
+                    mainView.registerController(clientController, popupController);
 
-                    authenticationView.setVisible(false);        //Se hace visible la views de autenticación
+                    authenticationView.setVisible(true);        //Se hace visible la views de autenticación
                     mainView.setVisible(true);
+
+                    //Zona Test
+                    VistaTest vistaTest = new VistaTest();
+                    vistaTest.setVisible(true);
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }

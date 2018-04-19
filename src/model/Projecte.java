@@ -3,6 +3,7 @@ package model;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Tablero del proyecto
@@ -15,6 +16,7 @@ public class Projecte implements Serializable{
     private ArrayList<Columna> columnes;
     private Image background;
     private ArrayList<Etiqueta> etiquetes;
+    private Date fecha;
 
     public String getName() {
         return name;
