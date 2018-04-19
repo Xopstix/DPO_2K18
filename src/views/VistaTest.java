@@ -50,12 +50,14 @@ public class VistaTest extends JFrame{
 
     private void initVista() {
 
-        JPanel panel = new JPanel() {
+        File image = new File("/Users/xaviamorcastillo/Desktop/DPO_2K18/images/bg1.jpg");
+
+        JPanel panel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 try {
-                    g.drawImage(ImageIO.read(new File("/Users/xaviamorcastillo/Desktop/DPO_2K18/images/bg1.jpg")), 0, 0, null);
+                    g.drawImage(ImageIO.read(image),0, 0, null);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

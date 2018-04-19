@@ -9,6 +9,7 @@ import model.Usuari;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -16,7 +17,9 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -105,7 +108,12 @@ public class MainView extends JFrame {
         stringsShared = new JList<String>(dataShared);
 
         userProjects = new JList();     //Clase que contendra la info de la DB
+        userProjects.setOpaque(false);
+        userProjects.setCellRenderer(new TransparentListCellRenderer());
+
         sharedProjects = new JList();
+        sharedProjects.setOpaque(false);
+        sharedProjects.setCellRenderer(new TransparentListCellRenderer());
 
         // Creación de la lista, de momento con un ejemplo clicable
         userProjects.setModel(new AbstractListModel() {
@@ -135,14 +143,24 @@ public class MainView extends JFrame {
         });
 
         // Adición al window de los Java Components
-        userProjects.setPreferredSize(new Dimension(270,120));
-        sharedProjects.setPreferredSize(new Dimension(270,120));
+        userProjects.setPreferredSize(new Dimension(270,130));
+        sharedProjects.setPreferredSize(new Dimension(270,130));
 
         jsc1 = new JScrollPane(userProjects);
-        jsc2 = new JScrollPane(sharedProjects);
+        jsc1.setOpaque(false);
+        jsc1.getViewport().setOpaque(false);
 
-        jsc1.setBorder(BorderFactory.createTitledBorder("Your Projects"));
-        jsc2.setBorder(BorderFactory.createTitledBorder("Shared Projects"));
+        jsc2 = new JScrollPane(sharedProjects);
+        jsc2.setOpaque(false);
+        jsc2.getViewport().setOpaque(false);
+
+        //jsc1.setBorder(BorderFactory.createTitledBorder("Your Projects"));
+        jsc1.setBorder(BorderFactory.createTitledBorder(null, "Your Projects", TitledBorder.CENTER, TitledBorder.TOP,
+                new Font("Arial",Font.PLAIN,12), Color.WHITE));
+
+        jsc2.setBorder(BorderFactory.createTitledBorder(null, "Shared Projects", TitledBorder.CENTER, TitledBorder.TOP,
+                new Font("Arial",Font.PLAIN,12), Color.WHITE));
+
 
         popup = new JPopupMenu();
 
@@ -165,8 +183,11 @@ public class MainView extends JFrame {
 
         //Componentes Vista New Project
         jbNew = new JButton("New Project");
+        jbNew.setBackground(Color.GRAY);
+        jbNew.setForeground(Color.DARK_GRAY);
 
         jbUser = new JButton("User");
+        jbUser.setOpaque(false);
 
         jlProjectName = new JLabel("Insert a name for your project:");
         jtfProjectName = new JTextField("Project name");
@@ -282,15 +303,32 @@ public class MainView extends JFrame {
         getContentPane().removeAll();
 
         JPanel jpButtons = new JPanel(new BorderLayout());
+        jpButtons.setOpaque(false);
         jpButtons.add(jbNew, BorderLayout.LINE_START);
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
         JPanel jpLists = new JPanel(new FlowLayout());
+        jpLists.setOpaque(false);
         jpLists.add(jsc1);
         jpLists.add(jsc2);
 
-        this.getContentPane().add(jpLists, BorderLayout.CENTER);
-        this.getContentPane().add(jpButtons, BorderLayout.NORTH);
+        JPanel finalPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("/Users/xaviamorcastillo/Desktop/DPO_2K18/images/bgMain.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        finalPanel.add(jpLists, BorderLayout.CENTER);
+        finalPanel.add(jpButtons, BorderLayout.NORTH);
+
+        this.getContentPane().add(finalPanel);
         validate();
     }
 
