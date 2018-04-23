@@ -1,5 +1,7 @@
 package views;
 
+import controlador.ClientController;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -44,15 +46,13 @@ public class VistaTest extends JFrame{
 
         jbUser = new JButton("User");
 
-        JPanel panel = new JPanel(new GridBagLayout());
-
     }
 
     private void initVista() {
 
-        File image = new File("/Users/xaviamorcastillo/Desktop/DPO_2K18/images/bg1.jpg");
+        File image = new File("images/bg1.jpg");
 
-        JPanel panel = new JPanel(new GridBagLayout()) {
+        JPanel boxPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -64,6 +64,75 @@ public class VistaTest extends JFrame{
             }
         };
 
-        getContentPane().add(panel);
+        JPanel jpButtons = new JPanel(new BorderLayout());
+        jpButtons.setOpaque(false);
+        jpButtons.add(jbNew, BorderLayout.LINE_START);
+        jpButtons.add(jbUser, BorderLayout.LINE_END);
+
+        boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
+        //boxPanel.setPreferredSize(new Dimension(1200, 600));
+        //boxPanel.setMaximumSize(new Dimension(1200 , 600));
+
+        for (int i = 0; i < dataUser.size(); i++){
+
+            JPanel auxPanel = new JPanel();
+            auxPanel.setLayout(new BoxLayout(auxPanel, BoxLayout.Y_AXIS));
+
+            JPanel titlePanel = new JPanel(new FlowLayout());
+            titlePanel.setMaximumSize(new Dimension(150,50));
+
+            JButton nameButton = new JButton(dataUser.get(i));
+            nameButton.setBorderPainted(false);
+            JButton deleteButton = new JButton();
+            deleteButton.setBorderPainted(false);
+
+            try {
+                Image img = ImageIO.read(new File("icons/delete_icon.png")).
+                        getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+                deleteButton.setIcon(new ImageIcon(img));
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+
+            titlePanel.add(nameButton);
+            titlePanel.add(deleteButton);
+
+            auxPanel.add(titlePanel);
+
+            nameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            for (int j = 0; j < dataUser.size(); j++) {
+
+                JButton auxButton2 = new JButton(dataUser.get(j));
+                auxButton2.setBorderPainted(false);
+                //auxButton2.setBorder(BorderFactory.createEmptyBorder(10,5,10,0));
+                auxPanel.add(auxButton2);
+            }
+
+            JTextField auxTextField = new JTextField("Afegeix tasca...");
+            auxTextField.setPreferredSize(new Dimension(200,25));
+            auxTextField.setMaximumSize(new Dimension(200,25));
+
+            auxPanel.add(auxTextField);
+            auxPanel.setPreferredSize(new Dimension(200, 400));
+            auxPanel.setMaximumSize(new Dimension(200, 400));
+            auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
+            auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
+
+            boxPanel.add(auxPanel);
+        }
+
+        JPanel totalPanel = new JPanel(new BorderLayout());
+        totalPanel.add(jpButtons, BorderLayout.NORTH);
+        totalPanel.add(boxPanel, BorderLayout.CENTER);
+
+        getContentPane().add(totalPanel);
+    }
+
+    public void registerController(ClientController controllerClient) {
+
+        jbNew.setActionCommand("NEW_PROJECT");
+        jbNew.addActionListener(controllerClient);
+
     }
 }

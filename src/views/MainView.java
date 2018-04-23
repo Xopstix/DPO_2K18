@@ -316,7 +316,7 @@ public class MainView extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 try {
-                    g.drawImage(ImageIO.read(new File("/Users/xaviamorcastillo/Desktop/DPO_2K18/images/bgMain.jpg")),
+                    g.drawImage(ImageIO.read(new File("images/bgMain.jpg")),
                             0, 0, null);
                 } catch (IOException e) {
                     e.printStackTrace();
