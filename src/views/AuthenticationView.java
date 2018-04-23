@@ -2,8 +2,14 @@ package views;
 
 import controlador.ClientController;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +26,7 @@ public class AuthenticationView extends JFrame{
     private JPanel jpCorreo;
     private JPanel jpPassword;
     private JPanel jpConfirmacio;
+    private JPanel jlSouth;
 
     //Etiquetas
     private JLabel jlName;
@@ -47,10 +54,39 @@ public class AuthenticationView extends JFrame{
      */
     public AuthenticationView(){
 
-        jpEnter = new JPanel(new FlowLayout());
-        jpEnter.setBorder(BorderFactory.createTitledBorder("SIGN IN"));
+        /*JPanel finalPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/bgMain.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        add(finalPanel);*/
+
+        jpEnter = new JPanel(new FlowLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        jpEnter.setBorder(BorderFactory.createTitledBorder( new LineBorder(Color.white, 2), "Sign In", TitledBorder.LEFT, TitledBorder.TOP,
+                new Font("Arial", Font.PLAIN, 16), Color.white));
 
         jlName = new JLabel("Username/Email:");
+        jlName.setForeground(Color.white);
         jpEnter.add(jlName);
 
         jtfName = new JTextField();
@@ -58,6 +94,7 @@ public class AuthenticationView extends JFrame{
         jpEnter.add(jtfName);
 
         jlPassword = new JLabel(" Password:");
+        jlPassword.setForeground(Color.white);
         jpEnter.add(jlPassword);
 
         jpfPassword = new JPasswordField();
@@ -65,39 +102,101 @@ public class AuthenticationView extends JFrame{
         jpEnter.add(jpfPassword);
 
         jbSignIn = new JButton("Sign In");
+        jbSignIn.setBackground(Color.green);
+        jbSignIn.setForeground(Color.BLACK);
         jpEnter.add(jbSignIn);
 
         add(jpEnter, BorderLayout.NORTH);
 
-        jpRegister = new JPanel(new GridLayout(5,1));
-        jpRegister.setBorder(BorderFactory.createTitledBorder("SIGN UP"));
+        jpRegister = new JPanel(new GridLayout(5,1)){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        jpRegister.setBorder(BorderFactory.createTitledBorder( new LineBorder(Color.white, 2), "Sign Up", TitledBorder.LEFT, TitledBorder.TOP,
+                new Font("Arial", Font.PLAIN, 16), Color.white));
 
-        jpUsername = new JPanel(new FlowLayout());
+        jpUsername = new JPanel(new FlowLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         jlUsername = new JLabel("Username:             ");
+        jlUsername.setForeground(Color.white);
         jpUsername.add(jlUsername);
         jtfUsername = new JTextField();
         jtfUsername.setColumns(25);
         jpUsername.add(jtfUsername);
         jpRegister.add(jpUsername);
 
-        jpCorreo = new JPanel(new FlowLayout());
+        jpCorreo = new JPanel(new FlowLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         jlCorreo = new JLabel("Email:                    ");
+        jlCorreo.setForeground(Color.white);
         jpCorreo.add(jlCorreo);
         jtfCorreo = new JTextField();
         jtfCorreo.setColumns(25);
         jpCorreo.add(jtfCorreo);
         jpRegister.add(jpCorreo);
 
-        jpPassword = new JPanel(new FlowLayout());
+        jpPassword = new JPanel(new FlowLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         jlContrasenya = new JLabel("Password:              ");
+        jlContrasenya.setForeground(Color.white);
         jpPassword.add(jlContrasenya);
         jpfContrasenya = new JPasswordField();
         jpfContrasenya.setColumns(25);
         jpPassword.add(jpfContrasenya);
         jpRegister.add(jpPassword);
 
-        jpConfirmacio = new JPanel(new FlowLayout());
+        jpConfirmacio = new JPanel(new FlowLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         jlConfirmacio = new JLabel("Confirm Password:");
+        jlConfirmacio.setForeground(Color.white);
         jpConfirmacio.add(jlConfirmacio);
         jpfConfirmacio = new JPasswordField();
         jpfConfirmacio.setColumns(25);
@@ -106,17 +205,29 @@ public class AuthenticationView extends JFrame{
 
 
         jbSignUp = new JButton("Sign Up");
-        jpRegister.add(jbSignUp);
+        jbLogOut = new JButton("Exit");
+        jlSouth = new JPanel(new FlowLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File("images/dgreen.jpg")),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        jlSouth.add(jbSignUp);
+        jlSouth.add(jbLogOut);
+        jpRegister.add(jlSouth);
 
         add(jpRegister, BorderLayout.CENTER);
 
-        jbLogOut = new JButton("Exit");
-
-        add(jbLogOut, BorderLayout.SOUTH);
 
         setSize(600,350);                           //Tamaño de la ventana
         setResizable(false);                                      //Tamaño fijo
-        setTitle("Organizer Authentication");                     //Título de la ventana
+        setTitle("Welcome to Organizer!");                     //Título de la ventana
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);  //Cerrar cuando se aprieta la cruz roja
         setLocationRelativeTo(null);                              //Poner la ventana en el centro de la pantalla
     }

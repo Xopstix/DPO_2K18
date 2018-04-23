@@ -68,7 +68,7 @@ public class MainView extends JFrame {
     private DefaultListModel<String> dataSelected;
 
 
-    public MainView() {
+    public MainView(String s) {
 
         initHome();
         this.setSize(600, 300);
