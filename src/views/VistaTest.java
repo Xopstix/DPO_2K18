@@ -103,6 +103,7 @@ public class VistaTest extends JFrame{
 
                 JButton auxButton2 = new JButton(dataUser.get(j));
                 auxButton2.setBorderPainted(false);
+
                 auxButton2.setAlignmentY(boxPanel.LEFT_ALIGNMENT);
                 //auxButton2.setBorder(BorderFactory.createEmptyBorder(10,5,10,0));
                 auxPanel.add(auxButton2);
