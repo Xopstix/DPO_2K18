@@ -99,12 +99,11 @@ public class VistaTest extends JFrame{
 
             auxPanel.add(titlePanel);
 
-            nameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
             for (int j = 0; j < dataUser.size(); j++) {
 
                 JButton auxButton2 = new JButton(dataUser.get(j));
                 auxButton2.setBorderPainted(false);
+                auxButton2.setAlignmentY(boxPanel.LEFT_ALIGNMENT);
                 //auxButton2.setBorder(BorderFactory.createEmptyBorder(10,5,10,0));
                 auxPanel.add(auxButton2);
             }
@@ -116,7 +115,7 @@ public class VistaTest extends JFrame{
             auxPanel.add(auxTextField);
             auxPanel.setPreferredSize(new Dimension(200, 400));
             auxPanel.setMaximumSize(new Dimension(200, 400));
-            auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
+            //auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
             auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
 
             boxPanel.add(auxPanel);
