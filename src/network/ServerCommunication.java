@@ -2,8 +2,10 @@ package network;
 
 import config.Config;
 import config.ObjectFile;
+import controlador.ClientController;
 import model.ProjectManager;
 import model.Usuari;
+import views.MainView;
 
 import javax.swing.*;
 import java.io.*;
@@ -22,11 +24,14 @@ public class ServerCommunication extends Thread{
     private boolean running;
     private ProjectManager projectManager;
     private String msg;
+    private ClientController clientController;
 
-    public ServerCommunication(ProjectManager projectManager){
+    public ServerCommunication(ProjectManager projectManager, ClientController clientController){
 
         running = false;
         this.projectManager = projectManager;
+        msg = "";
+        this.clientController = clientController;
     }
 
     /**
@@ -43,7 +48,6 @@ public class ServerCommunication extends Thread{
         try{
             System.out.println(data.getIp() + data.getPort());
             socket = new Socket(data.getIp(), data.getPort());
-            //socket = new Socket("localhost", 12345);
             this.start();
 
         }catch (IOException ioe){
@@ -64,8 +68,7 @@ public class ServerCommunication extends Thread{
 
                 oos.writeObject(projectManager);
                 msg = dis.readUTF();
-                JOptionPane.showMessageDialog(null, msg);
-
+                autentica(msg);
                 endConnection();
             }
 
@@ -79,9 +82,25 @@ public class ServerCommunication extends Thread{
      */
     public void endConnection(){
         running = false;
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         interrupt();
     }
 
+    private void autentica(String msg){
+        if (msg.equals("Logged")) {
+            clientController.logInAccepted();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, msg);
+        }
+    }
 
+    public void showDialogMessage(String msg){
 
+        JOptionPane.showMessageDialog(null, msg);
+    }
 }

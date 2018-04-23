@@ -50,7 +50,7 @@ public class VistaTest extends JFrame{
 
     private void initVista() {
 
-        File image = new File("/Users/xaviamorcastillo/Desktop/DPO_2K18/images/bg1.jpg");
+        File image = new File("images/bg1.jpg");
 
         JPanel panel = new JPanel(new GridBagLayout()) {
             @Override

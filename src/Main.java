@@ -3,6 +3,7 @@ import config.ObjectFile;
 import controlador.ClientController;
 import controlador.PopupController;
 import model.ProjectManager;
+import network.ServerCommunication;
 import views.AuthenticationView;
 import views.MainView;
 import views.VistaTest;
@@ -31,13 +32,14 @@ public class Main {
                     data = objData.readData();
 
                     AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
-                    MainView mainView = new MainView();
+                    MainView mainView = new MainView("");
                     ProjectManager projectManager = new ProjectManager();                              //modelo
                     //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                     //serverCommunication.startConnection();
 
                     ClientController clientController = new ClientController(authenticationView, mainView, projectManager, data);    //controlador
-                    PopupController popupController = new PopupController(mainView);
+                    ServerCommunication serverCommunication = clientController.getServerCommunication();
+                    PopupController popupController = new PopupController(mainView, serverCommunication);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
                     mainView.registerController(clientController, popupController);

@@ -1,5 +1,6 @@
 package controlador;
 
+import network.ServerCommunication;
 import views.MainView;
 
 import java.awt.event.ActionEvent;
@@ -11,13 +12,11 @@ import java.awt.event.ActionListener;
 public class PopupController implements ActionListener{
 
     private MainView vista;
+    private ServerCommunication serverCommunication;
 
-    public PopupController(){
-
-    }
-
-    public PopupController(MainView vista) {
+    public PopupController(MainView vista, ServerCommunication serverCommunication) {
         this.vista = vista;
+        this.serverCommunication = serverCommunication;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -34,7 +33,8 @@ public class PopupController implements ActionListener{
 
         if (e.getActionCommand().equals("LOGOUT")){
 
-            //Por hacer
+            //serverCommunication.endConnection();
+            vista.dispose();
         }
     }
 

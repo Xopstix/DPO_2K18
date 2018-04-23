@@ -21,7 +21,7 @@ public class ClientController implements ActionListener{
     private MainView mainView;
     private ProjectManager projectManager;              //Modelo
     private Config data;
-    //private ServerCommunication serverCommunication;
+    private ServerCommunication serverCommunication;
 
     /**
      * Constructor del controlador que se encarga de poner las condiciones de inicio a partir de la vista y
@@ -35,7 +35,6 @@ public class ClientController implements ActionListener{
         this.mainView = mainView;
         this.projectManager = projectManager;
         this.data = data;
-        //this.serverCommunication = serverCommunication;
     }
 
     /**
@@ -57,7 +56,7 @@ public class ClientController implements ActionListener{
                 projectManager.getUsuari().setPassword(authenticationView.getPassword());   //A la contraseña se le asigna
                                                                                             //la contraseña introducida
 
-            ServerCommunication serverCommunication = new ServerCommunication(projectManager);
+            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this);
 
             try {
                 serverCommunication.startConnection();
@@ -98,7 +97,7 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getContrasenya());    //A la contraseña se le asigna la contraseña introducida
 
-                ServerCommunication serverCommunication = new ServerCommunication(projectManager);
+                serverCommunication = new ServerCommunication(projectManager, this);
 
                 try {
                     serverCommunication.startConnection();
@@ -137,9 +136,17 @@ public class ClientController implements ActionListener{
         }
 
         if (e.getActionCommand().equals("CANCEL")){
-
-            System.out.println("polla");
             mainView.initHomeView();
         }
+    }
+
+    public void logInAccepted(){
+        MainView mainView = new MainView(projectManager.getUsuari().getCorreu());
+        mainView.setVisible(true);
+        authenticationView.setVisible(false);
+    }
+
+    public ServerCommunication getServerCommunication() {
+        return serverCommunication;
     }
 }
