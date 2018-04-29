@@ -13,6 +13,7 @@ public class ProjectManager implements Serializable{
     /**
      * Constructor del modelo
      */
+
     public ProjectManager(){
 
         usuari = new Usuari();

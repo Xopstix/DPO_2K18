@@ -2,6 +2,7 @@ package controlador;
 
 import config.Config;
 import model.ProjectManager;
+import model.Project;
 import network.ServerCommunication;
 import views.AuthenticationView;
 import views.MainView;
@@ -19,7 +20,8 @@ public class ClientController implements ActionListener{
 
     private AuthenticationView authenticationView;//Vista de autenticación
     private MainView mainView;
-    private ProjectManager projectManager;              //Modelo
+    private ProjectManager projectManager;  //Modelo
+    private Project projecte;
     private Config data;
     private ServerCommunication serverCommunication;
 
@@ -56,7 +58,7 @@ public class ClientController implements ActionListener{
                 projectManager.getUsuari().setPassword(authenticationView.getPassword());   //A la contraseña se le asigna
                                                                                             //la contraseña introducida
 
-            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this);
+            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 1);
 
             try {
                 serverCommunication.startConnection();
@@ -97,7 +99,7 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getContrasenya());    //A la contraseña se le asigna la contraseña introducida
 
-                serverCommunication = new ServerCommunication(projectManager, this);
+                ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 1);
 
                 try {
                     serverCommunication.startConnection();
@@ -128,11 +130,31 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("CREATE")){
 
-            try {
+            /*try {
                 mainView.createProject();
+                System.out.println(projecte.getName());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }*/
+
+            /*projecte = new Project();
+            projecte.setName(mainView.getProjectName());
+            projecte.setDate();*/
+
+
+            ServerCommunication serverCommunication = null;
+            try {
+                serverCommunication = new ServerCommunication(mainView.createProject(), this, 2);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+
+            try {
+                serverCommunication.startConnection();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
         }
 
         if (e.getActionCommand().equals("CANCEL")){

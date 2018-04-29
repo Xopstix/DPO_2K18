@@ -4,7 +4,7 @@ import controlador.ClientController;
 import controlador.PopupController;
 import model.Columna;
 import model.Etiqueta;
-import model.Projecte;
+import model.Project;
 import model.Usuari;
 
 import javax.imageio.ImageIO;
@@ -543,17 +543,21 @@ public class MainView extends JFrame {
 
     }
 
-    public void createProject() throws IOException {
+    public Project createProject() throws IOException {
 
-        Projecte newProject = new Projecte();
+        Project newProject = new Project();
 
-        newProject.setName(jtfProjectName.getName());
+        newProject.setName(jtfProjectName.getText());
+        System.out.println(newProject.getName());
         newProject.setMembres(new ArrayList<Usuari>());
         newProject.setColumnes(new ArrayList<Columna>());
-        newProject.setBackground(ImageIO.read(new File(jfChooser.getSelectedFile().getAbsolutePath())));
+        newProject.setBackground(jfChooser.getSelectedFile().getAbsolutePath());
         newProject.setEtiquetes(new ArrayList<Etiqueta>());
+        newProject.setDate();
 
+        return newProject;
     }
+
 
     private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
         //set text on right here

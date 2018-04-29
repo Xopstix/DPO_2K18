@@ -4,8 +4,8 @@ import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
 import model.ProjectManager;
-import model.Usuari;
-import views.MainView;
+import model.Project;
+
 
 import javax.swing.*;
 import java.io.*;
@@ -21,18 +21,33 @@ public class ServerCommunication extends Thread{
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
     private DataInputStream dis;
+    private DataOutputStream dos;
     private boolean running;
     private ProjectManager projectManager;
+    private Project projecte;
     private String msg;
     private ClientController clientController;
+    private int mode;
 
-    public ServerCommunication(ProjectManager projectManager, ClientController clientController){
+    public ServerCommunication(ProjectManager projectManager, ClientController clientController, int mode){
 
         running = false;
         this.projectManager = projectManager;
         msg = "";
         this.clientController = clientController;
+        this.mode = mode;
     }
+
+    public ServerCommunication(Project projecte, ClientController clientController, int mode){
+
+        running = false;
+        this.projecte = projecte;
+        msg = "";
+        this.clientController = clientController;
+        this.mode = mode;
+    }
+
+
 
     /**
      * Es connecta al servidor
@@ -41,6 +56,7 @@ public class ServerCommunication extends Thread{
 
         Config data;
         ObjectFile objData = new ObjectFile();
+
 
         data = objData.readData();
 
@@ -63,13 +79,28 @@ public class ServerCommunication extends Thread{
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
             dis = new DataInputStream(socket.getInputStream());
+            dos = new DataOutputStream(socket.getOutputStream());
 
             while(running){
 
-                oos.writeObject(projectManager);
-                msg = dis.readUTF();
-                autentica(msg);
-                endConnection();
+                if (mode == 1) {
+                    dos.writeUTF("1");
+                    oos.writeObject(projectManager);
+                    msg = dis.readUTF();
+                    autentica(msg);
+                    endConnection();
+                }
+                if (mode == 2) {
+                    dos.writeUTF("2");
+                    oos.writeObject(projecte);
+                    System.out.println("hola1");
+                    System.out.println(projecte.getName());
+                    msg = dis.readUTF();
+                    autentica(msg);
+                    endConnection();
+                }
+
+
             }
 
         }catch (IOException ioe) {

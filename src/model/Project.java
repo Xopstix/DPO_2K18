@@ -1,5 +1,7 @@
 package model;
 
+import sun.util.calendar.BaseCalendar;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,14 +11,17 @@ import java.util.Date;
  * Tablero del proyecto
  * Created by Marc on 13/3/18.
  */
-public class Projecte implements Serializable{
+public class Project implements Serializable{
 
     private String name;
     private ArrayList<Usuari> membres;
     private ArrayList<Columna> columnes;
-    private Image background;
+    private String background;
     private ArrayList<Etiqueta> etiquetes;
-    private Date fecha;
+    private int day;
+    private int month;
+    private int year;
+
 
     public String getName() {
         return name;
@@ -42,11 +47,11 @@ public class Projecte implements Serializable{
         this.columnes = columnes;
     }
 
-    public Image getBackground() {
+    public String getBackground() {
         return background;
     }
 
-    public void setBackground(Image background) {
+    public void setBackground(String background) {
         this.background = background;
     }
 
@@ -57,4 +62,13 @@ public class Projecte implements Serializable{
     public void setEtiquetes(ArrayList<Etiqueta> etiquetes) {
         this.etiquetes = etiquetes;
     }
+
+    public void setDate (){
+        java.util.Date fecha = new Date();
+
+        day = fecha.getDay();
+        month = fecha.getMonth();
+        year = fecha.getYear();
+    }
+
 }
