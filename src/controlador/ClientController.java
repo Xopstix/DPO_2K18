@@ -3,6 +3,7 @@ package controlador;
 import config.Config;
 import model.ProjectManager;
 import model.Project;
+import model.Usuari;
 import network.ServerCommunication;
 import views.AuthenticationView;
 import views.MainView;
@@ -21,7 +22,6 @@ public class ClientController implements ActionListener{
     private AuthenticationView authenticationView;//Vista de autenticación
     private MainView mainView;
     private ProjectManager projectManager;  //Modelo
-    private Project projecte;
     private Config data;
     private ServerCommunication serverCommunication;
 
@@ -99,6 +99,7 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getContrasenya());    //A la contraseña se le asigna la contraseña introducida
 
+
                 ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 1);
 
                 try {
@@ -141,13 +142,15 @@ public class ClientController implements ActionListener{
             projecte.setName(mainView.getProjectName());
             projecte.setDate();*/
 
-
-            ServerCommunication serverCommunication = null;
             try {
-                serverCommunication = new ServerCommunication(mainView.createProject(), this, 2);
+                projectManager.setProject(mainView.createProject());
+
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+
+            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 2);
+
 
             try {
                 serverCommunication.startConnection();
