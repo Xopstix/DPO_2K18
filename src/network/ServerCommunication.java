@@ -24,7 +24,6 @@ public class ServerCommunication extends Thread{
     private DataOutputStream dos;
     private boolean running;
     private ProjectManager projectManager;
-    private Project projecte;
     private String msg;
     private ClientController clientController;
     private int mode;
@@ -37,16 +36,6 @@ public class ServerCommunication extends Thread{
         this.clientController = clientController;
         this.mode = mode;
     }
-
-    public ServerCommunication(Project projecte, ClientController clientController, int mode){
-
-        running = false;
-        this.projecte = projecte;
-        msg = "";
-        this.clientController = clientController;
-        this.mode = mode;
-    }
-
 
 
     /**
@@ -84,17 +73,15 @@ public class ServerCommunication extends Thread{
             while(running){
 
                 if (mode == 1) {
-                    dos.writeUTF("1");
+                    projectManager.setMode(1);
                     oos.writeObject(projectManager);
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
                 }
                 if (mode == 2) {
-                    dos.writeUTF("2");
-                    oos.writeObject(projecte);
-                    System.out.println("hola1");
-                    System.out.println(projecte.getName());
+                    projectManager.setMode(2);
+                    oos.writeObject(projectManager);
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
