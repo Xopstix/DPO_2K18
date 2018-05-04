@@ -96,6 +96,12 @@ public class MainView extends JFrame {
         dataUser.addElement("Item2");
         dataUser.addElement("Item3");
         dataUser.addElement("Item4");
+        dataUser.addElement("Item5");
+        dataUser.addElement("Item6");
+        dataUser.addElement("Item7");
+        dataUser.addElement("Item8");
+        dataUser.addElement("Item9");
+
 
         stringsUser = new JList<String>(dataUser);
 
@@ -108,10 +114,12 @@ public class MainView extends JFrame {
         stringsShared = new JList<String>(dataShared);
 
         userProjects = new JList();     //Clase que contendra la info de la DB
+        userProjects.setFixedCellHeight(25);
         userProjects.setOpaque(false);
         userProjects.setCellRenderer(new TransparentListCellRenderer());
 
         sharedProjects = new JList();
+        sharedProjects.setFixedCellHeight(25);
         sharedProjects.setOpaque(false);
         sharedProjects.setCellRenderer(new TransparentListCellRenderer());
 
@@ -147,10 +155,14 @@ public class MainView extends JFrame {
         sharedProjects.setPreferredSize(new Dimension(270,130));
 
         jsc1 = new JScrollPane(userProjects);
+        JScrollBar jScrollBar1 = new JScrollBar();
+        jsc1.setVerticalScrollBar(jScrollBar1);
         jsc1.setOpaque(false);
         jsc1.getViewport().setOpaque(false);
 
         jsc2 = new JScrollPane(sharedProjects);
+        JScrollBar jScrollBar2 = new JScrollBar();
+        jsc1.setVerticalScrollBar(jScrollBar2);
         jsc2.setOpaque(false);
         jsc2.getViewport().setOpaque(false);
 
@@ -557,7 +569,6 @@ public class MainView extends JFrame {
 
         return newProject;
     }
-
 
     private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
         //set text on right here

@@ -38,7 +38,26 @@ public class VistaTest extends JFrame{
         dataUser.addElement("Item1");
         dataUser.addElement("Item2");
         dataUser.addElement("Item3");
-        dataUser.addElement("Item4");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+
+
+
 
         stringsUser = new JList<String>(dataUser);
 
@@ -50,9 +69,16 @@ public class VistaTest extends JFrame{
 
     private void initVista() {
 
+
+        JPanel boxPanel = new JPanel(new FlowLayout());
+        JScrollPane jScrollPane2 = new JScrollPane(boxPanel);
+        jScrollPane2.setMaximumSize(new Dimension(600,500));
+        jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
         File image = new File("images/bg1.jpg");
 
-        JPanel boxPanel = new JPanel() {
+        /*
+        boxPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -63,6 +89,7 @@ public class VistaTest extends JFrame{
                 }
             }
         };
+*/
 
         JPanel jpButtons = new JPanel(new BorderLayout());
         jpButtons.setOpaque(false);
@@ -70,8 +97,6 @@ public class VistaTest extends JFrame{
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
         boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
-        //boxPanel.setPreferredSize(new Dimension(1200, 600));
-        //boxPanel.setMaximumSize(new Dimension(1200 , 600));
 
         for (int i = 0; i < dataUser.size(); i++){
 
@@ -99,34 +124,87 @@ public class VistaTest extends JFrame{
 
             auxPanel.add(titlePanel);
 
+            JPanel scrollable = new JPanel();
+            scrollable.setLayout(new BoxLayout(scrollable, BoxLayout.Y_AXIS));
+            auxPanel.add(titlePanel);
+            auxPanel.setMaximumSize(new Dimension(200, 500));
+            auxPanel.setMinimumSize(new Dimension(200,400));
+
             for (int j = 0; j < dataUser.size(); j++) {
 
+                JPanel leftAlignment = new JPanel(new BorderLayout());
+                leftAlignment.setMaximumSize(new Dimension(180,40));
                 JButton auxButton2 = new JButton(dataUser.get(j));
                 auxButton2.setBorderPainted(false);
-
-                auxButton2.setAlignmentY(boxPanel.LEFT_ALIGNMENT);
-                //auxButton2.setBorder(BorderFactory.createEmptyBorder(10,5,10,0));
-                auxPanel.add(auxButton2);
+                leftAlignment.add(auxButton2, BorderLayout.LINE_START);
+                auxButton2.setBorder(BorderFactory.createEmptyBorder(10,5,10,0));
+                scrollable.add(leftAlignment);
             }
+
+
+            JScrollPane jScrollPane = new JScrollPane(scrollable);
+            //jScrollPane.setMinimumSize(new Dimension(200, dataUser.size()* 42));
+            //jScrollPane.setMaximumSize(new Dimension(200, dataUser.size()* 42));
+            jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            auxPanel.add(jScrollPane);
 
             JTextField auxTextField = new JTextField("Afegeix tasca...");
             auxTextField.setPreferredSize(new Dimension(200,25));
             auxTextField.setMaximumSize(new Dimension(200,25));
 
             auxPanel.add(auxTextField);
-            auxPanel.setPreferredSize(new Dimension(200, 400));
-            auxPanel.setMaximumSize(new Dimension(200, 400));
-            //auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
+            JButton jbaux = new JButton("Afegeix");
+            jbaux.setName(i+"");
+
+            //auxPanel.setPreferredSize(new Dimension(200, 530));
+            //auxPanel.setMaximumSize(new Dimension(200, 530));
+            auxPanel.setBackground(Color.black);
+            auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
             auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
 
             boxPanel.add(auxPanel);
         }
 
-        JPanel totalPanel = new JPanel(new BorderLayout());
+        JPanel totalPanel;
+
+        totalPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(image),0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
         totalPanel.add(jpButtons, BorderLayout.NORTH);
         totalPanel.add(boxPanel, BorderLayout.CENTER);
 
         getContentPane().add(totalPanel);
+
+        /*JPanel box = new JPanel();
+        box.setLayout(new BoxLayout(box, BoxLayout.Y_AXIS));
+
+        File image = new File("images/bg1.jpg");
+
+        box = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(image),0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        getContentPane().add(box);
+        */
+
     }
 
     public void registerController(ClientController controllerClient) {

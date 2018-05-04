@@ -99,8 +99,6 @@ public class ServerCommunication extends Thread{
                     autentica(msg);
                     endConnection();
                 }
-
-
             }
 
         }catch (IOException ioe) {

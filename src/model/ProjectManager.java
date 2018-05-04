@@ -19,7 +19,6 @@ public class ProjectManager implements Serializable{
         usuari = new Usuari();
     }
 
-
     public Usuari getUsuari() {
         return usuari;
     }
