@@ -29,6 +29,8 @@ import java.util.ArrayList;
  */
 public class MainView extends JFrame {
 
+    private String user;
+
     //Components de vista global de proyectos
     private JButton jbNew;
     private JButton jbUser;
@@ -68,7 +70,7 @@ public class MainView extends JFrame {
     private DefaultListModel<String> dataSelected;
 
 
-    public MainView(String s) {
+    public MainView() {
 
         initHome();
         this.setSize(600, 300);
@@ -563,7 +565,7 @@ public class MainView extends JFrame {
         System.out.println(newProject.getName());
         newProject.setMembres(new ArrayList<Usuari>());
         newProject.setColumnes(new ArrayList<Columna>());
-        newProject.setBackground(jfChooser.getSelectedFile().getAbsolutePath());
+        //newProject.setBackground(jfChooser.getSelectedFile().getAbsolutePath());
         newProject.setEtiquetes(new ArrayList<Etiqueta>());
         newProject.setDate();
 
@@ -608,4 +610,11 @@ public class MainView extends JFrame {
         menuItem3.addActionListener(controllerPopUp);
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 }

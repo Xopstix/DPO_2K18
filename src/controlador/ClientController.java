@@ -2,8 +2,6 @@ package controlador;
 
 import config.Config;
 import model.ProjectManager;
-import model.Project;
-import model.Usuari;
 import network.ServerCommunication;
 import views.AuthenticationView;
 import views.MainView;
@@ -166,7 +164,8 @@ public class ClientController implements ActionListener{
     }
 
     public void logInAccepted(){
-        MainView mainView = new MainView(projectManager.getUsuari().getCorreu());
+        //MainView mainView = new MainView(projectManager.getUsuari().getCorreu());
+        mainView.setUser(projectManager.getUsuari().getCorreu());
         mainView.setVisible(true);
         authenticationView.setVisible(false);
     }

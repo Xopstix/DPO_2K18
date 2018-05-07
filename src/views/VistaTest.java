@@ -70,7 +70,7 @@ public class VistaTest extends JFrame{
     private void initVista() {
 
 
-        JPanel boxPanel = new JPanel(new FlowLayout());
+        JPanel boxPanel = new JPanel(new BorderLayout());
         JScrollPane jScrollPane2 = new JScrollPane(boxPanel);
         jScrollPane2.setMaximumSize(new Dimension(600,500));
         jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);

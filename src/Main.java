@@ -32,7 +32,7 @@ public class Main {
                     data = objData.readData();
 
                     AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
-                    MainView mainView = new MainView("");
+                    MainView mainView = new MainView();
                     ProjectManager projectManager = new ProjectManager();                              //modelo
                     //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                     //serverCommunication.startConnection();
@@ -45,7 +45,6 @@ public class Main {
                     mainView.registerController(clientController, popupController);
 
                     authenticationView.setVisible(true);        //Se hace visible la views de autenticación
-                    mainView.setVisible(true);
 
                     //Zona Test
                     VistaTest vistaTest = new VistaTest();
