@@ -104,7 +104,6 @@ public class MainView extends JFrame {
         dataUser.addElement("Item8");
         dataUser.addElement("Item9");
 
-
         stringsUser = new JList<String>(dataUser);
 
         dataShared = new DefaultListModel<>();

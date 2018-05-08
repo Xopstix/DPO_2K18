@@ -51,7 +51,6 @@ public class VistaTest extends JFrame{
         stringsUser = new JList<String>(dataUser);
 
         jbNew = new JButton("New Project");
-
         jbUser = new JButton("User");
 
     }
@@ -77,20 +76,6 @@ public class VistaTest extends JFrame{
         };
 
         JPanel boxPanel = new JPanel(new BorderLayout());
-
-        /*
-        boxPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                try {
-                    g.drawImage(ImageIO.read(image),0, 0, null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-*/
 
         JPanel jpButtons = new JPanel(new BorderLayout());
         jpButtons.setOpaque(false);
@@ -126,34 +111,38 @@ public class VistaTest extends JFrame{
             titlePanel.add(deleteButton);
 
             auxPanel.setOpaque(false);
-            auxPanel.add(titlePanel);
+            auxPanel.add(titlePanel, BorderLayout.NORTH);
 
             JPanel scrollable = new JPanel();
             scrollable.setLayout(new BoxLayout(scrollable, BoxLayout.Y_AXIS));
-            auxPanel.add(titlePanel);
             auxPanel.setMaximumSize(new Dimension(200, 500));
             auxPanel.setMinimumSize(new Dimension(200,400));
 
-            for (int j = 0; j < dataUser.size(); j++) {
+            JList userColumns = new JList<>();     //Clase que contendra la info de la DB
+            userColumns.setFixedCellHeight(25);
+            userColumns.setOpaque(false);
+            userColumns.setCellRenderer(new TransparentListCellRenderer());
 
-                JPanel leftAlignment = new JPanel(new BorderLayout());
-                leftAlignment.setOpaque(false);
-                leftAlignment.setMaximumSize(new Dimension(180,40));
-                JButton auxButton2 = new JButton(dataUser.get(j));
-                auxButton2.setBorderPainted(false);
-                leftAlignment.add(auxButton2, BorderLayout.LINE_START);
-                auxButton2.setBorder(BorderFactory.createEmptyBorder(10,5,10,0));
-                scrollable.add(leftAlignment);
-                scrollable.setOpaque(false);
-            }
+            userColumns.setModel(new AbstractListModel() {
 
+                @Override
+                public int getSize() {
+                    return stringsUser.getModel().getSize();
+                }
 
-            JScrollPane jScrollPane = new JScrollPane(scrollable);
+                @Override
+                public Object getElementAt(int i) {
+                    return stringsUser.getModel().getElementAt(i);
+                }
+            });
+
+            JScrollPane jScrollPane = new JScrollPane(userColumns);
+            //jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.RIGHT, TitledBorder.TOP, new Font("Arial",Font.PLAIN,12), Color.WHITE));
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            //jScrollPane.setMinimumSize(new Dimension(200, dataUser.size()* 42));
-            //jScrollPane.setMaximumSize(new Dimension(200, dataUser.size()* 42));
+            jScrollPane.setMinimumSize(new Dimension(200, dataUser.size()* 40));
+            jScrollPane.setMaximumSize(new Dimension(200, dataUser.size()* 40));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             auxPanel.add(jScrollPane);
@@ -166,8 +155,8 @@ public class VistaTest extends JFrame{
             JButton jbaux = new JButton("Afegeix");
             jbaux.setName(i+"");
 
-            //auxPanel.setPreferredSize(new Dimension(200, 530));
-            //auxPanel.setMaximumSize(new Dimension(200, 530));
+            auxPanel.setPreferredSize(new Dimension(200, 530));
+            auxPanel.setMaximumSize(new Dimension(200, 530));
             auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
             auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
 

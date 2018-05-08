@@ -45,6 +45,7 @@ public class Main {
                     mainView.registerController(clientController, popupController);
 
                     authenticationView.setVisible(true);        //Se hace visible la views de autenticación
+                    mainView.setVisible(true);
 
                     //Zona Test
                     VistaTest vistaTest = new VistaTest();

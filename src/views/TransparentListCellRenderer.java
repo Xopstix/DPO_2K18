@@ -17,8 +17,7 @@ public class TransparentListCellRenderer extends DefaultListCellRenderer {
 
         if (cellHasFocus){
 
-            setBackground(Color.WHITE);
-            setForeground(Color.BLACK);
+            setForeground(Color.WHITE);
         }
         return this;
     }
