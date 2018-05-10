@@ -82,7 +82,7 @@ public class AuthenticationView extends JFrame{
             }
         };
 
-        jpEnter.setBorder(BorderFactory.createTitledBorder( new LineBorder(Color.white, 2), "Sign In", TitledBorder.LEFT, TitledBorder.TOP,
+        jpEnter.setBorder(BorderFactory.createTitledBorder(new LineBorder(Color.white, 2), "Sign In", TitledBorder.LEFT, TitledBorder.TOP,
                 new Font("Arial", Font.PLAIN, 16), Color.white));
 
         jlName = new JLabel("Username/Email:");
@@ -314,6 +314,8 @@ public class AuthenticationView extends JFrame{
      * Pop de error (el formato del email no es correcto)
      */
     public void badEmailFormat(){
+        JOptionPane j;
+
         JOptionPane.showMessageDialog(null, "El formato del email no es correcto!",
                 "ERROR", JOptionPane.ERROR_MESSAGE);
     }
