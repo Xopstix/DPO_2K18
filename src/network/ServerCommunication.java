@@ -4,8 +4,6 @@ import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
 import model.ProjectManager;
-import model.Project;
-
 
 import javax.swing.*;
 import java.io.*;
@@ -85,6 +83,10 @@ public class ServerCommunication extends Thread{
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
+                }
+                if(mode == 3){
+                    projectManager.setMode(3);
+                    oos.writeObject(projectManager);
                 }
             }
 

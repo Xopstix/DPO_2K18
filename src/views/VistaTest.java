@@ -1,10 +1,17 @@
 package views;
 
 import controlador.ClientController;
+import model.ProjectManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,11 +25,17 @@ public class VistaTest extends JFrame{
     private JButton jbNew;
     private JButton jbUser;
     private JList<String> stringsUser;
+    private JScrollPane jScrollPane;
+    private JList<String> userColumns;
+
+    private ProjectManager projectManager;
 
     public VistaTest(){
 
         initComponents();
         initVista();
+        initDragDrop();
+        initListeners();
         this.setSize(1200, 600);
         this.setTitle("ProjectManager");
         this.setLocationRelativeTo(null);
@@ -34,9 +47,17 @@ public class VistaTest extends JFrame{
         //Habrá que coger de la base de datos los panels e irlos creando
         //De momento hecho con listas de strings, reaprovechamos nombres
 
+        projectManager = new ProjectManager();
+
         dataUser = new DefaultListModel<>();
         dataUser.addElement("Item1");
         dataUser.addElement("Item2");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
+        dataUser.addElement("Item3");
         dataUser.addElement("Item3");
         dataUser.addElement("Item3");
         dataUser.addElement("Item3");
@@ -52,6 +73,24 @@ public class VistaTest extends JFrame{
 
         jbNew = new JButton("New Project");
         jbUser = new JButton("User");
+
+        userColumns = new JList<>();     //Clase que contendra la info de la DB
+        userColumns.setFixedCellHeight(35);
+        userColumns.setOpaque(false);
+        userColumns.setCellRenderer(new TransparentListCellRenderer());
+
+        userColumns.setModel(new AbstractListModel() {
+
+            @Override
+            public int getSize() {
+                return stringsUser.getModel().getSize();
+            }
+
+            @Override
+            public Object getElementAt(int i) {
+                return stringsUser.getModel().getElementAt(i);
+            }
+        });
 
     }
 
@@ -113,36 +152,17 @@ public class VistaTest extends JFrame{
             auxPanel.setOpaque(false);
             auxPanel.add(titlePanel, BorderLayout.NORTH);
 
-            JPanel scrollable = new JPanel();
-            scrollable.setLayout(new BoxLayout(scrollable, BoxLayout.Y_AXIS));
+            //JPanel scrollable = new JPanel();
+            //scrollable.setLayout(new BoxLayout(scrollable, BoxLayout.Y_AXIS));
             auxPanel.setMaximumSize(new Dimension(200, 500));
             auxPanel.setMinimumSize(new Dimension(200,400));
 
-            JList userColumns = new JList<>();     //Clase que contendra la info de la DB
-            userColumns.setFixedCellHeight(25);
-            userColumns.setOpaque(false);
-            userColumns.setCellRenderer(new TransparentListCellRenderer());
-
-            userColumns.setModel(new AbstractListModel() {
-
-                @Override
-                public int getSize() {
-                    return stringsUser.getModel().getSize();
-                }
-
-                @Override
-                public Object getElementAt(int i) {
-                    return stringsUser.getModel().getElementAt(i);
-                }
-            });
-
-            JScrollPane jScrollPane = new JScrollPane(userColumns);
+            jScrollPane = new JScrollPane(userColumns);
             //jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.RIGHT, TitledBorder.TOP, new Font("Arial",Font.PLAIN,12), Color.WHITE));
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            jScrollPane.setMinimumSize(new Dimension(200, dataUser.size()* 40));
-            jScrollPane.setMaximumSize(new Dimension(200, dataUser.size()* 40));
+            jScrollPane.setMaximumSize(new Dimension(200, userColumns.getModel().getSize()* 35));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             auxPanel.add(jScrollPane);
@@ -164,7 +184,6 @@ public class VistaTest extends JFrame{
             boxPanel.setOpaque(false);
         }
 
-
         JScrollPane jScrollPane2 = new JScrollPane(boxPanel);
         jScrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -176,32 +195,86 @@ public class VistaTest extends JFrame{
 
         getContentPane().add(totalPanel);
 
-        /*JPanel box = new JPanel();
-        box.setLayout(new BoxLayout(box, BoxLayout.Y_AXIS));
+        System.out.println(userColumns.getName());
 
-        File image = new File("images/bg1.jpg");
+    }
 
-        box = new JPanel() {
+    private void initDragDrop() {
+
+        userColumns.setDragEnabled(true);
+        userColumns.setDropMode(DropMode.INSERT);
+        userColumns.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        userColumns.setTransferHandler(new TransferHandler() {
+
+            int index;
+            boolean beforeIndex = false;
+
             @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                try {
-                    g.drawImage(ImageIO.read(image),0, 0, null);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            public int getSourceActions(JComponent comp) {
+                return COPY_OR_MOVE;
+            }
+
+            @Override
+            public Transferable createTransferable(JComponent comp) {
+                index = userColumns.getSelectedIndex();
+                return new StringSelection((String) userColumns.getSelectedValue());
+            }
+
+            @Override
+            public void exportDone(JComponent comp, Transferable trans, int action) {
+                if (action == MOVE) {
+                    if (beforeIndex) {
+                        dataUser.remove(index + 1);
+                    } else {
+                        dataUser.remove(index);
+                    }
+                    jScrollPane.updateUI();
                 }
             }
-        };
 
-        getContentPane().add(box);
-        */
+            @Override
+            public boolean canImport(TransferHandler.TransferSupport support) {
+                // Data =? String
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+            }
 
+            @Override
+            public boolean importData(TransferHandler.TransferSupport support) {
+                try {
+                    // Data to String
+                    String s = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                    JList.DropLocation dl = (JList.DropLocation) support.getDropLocation();
+                    dataUser.add(dl.getIndex(), s);
+                    beforeIndex = dl.getIndex() < index ? true : false;
+                    return true;
+                } catch (UnsupportedFlavorException | IOException e) {
+                }
+                return false;
+            }
+        });
+    }
+
+    private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
+        //set text on right here
+        String s = (String) userColumns.getSelectedValue();
+    }
+
+    private void initListeners() {
+
+        //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
+        userColumns.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent evt) {
+                jListUserValueChanged(evt);
+            }
+        });
     }
 
     public void registerController(ClientController controllerClient) {
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
-
     }
 }

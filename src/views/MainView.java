@@ -119,10 +119,26 @@ public class MainView extends JFrame {
         userProjects.setOpaque(false);
         userProjects.setCellRenderer(new TransparentListCellRenderer());
 
+        userProjects.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent evt) {
+                if (!evt.getValueIsAdjusting()) {
+                    System.out.println(userProjects.getSelectedValue());
+                }
+            }
+        });
+
         sharedProjects = new JList();
         sharedProjects.setFixedCellHeight(25);
         sharedProjects.setOpaque(false);
         sharedProjects.setCellRenderer(new TransparentListCellRenderer());
+
+        sharedProjects.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent evt) {
+                if (!evt.getValueIsAdjusting()) {
+                    System.out.println(sharedProjects.getModel().getElementAt(sharedProjects.getSelectedIndex()));
+                }
+            }
+        });
 
         // Creación de la lista, de momento con un ejemplo clicable
         userProjects.setModel(new AbstractListModel() {
@@ -552,10 +568,6 @@ public class MainView extends JFrame {
         }
     }
 
-    private void Logout(){
-
-    }
-
     public Project createProject() throws IOException {
 
         Project newProject = new Project();
@@ -572,10 +584,9 @@ public class MainView extends JFrame {
     }
 
     private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
-        //set text on right here
         String s = (String) userProjects.getSelectedValue();
 
-        }
+    }
 
     private void jListSharedValueChanged(javax.swing.event.ListSelectionEvent evt) {
         String s = (String) sharedProjects.getSelectedValue();
@@ -607,6 +618,7 @@ public class MainView extends JFrame {
 
         menuItem3.setActionCommand("LOGOUT");
         menuItem3.addActionListener(controllerPopUp);
+
     }
 
     public String getUser() {
