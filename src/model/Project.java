@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Date;
 public class Project implements Serializable{
 
     private String name;
+    private String username;
     private ArrayList<Usuari> membres;
     private ArrayList<Columna> columnes;
     private String background;
@@ -63,9 +65,9 @@ public class Project implements Serializable{
     public void setDate (){
         java.util.Date fecha = new Date();
 
-        day = fecha.getDay();
-        month = fecha.getMonth();
-        year = fecha.getYear();
+        day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        month = (Calendar.getInstance().get(Calendar.MONTH)) + 1;
+        year = Calendar.getInstance().get(Calendar.YEAR);
     }
 
     public int getDay() {
@@ -90,5 +92,13 @@ public class Project implements Serializable{
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Modelo del programa cliente
@@ -11,6 +12,8 @@ public class ProjectManager implements Serializable{
     private Usuari usuari;  //Usuario que almacena los datos de registro de inicio de sesión
     private Project project;
     private int mode;
+    private ArrayList<Project> sharedProjects;
+    private ArrayList<Project> yourProjects;
     /**
      * Constructor del modelo
      */
@@ -19,6 +22,8 @@ public class ProjectManager implements Serializable{
 
         usuari = new Usuari();
         project = new Project();
+        sharedProjects = new ArrayList<>();
+        yourProjects = new ArrayList<>();
 
     }
 
@@ -44,5 +49,22 @@ public class ProjectManager implements Serializable{
 
     public void setMode(int mode) {
         this.mode = mode;
+    }
+
+
+    public ArrayList<Project> getSharedProjects() {
+        return sharedProjects;
+    }
+
+    public void setSharedProjects(ArrayList<Project> sharedProjects) {
+        this.sharedProjects = sharedProjects;
+    }
+
+    public ArrayList<Project> getYourProjects() {
+        return yourProjects;
+    }
+
+    public void setYourProjects(ArrayList<Project> yourProjects) {
+        this.yourProjects = yourProjects;
     }
 }
