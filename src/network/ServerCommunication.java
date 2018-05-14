@@ -77,7 +77,7 @@ public class ServerCommunication extends Thread{
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
-                    System.out.println(projectManager.getProjects().get(0).getName());
+                    System.out.println(projectManager.getYourProjects().get(0).getName());
                 }
                 if (mode == 2) {
                     projectManager.setMode(2);

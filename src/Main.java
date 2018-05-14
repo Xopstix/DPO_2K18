@@ -1,6 +1,7 @@
 import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
+import controlador.CustomListSelectionListener;
 import controlador.PopupController;
 import model.ProjectManager;
 import network.ServerCommunication;
@@ -34,12 +35,14 @@ public class Main {
                     AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
                     MainView mainView = new MainView();
                     ProjectManager projectManager = new ProjectManager();                              //modelo
+                    VistaTest vistaTest = new VistaTest();
                     //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                     //serverCommunication.startConnection();
 
                     ClientController clientController = new ClientController(authenticationView, mainView, projectManager, data);    //controlador
                     ServerCommunication serverCommunication = clientController.getServerCommunication();
                     PopupController popupController = new PopupController(mainView, serverCommunication);
+                    CustomListSelectionListener listSelectionListener = new CustomListSelectionListener(vistaTest);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
                     mainView.registerController(clientController, popupController);
@@ -48,8 +51,7 @@ public class Main {
                     mainView.setVisible(true);
 
                     //Zona Test
-                    VistaTest vistaTest = new VistaTest();
-                    vistaTest.registerController(clientController);
+                    vistaTest.registerController(clientController, listSelectionListener);
                     vistaTest.setVisible(true);
 
                 } catch (FileNotFoundException e) {

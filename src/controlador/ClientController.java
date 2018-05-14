@@ -97,8 +97,10 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getContrasenya());    //A la contraseña se le asigna la contraseña introducida
 
-
                 ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 1);
+
+                System.out.println(projectManager.getYourProjects().get(1).getName() + "hola1");
+                System.out.println(projectManager.getYourProjects().get(2).getName() + "hola2");
 
                 try {
                     serverCommunication.startConnection();

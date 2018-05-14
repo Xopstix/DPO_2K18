@@ -1,19 +1,17 @@
 package views;
 
 import controlador.ClientController;
+import controlador.CustomListSelectionListener;
+import controlador.CustomTransferHandler;
 import model.ProjectManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by xaviamorcastillo on 17/4/18.
@@ -25,8 +23,8 @@ public class VistaTest extends JFrame{
     private JButton jbNew;
     private JButton jbUser;
     private JList<String> stringsUser;
-    private JScrollPane jScrollPane;
-    private JList<String> userColumns;
+    private ArrayList<JList<String>> userColumns;
+    private CustomListSelectionListener customListSelectionListener;
 
     private ProjectManager projectManager;
 
@@ -34,8 +32,6 @@ public class VistaTest extends JFrame{
 
         initComponents();
         initVista();
-        initDragDrop();
-        initListeners();
         this.setSize(1200, 600);
         this.setTitle("ProjectManager");
         this.setLocationRelativeTo(null);
@@ -74,24 +70,6 @@ public class VistaTest extends JFrame{
         jbNew = new JButton("New Project");
         jbUser = new JButton("User");
 
-        userColumns = new JList<>();     //Clase que contendra la info de la DB
-        userColumns.setFixedCellHeight(35);
-        userColumns.setOpaque(false);
-        userColumns.setCellRenderer(new TransparentListCellRenderer());
-
-        userColumns.setModel(new AbstractListModel() {
-
-            @Override
-            public int getSize() {
-                return stringsUser.getModel().getSize();
-            }
-
-            @Override
-            public Object getElementAt(int i) {
-                return stringsUser.getModel().getElementAt(i);
-            }
-        });
-
     }
 
     private void initVista() {
@@ -122,6 +100,8 @@ public class VistaTest extends JFrame{
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
         boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
+
+        userColumns = new ArrayList<>();
 
         for (int i = 0; i < dataUser.size(); i++){
 
@@ -157,15 +137,39 @@ public class VistaTest extends JFrame{
             auxPanel.setMaximumSize(new Dimension(200, 500));
             auxPanel.setMinimumSize(new Dimension(200,400));
 
-            jScrollPane = new JScrollPane(userColumns);
+            JList<String> userColumn = new JList<>(dataUser);     //Clase que contendra la info de la DB
+            userColumn.setFixedCellHeight(35);
+            userColumn.setOpaque(false);
+            userColumn.setCellRenderer(new TransparentListCellRenderer());
+
+            userColumn.setName(i+"");
+            System.out.println(userColumn.getName());
+
+            userColumn.setModel(new AbstractListModel() {
+
+                @Override
+                public int getSize() {
+                    return stringsUser.getModel().getSize();
+                }
+
+                @Override
+                public Object getElementAt(int i) {
+                    return stringsUser.getModel().getElementAt(i);
+                }
+            });
+            userColumns.add(userColumn);
+
+            JScrollPane jScrollPane = new JScrollPane(userColumn);
             //jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.RIGHT, TitledBorder.TOP, new Font("Arial",Font.PLAIN,12), Color.WHITE));
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            jScrollPane.setMaximumSize(new Dimension(200, userColumns.getModel().getSize()* 35));
+            jScrollPane.setMaximumSize(new Dimension(200, userColumn.getModel().getSize()* 35));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             auxPanel.add(jScrollPane);
+            initDragDrop(userColumn, jScrollPane);
+            //initListeners(userColumn);
 
             JTextField auxTextField = new JTextField("Afegeix tasca...");
             auxTextField.setPreferredSize(new Dimension(200,25));
@@ -195,86 +199,68 @@ public class VistaTest extends JFrame{
 
         getContentPane().add(totalPanel);
 
-        System.out.println(userColumns.getName());
+        //System.out.println(userColumns.getName());
+        //getSource
 
     }
 
-    private void initDragDrop() {
+    private void initDragDrop(JList<String> userColumn, JScrollPane jScrollPane) {
 
-        userColumns.setDragEnabled(true);
-        userColumns.setDropMode(DropMode.INSERT);
-        userColumns.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        userColumn.setDragEnabled(true);
+        userColumn.setDropMode(DropMode.INSERT);
+        userColumn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        userColumns.setTransferHandler(new TransferHandler() {
-
-            int index;
-            boolean beforeIndex = false;
-
-            @Override
-            public int getSourceActions(JComponent comp) {
-                return COPY_OR_MOVE;
-            }
-
-            @Override
-            public Transferable createTransferable(JComponent comp) {
-                index = userColumns.getSelectedIndex();
-                return new StringSelection((String) userColumns.getSelectedValue());
-            }
-
-            @Override
-            public void exportDone(JComponent comp, Transferable trans, int action) {
-                if (action == MOVE) {
-                    if (beforeIndex) {
-                        dataUser.remove(index + 1);
-                    } else {
-                        dataUser.remove(index);
-                    }
-                    jScrollPane.updateUI();
-                }
-            }
-
-            @Override
-            public boolean canImport(TransferHandler.TransferSupport support) {
-                // Data =? String
-                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
-            }
-
-            @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                try {
-                    // Data to String
-                    String s = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                    JList.DropLocation dl = (JList.DropLocation) support.getDropLocation();
-                    dataUser.add(dl.getIndex(), s);
-                    beforeIndex = dl.getIndex() < index ? true : false;
-                    return true;
-                } catch (UnsupportedFlavorException | IOException e) {
-                }
-                return false;
-            }
-        });
+        CustomTransferHandler customTransferHandler = new CustomTransferHandler(userColumn, dataUser, jScrollPane);
+        userColumn.setTransferHandler(customTransferHandler);
     }
 
-    private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
+    /*private void jListUserValueChanged(ListSelectionEvent evt, JList<String> userColumn) {
         //set text on right here
-        String s = (String) userColumns.getSelectedValue();
+        String s = (String) userColumn.getSelectedValue();
     }
 
-    private void initListeners() {
+    private void initListeners(JList<String> userColumn) {
 
         //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
-        userColumns.addListSelectionListener(new ListSelectionListener() {
+        userColumn.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                jListUserValueChanged(evt);
+                jListUserValueChanged(evt, userColumn);
             }
         });
+    }*/
+
+    public void initPopupTasca(int columna, int fila){
+
+        JPopupMenu popup = new JPopupMenu();
+
+        JMenuItem deleteButton = new JMenuItem("Delete", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        deleteButton.setMnemonic(KeyEvent.VK_P);
+        deleteButton.getAccessibleContext().setAccessibleDescription("Delete task");
+
+        JTextField jTextField = new JTextField("Nou nom");
+
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+
+        menuPanel.add(jTextField);
+        menuPanel.add(deleteButton);
+
+        popup.add(menuPanel);
+
+        popup.show(this, columna * 200 + 25, fila * 35 + 120);
     }
 
-    public void registerController(ClientController controllerClient) {
+    public void registerController(ClientController controllerClient, CustomListSelectionListener listSelectionListener) {
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
+
+        for (int i = 0; i < userColumns.size(); i++){
+            userColumns.get(i).addListSelectionListener(listSelectionListener);
+        }
+
     }
 }
