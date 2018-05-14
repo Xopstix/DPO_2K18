@@ -75,20 +75,21 @@ public class ServerCommunication extends Thread{
                 if (mode == 1) {
                     projectManager.setMode(1);
                     oos.writeObject(projectManager);
-                    projectManager = (ProjectManager) ois.readObject();
+                    this.projectManager = (ProjectManager) ois.readObject();
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
-                    System.out.println(projectManager.getProjects().get(0).getName());
+                    //System.out.println(projectManager.getYourProjects().get(0).getName());
                 }
                 if (mode == 2) {
                     projectManager.setMode(2);
                     oos.writeObject(projectManager);
-                    projectManager = (ProjectManager) ois.readObject();
+                    this.projectManager = (ProjectManager) ois.readObject();
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
                 }
+                System.out.println(projectManager.getYourProjects().size());
             }
 
         }catch (IOException ioe) {
