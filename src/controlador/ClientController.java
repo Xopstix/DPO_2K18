@@ -1,6 +1,7 @@
 package controlador;
 
 import config.Config;
+import model.Project;
 import model.ProjectManager;
 import network.ServerCommunication;
 import views.AuthenticationView;
@@ -22,6 +23,7 @@ public class ClientController implements ActionListener{
     private ProjectManager projectManager;  //Modelo
     private Config data;
     private ServerCommunication serverCommunication;
+    private Project project;
 
     /**
      * Constructor del controlador que se encarga de poner las condiciones de inicio a partir de la vista y
@@ -35,6 +37,7 @@ public class ClientController implements ActionListener{
         this.mainView = mainView;
         this.projectManager = projectManager;
         this.data = data;
+        this.project = new Project();
     }
 
     /**
@@ -143,7 +146,9 @@ public class ClientController implements ActionListener{
             projecte.setDate();*/
 
             try {
-                projectManager.setProject(mainView.createProject());
+                project = mainView.createProject();
+
+                projectManager.setProject(project);
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -158,6 +163,10 @@ public class ClientController implements ActionListener{
                 e1.printStackTrace();
             }
 
+            mainView.initHomeView();
+            mainView.addProject(project.getName());
+            mainView.addBackground(project.getBackground());
+
         }
 
         if (e.getActionCommand().equals("CANCEL")){
@@ -166,7 +175,12 @@ public class ClientController implements ActionListener{
     }
 
     public void logInAccepted(){
-        //MainView mainView = new MainView(projectManager.getUsuari().getCorreu());
+        /*for (int i = 0; i < projectManager.getYourProjects().size(); i++){
+            mainView.addProject(projectManager.getYourProjects().get(i).getName());
+            System.out.println(projectManager.getYourProjects().get(i).getName());
+            System.out.println(projectManager.getYourProjects().size());
+        }*/
+        //System.out.println(projectManager.getYourProjects().size());
         mainView.setUser(projectManager.getUsuari().getCorreu());
         mainView.setVisible(true);
         authenticationView.setVisible(false);

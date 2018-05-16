@@ -42,6 +42,9 @@ public class MainView extends JFrame {
     private JScrollPane jsc2;
     private JList userProjects;
     private JList sharedProjects;
+    private JPanel finalPanel;
+    private JPanel jpLists;
+    private JPanel jpButtons;
 
     private DefaultListModel<String> dataUser;
     private DefaultListModel<String> dataShared;
@@ -95,14 +98,14 @@ public class MainView extends JFrame {
         //Componentes Vista Home
         // Esta lista habra que cogerla de la base de datos directamente
         dataUser = new DefaultListModel<>();
-        dataUser.addElement("Item1");
+        /*dataUser.addElement("Item1");
         dataUser.addElement("Item2");
         dataUser.addElement("Item3");
         dataUser.addElement("Item4");
         dataUser.addElement("Item5");
         dataUser.addElement("Item6");
         dataUser.addElement("Item7");
-        dataUser.addElement("Item8");
+        dataUser.addElement("Item8");*/
         dataUser.addElement("Item9");
 
         stringsUser = new JList<String>(dataUser);
@@ -331,17 +334,17 @@ public class MainView extends JFrame {
 
         getContentPane().removeAll();
 
-        JPanel jpButtons = new JPanel(new BorderLayout());
+        jpButtons = new JPanel(new BorderLayout());
         jpButtons.setOpaque(false);
         jpButtons.add(jbNew, BorderLayout.LINE_START);
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
-        JPanel jpLists = new JPanel(new FlowLayout());
+        jpLists = new JPanel(new FlowLayout());
         jpLists.setOpaque(false);
         jpLists.add(jsc1);
         jpLists.add(jsc2);
 
-        JPanel finalPanel = new JPanel(new BorderLayout()) {
+        finalPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -634,5 +637,32 @@ public class MainView extends JFrame {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public void addProject(String project){
+        dataUser.addElement(project);
+    }
+
+    public void addBackground(String path){
+        finalPanel.removeAll();
+
+        finalPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(new File(path)),
+                            0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        finalPanel.add(jpLists, BorderLayout.CENTER);
+        finalPanel.add(jpButtons, BorderLayout.NORTH);
+
+        this.getContentPane().add(finalPanel);
+        validate();
     }
 }
