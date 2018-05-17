@@ -49,7 +49,6 @@ public class Main {
 
                     //Zona Test
                     VistaTest vistaTest = new VistaTest();
-                    vistaTest.registerController(clientController);
                     vistaTest.setVisible(true);
 
                 } catch (FileNotFoundException e) {
