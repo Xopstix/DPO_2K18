@@ -77,10 +77,9 @@ public class MainView extends JFrame {
 
         initHome();
         this.setSize(600, 300);
-        this.setTitle("Projects");
+        this.setTitle("ProjectManager");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setResizable(false);
     }
 
     public void initHome() {
@@ -107,6 +106,7 @@ public class MainView extends JFrame {
         dataUser.addElement("Item7");
         dataUser.addElement("Item8");*/
         dataUser.addElement("Item9");
+
 
         stringsUser = new JList<String>(dataUser);
 
@@ -580,13 +580,7 @@ public class MainView extends JFrame {
         System.out.println(newProject.getName());
         newProject.setMembres(new ArrayList<Usuari>());
         newProject.setColumnes(new ArrayList<Columna>());
-        //Guarda la imagen seleccionada como background en la carpeta images y guarda su path relativo en
-        //el atributo Background del proyecto
-        File f = new File(jfChooser.getSelectedFile().getAbsolutePath());
-        newProject.setBackground("images/" + f.getName());
-        f.renameTo(new File("images/" + f.getName()));
-        f.delete();
-        System.out.println(newProject.getBackground());
+        //newProject.setBackground(jfChooser.getSelectedFile().getAbsolutePath());
         newProject.setEtiquetes(new ArrayList<Etiqueta>());
         newProject.setDate();
 
