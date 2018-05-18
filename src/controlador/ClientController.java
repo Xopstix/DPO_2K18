@@ -37,6 +37,7 @@ public class ClientController implements ActionListener{
         this.mainView = mainView;
         this.projectManager = projectManager;
         this.data = data;
+        this.serverCommunication = new ServerCommunication();
         this.project = new Project();
     }
 
@@ -110,16 +111,21 @@ public class ClientController implements ActionListener{
                 } catch (FileNotFoundException e1) {
                     e1.printStackTrace();
                 }
-
             }
         }
+
         if (e.getActionCommand().equals("LOGOUT")){ //Si se quiere salir del programa
+
+            projectManager.setYourProjects(mainView.getYourNewOrder(projectManager.getYourProjects()));
+            projectManager.setSharedProjects(mainView.getSharedNewOrder(projectManager.getSharedProjects()));
             System.exit(1);                  //Se sale del programa con código 1
         }
 
         if (e.getActionCommand().equals("NEW_PROJECT")){
 
+            mainView.addContributors(projectManager.getUsuarios());
             mainView.initNewProjectView();
+            mainView.revalidate();
         }
 
         if (e.getActionCommand().equals("POPUP")){
@@ -175,15 +181,17 @@ public class ClientController implements ActionListener{
     }
 
     public void logInAccepted(){
-        /*for (int i = 0; i < projectManager.getYourProjects().size(); i++){
-            mainView.addProject(projectManager.getYourProjects().get(i).getName());
-            System.out.println(projectManager.getYourProjects().get(i).getName());
-            System.out.println(projectManager.getYourProjects().size());
-        }*/
-        //System.out.println(projectManager.getYourProjects().size());
+
         mainView.setUser(projectManager.getUsuari().getCorreu());
-        mainView.setVisible(true);
+        mainView.addProjects(projectManager.getYourProjects(), projectManager.getSharedProjects());
+        mainView.revalidate();
         authenticationView.setVisible(false);
+        mainView.setVisible(true);
+    }
+
+    public void setProjectManager(ProjectManager projectManager){
+
+        this.projectManager = projectManager;
     }
 
     public ServerCommunication getServerCommunication() {

@@ -4,8 +4,6 @@ import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
 import model.ProjectManager;
-import model.Project;
-
 
 import javax.swing.*;
 import java.io.*;
@@ -28,6 +26,10 @@ public class ServerCommunication extends Thread{
     private ClientController clientController;
     private int mode;
 
+    public ServerCommunication(){
+
+    }
+
     public ServerCommunication(ProjectManager projectManager, ClientController clientController, int mode){
 
         running = false;
@@ -36,7 +38,6 @@ public class ServerCommunication extends Thread{
         this.clientController = clientController;
         this.mode = mode;
     }
-
 
     /**
      * Es connecta al servidor
@@ -76,11 +77,12 @@ public class ServerCommunication extends Thread{
                     projectManager.setMode(1);
                     oos.writeObject(projectManager);
                     this.projectManager = (ProjectManager) ois.readObject();
+                    clientController.setProjectManager(projectManager);
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();
-                    //System.out.println(projectManager.getYourProjects().get(0).getName());
                 }
+
                 if (mode == 2) {
                     projectManager.setMode(2);
                     oos.writeObject(projectManager);
@@ -89,7 +91,7 @@ public class ServerCommunication extends Thread{
                     autentica(msg);
                     endConnection();
                 }
-                System.out.println(projectManager.getYourProjects().size());
+
             }
 
         }catch (IOException ioe) {
@@ -124,5 +126,10 @@ public class ServerCommunication extends Thread{
     public void showDialogMessage(String msg){
 
         JOptionPane.showMessageDialog(null, msg);
+    }
+
+    public ProjectManager getProjectManager(){
+
+        return this.projectManager;
     }
 }

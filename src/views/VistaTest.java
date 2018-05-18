@@ -7,6 +7,9 @@ import model.ProjectManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -240,20 +243,42 @@ public class VistaTest extends JFrame{
         deleteButton.setMnemonic(KeyEvent.VK_P);
         deleteButton.getAccessibleContext().setAccessibleDescription("Delete task");
 
-        JTextField jTextField = new JTextField("Nou nom");
+        deleteButton.setMinimumSize(new Dimension(200,50));
+        deleteButton.setMaximumSize(new Dimension(200,50));
 
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+        JTextField nameTextField = new JTextField("Nou nom");
 
-        menuPanel.add(jTextField);
-        menuPanel.add(deleteButton);
+        nameTextField.setMinimumSize(new Dimension(200,50));
+        nameTextField.setMaximumSize(new Dimension(200,50));
 
-        popup.add(menuPanel);
+        JColorChooser colorChooser = new JColorChooser(Color.WHITE);
+        colorChooser.setBorder(null);
+        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                //colorChanged(); // change background color of "button"
+                System.out.println("Hola");
+            }
+        });
 
+        colorChooser.setPreviewPanel(new JPanel());
+
+        AbstractColorChooserPanel panels[] = { new ColorChooserPanel() };
+        colorChooser.setChooserPanels(panels);
+
+        colorChooser.setMaximumSize(new Dimension(200, 40));
+
+        popup.add(nameTextField);
+        popup.add(deleteButton);
+        popup.add(colorChooser);
+
+        popup.setPopupSize(new Dimension(200,300));
         popup.show(this, columna * 200 + 25, fila * 35 + 120);
     }
 
     public void registerController(ClientController controllerClient, CustomListSelectionListener listSelectionListener) {
+
+        jbUser.setActionCommand("POPUP_PANEL");
+        jbUser.addActionListener(controllerClient);
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
@@ -261,6 +286,5 @@ public class VistaTest extends JFrame{
         for (int i = 0; i < userColumns.size(); i++){
             userColumns.get(i).addListSelectionListener(listSelectionListener);
         }
-
     }
 }

@@ -97,24 +97,11 @@ public class MainView extends JFrame {
         //Componentes Vista Home
         // Esta lista habra que cogerla de la base de datos directamente
         dataUser = new DefaultListModel<>();
-        /*dataUser.addElement("Item1");
-        dataUser.addElement("Item2");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item4");
-        dataUser.addElement("Item5");
-        dataUser.addElement("Item6");
-        dataUser.addElement("Item7");
-        dataUser.addElement("Item8");*/
-        dataUser.addElement("Item9");
 
 
         stringsUser = new JList<String>(dataUser);
 
         dataShared = new DefaultListModel<>();
-        dataShared.addElement("Item1");
-        dataShared.addElement("Item2");
-        dataShared.addElement("Item3");
-        dataShared.addElement("Item4");
 
         stringsShared = new JList<String>(dataShared);
 
@@ -244,18 +231,6 @@ public class MainView extends JFrame {
 
         // Esta lista habra que cogerla de la base de datos directamente
         dataContributors = new DefaultListModel<>();
-        dataContributors.addElement("Item1");
-        dataContributors.addElement("Item2");
-        dataContributors.addElement("Item3");
-        dataContributors.addElement("Item4");
-        dataContributors.addElement("Item5");
-        dataContributors.addElement("Item6");
-        dataContributors.addElement("Item7");
-        dataContributors.addElement("Item8");
-        dataContributors.addElement("Item9");
-        dataContributors.addElement("Item10");
-        dataContributors.addElement("Item11");
-        dataContributors.addElement("Item12");
 
         contributors = new JList<>(dataContributors);
         contributors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -362,6 +337,31 @@ public class MainView extends JFrame {
 
         this.getContentPane().add(finalPanel);
         validate();
+    }
+
+    public void addProjects (ArrayList<Project> userProjects, ArrayList<Project> sharedProjects){
+
+        for (int i = 0; i < userProjects.size(); i++){
+
+            dataUser.addElement(userProjects.get(i).getName());
+            try{
+                dataShared.addElement(sharedProjects.get(i).getName());
+            }catch(IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+        }
+
+        this.revalidate();
+    }
+
+    public void addContributors (ArrayList<String> contributors){
+
+        for (int i = 0; i < contributors.size(); i++){
+
+            dataContributors.addElement(contributors.get(i));
+        }
+
+        this.revalidate();
     }
 
     private void initListeners(){
@@ -658,5 +658,41 @@ public class MainView extends JFrame {
 
         this.getContentPane().add(finalPanel);
         validate();
+    }
+
+    public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){
+
+        ArrayList<Project> aux = new ArrayList<>();
+
+        for (int i = 0; i < dataUser.size(); i++){
+
+            for (int j = 0; j < projects.size(); j++){
+
+                if (projects.get(j).getName().equals(dataUser.get(i))){
+
+                    aux.add(projects.get(j));
+                }
+            }
+        }
+
+        return aux;
+    }
+
+    public ArrayList<Project> getSharedNewOrder(ArrayList<Project> projects){
+
+        ArrayList<Project> aux = new ArrayList<>();
+
+        for (int i = 0; i < dataShared.size(); i++){
+
+            for (int j = 0; j < projects.size(); j++){
+
+                if (projects.get(j).getName().equals(dataShared.get(i))){
+
+                    aux.add(projects.get(j));
+                }
+            }
+        }
+
+        return aux;
     }
 }
