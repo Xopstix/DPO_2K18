@@ -20,7 +20,7 @@ public class CustomListSelectionListener implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-
+        
         vistaTest.initPopupTasca(Integer.parseInt(((JList) e.getSource()).getName()), ((JList) e.getSource()).getSelectedIndex());
         System.out.println(((JList) e.getSource()).getName());
         System.out.println(((JList) e.getSource()).getSelectedIndex());

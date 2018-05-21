@@ -3,13 +3,12 @@ package views;
 import controlador.ClientController;
 import controlador.CustomListSelectionListener;
 import controlador.CustomTransferHandler;
+import model.Project;
 import model.ProjectManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -29,6 +28,13 @@ public class VistaTest extends JFrame{
     private ArrayList<JList<String>> userColumns;
     private CustomListSelectionListener customListSelectionListener;
 
+    private JPopupMenu popup;
+    private JMenuItem deleteButton;
+    private JTextField nameTextField;
+    private JColorChooser colorChooser;
+    private JPanel colorChooserPanel;
+
+    private Project project;
     private ProjectManager projectManager;
 
     public VistaTest(){
@@ -45,6 +51,8 @@ public class VistaTest extends JFrame{
 
         //Habrá que coger de la base de datos los panels e irlos creando
         //De momento hecho con listas de strings, reaprovechamos nombres
+
+        project = new Project();
 
         projectManager = new ProjectManager();
 
@@ -72,6 +80,65 @@ public class VistaTest extends JFrame{
 
         jbNew = new JButton("New Project");
         jbUser = new JButton("User");
+
+        popup = new JPopupMenu();
+
+        deleteButton = new JMenuItem("Delete", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        deleteButton.setMnemonic(KeyEvent.VK_P);
+        deleteButton.getAccessibleContext().setAccessibleDescription("Delete task");
+
+        deleteButton.setMinimumSize(new Dimension(200,40));
+        deleteButton.setMaximumSize(new Dimension(200,40));
+
+        nameTextField = new JTextField("Nou nom");
+
+        nameTextField.setMinimumSize(new Dimension(200,30));
+        nameTextField.setMaximumSize(new Dimension(200,30));
+
+        colorChooser = new JColorChooser(Color.WHITE);
+
+        colorChooser.setPreviewPanel(new JPanel());
+
+        AbstractColorChooserPanel panels[] = { new ColorChooserPanel() };
+        colorChooser.setChooserPanels(panels);
+
+        colorChooser.setMaximumSize(new Dimension(50, 50));
+        colorChooser.setMinimumSize(new Dimension(50, 50));
+
+        colorChooserPanel = new JPanel(new BorderLayout());
+
+        JPanel colorLabels = new JPanel();
+
+        colorLabels.setLayout(new BoxLayout(colorLabels, BoxLayout.Y_AXIS));
+
+        colorLabels.setSize(new Dimension(150,50));
+
+        if (project.getEtiquetes() != null){
+
+            for (int i = 0; i < project.getEtiquetes().size(); i++){
+                JLabel auxLabelColor = new JLabel(project.getEtiquetes().get(i).getNom());
+                auxLabelColor.setBorder(BorderFactory.createEmptyBorder(5,0,5,10));
+                colorLabels.add(auxLabelColor);
+            }
+
+            colorChooserPanel.add(colorChooser, BorderLayout.WEST);
+            colorChooserPanel.add(colorLabels,BorderLayout.CENTER);
+
+        }else{
+
+            for (int i = 0; i < 5; i++){
+                JTextField auxColorTextField = new JTextField("Name your task!");
+                auxColorTextField.setMinimumSize(new Dimension(140, 40));
+                auxColorTextField.setMaximumSize(new Dimension(140, 40));
+                auxColorTextField.setBorder(BorderFactory.createMatteBorder(10,5,10,10, Color.LIGHT_GRAY));
+                auxColorTextField.setOpaque(false);
+                colorLabels.add(auxColorTextField);
+            }
+
+            colorChooserPanel.add(colorChooser, BorderLayout.WEST);
+            colorChooserPanel.add(colorLabels, BorderLayout.CENTER);
+        }
 
     }
 
@@ -236,43 +303,12 @@ public class VistaTest extends JFrame{
 
     public void initPopupTasca(int columna, int fila){
 
-        JPopupMenu popup = new JPopupMenu();
-
-        JMenuItem deleteButton = new JMenuItem("Delete", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
-                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
-        deleteButton.setMnemonic(KeyEvent.VK_P);
-        deleteButton.getAccessibleContext().setAccessibleDescription("Delete task");
-
-        deleteButton.setMinimumSize(new Dimension(200,50));
-        deleteButton.setMaximumSize(new Dimension(200,50));
-
-        JTextField nameTextField = new JTextField("Nou nom");
-
-        nameTextField.setMinimumSize(new Dimension(200,50));
-        nameTextField.setMaximumSize(new Dimension(200,50));
-
-        JColorChooser colorChooser = new JColorChooser(Color.WHITE);
-        colorChooser.setBorder(null);
-        colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                //colorChanged(); // change background color of "button"
-                System.out.println("Hola");
-            }
-        });
-
-        colorChooser.setPreviewPanel(new JPanel());
-
-        AbstractColorChooserPanel panels[] = { new ColorChooserPanel() };
-        colorChooser.setChooserPanels(panels);
-
-        colorChooser.setMaximumSize(new Dimension(200, 40));
-
         popup.add(nameTextField);
+        popup.add(colorChooserPanel);
         popup.add(deleteButton);
-        popup.add(colorChooser);
 
-        popup.setPopupSize(new Dimension(200,300));
-        popup.show(this, columna * 200 + 25, fila * 35 + 120);
+        popup.setPopupSize(new Dimension(200,264));
+        popup.show(this, columna * 200 + 23, fila * 35 + 120);
     }
 
     public void registerController(ClientController controllerClient, CustomListSelectionListener listSelectionListener) {

@@ -57,10 +57,10 @@ class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListe
 
     @Override
     protected void buildChooser() {
-        setLayout(new GridLayout(1, 0));
+        setLayout(new GridLayout(0, 1));
 
         ButtonGroup boxOfCrayons = new ButtonGroup();
-        Border border = BorderFactory.createEmptyBorder(4,4,4,4);
+        Border border = BorderFactory.createEmptyBorder(4,14,4,4);
 
         yellow = createColor("yellowsticker", border);
         boxOfCrayons.add(yellow);
