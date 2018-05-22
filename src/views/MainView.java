@@ -345,7 +345,7 @@ public class MainView extends JFrame {
 
             dataUser.addElement(userProjects.get(i).getName());
             try{
-                dataShared.addElement(sharedProjects.get(i).getName());
+                //dataShared.addElement(sharedProjects.get(i).getName());
             }catch(IndexOutOfBoundsException e){
                 e.printStackTrace();
             }
@@ -580,7 +580,12 @@ public class MainView extends JFrame {
         System.out.println(newProject.getName());
         newProject.setMembres(new ArrayList<Usuari>());
         newProject.setColumnes(new ArrayList<Columna>());
-        //newProject.setBackground(jfChooser.getSelectedFile().getAbsolutePath());
+        //Guarda la imagen seleccionada como background en la carpeta images y pone su path en
+        //el atributo Background del proyecto
+        File f = new File(jfChooser.getSelectedFile().getAbsolutePath());
+        newProject.setBackground("images/" + f.getName());
+        f.renameTo(new File("images/" + f.getName()));
+        f.delete();
         newProject.setEtiquetes(new ArrayList<Etiqueta>());
         newProject.setDate();
 

@@ -29,6 +29,7 @@ public class VistaTest extends JFrame{
     private CustomListSelectionListener customListSelectionListener;
 
     private JPopupMenu popup;
+    private JPopupMenu popupColumn;
     private JMenuItem deleteButton;
     private JTextField nameTextField;
     private JColorChooser colorChooser;
@@ -311,6 +312,13 @@ public class VistaTest extends JFrame{
         popup.show(this, columna * 200 + 23, fila * 35 + 120);
     }
 
+    public void initPopUpColumn(){
+
+        popupColumn.add(new TextField(10));
+
+
+    }
+
     public void registerController(ClientController controllerClient, CustomListSelectionListener listSelectionListener) {
 
         jbUser.setActionCommand("POPUP_PANEL");
@@ -322,5 +330,8 @@ public class VistaTest extends JFrame{
         for (int i = 0; i < userColumns.size(); i++){
             userColumns.get(i).addListSelectionListener(listSelectionListener);
         }
+
+
+
     }
 }
