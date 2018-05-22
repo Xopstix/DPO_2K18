@@ -505,6 +505,8 @@ public class MainView extends JFrame {
         // Logout menu item
         popup.add(menuItem3);
 
+        //----
+
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
