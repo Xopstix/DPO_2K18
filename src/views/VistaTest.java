@@ -149,7 +149,7 @@ public class VistaTest extends JFrame{
 
         JPanel totalPanel;
 
-        File image = new File("images/bg1.jpg");
+        File image = new File("images/dgreen.jpg");
 
         totalPanel = new JPanel(new BorderLayout()) {
             @Override
