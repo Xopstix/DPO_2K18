@@ -117,6 +117,7 @@ public class ServerCommunication extends Thread{
     private void autentica(String msg){
         if (msg.equals("Logged")) {
             clientController.logInAccepted();
+            System.out.println("LOGGED");
         }
         else{
             JOptionPane.showMessageDialog(null, msg);

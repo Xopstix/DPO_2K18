@@ -20,7 +20,14 @@ public class Project implements Serializable{
     private int day;
     private int month;
     private int year;
+    private int week;
+    private int idProyecto;
 
+    public Project(){
+        membres = new ArrayList<>();
+        columnes = new ArrayList<>();
+        etiquetes = new ArrayList<>();
+    }
 
     public String getName() {
         return name;
@@ -68,6 +75,8 @@ public class Project implements Serializable{
         day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         month = (Calendar.getInstance().get(Calendar.MONTH)) + 1;
         year = Calendar.getInstance().get(Calendar.YEAR);
+        week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+
     }
 
     public int getDay() {
@@ -100,5 +109,21 @@ public class Project implements Serializable{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public int getIdProyecto() {
+        return idProyecto;
+    }
+
+    public void setIdProyecto(int idProyecto) {
+        this.idProyecto = idProyecto;
+    }
+
+    public int getWeek() {
+        return week;
+    }
+
+    public void setWeek(int week) {
+        this.week = week;
     }
 }
