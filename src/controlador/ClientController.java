@@ -177,6 +177,10 @@ public class ClientController implements ActionListener{
         if (e.getActionCommand().equals("CANCEL")){
             mainView.initHomeView();
         }
+
+        if (e.getActionCommand().equals("TEXTFIELD")){
+
+        }
     }
 
     public void logInAccepted(){

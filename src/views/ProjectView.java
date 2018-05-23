@@ -11,7 +11,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by xaviamorcastillo on 17/4/18.
  */
-public class VistaProject extends JFrame{
+public class ProjectView extends JFrame{
 
     private ArrayList<DefaultListModel<String>> dataUser;
 
@@ -27,6 +30,7 @@ public class VistaProject extends JFrame{
     private JButton jbUser;
     private ArrayList<JList<String>> stringsUser;
     private ArrayList<JList<String>> projectColumns;
+    private ArrayList<JTextField> textFields;
     private CustomMouseListener customMouseListener;
 
     private JPopupMenu popup;
@@ -40,7 +44,7 @@ public class VistaProject extends JFrame{
     private Project project;
     private ProjectManager projectManager;
 
-    public VistaProject(Project project){
+    public ProjectView(Project project){
 
         this.project = project;
         initComponentsProject();
@@ -55,6 +59,8 @@ public class VistaProject extends JFrame{
 
         stringsUser = new ArrayList<>();
         dataUser = new ArrayList<>();
+
+        textFields = new ArrayList<>();
 
         try{
             for (int i = 0; i < project.getColumnes().size(); i++) {
@@ -238,8 +244,30 @@ public class VistaProject extends JFrame{
             //initListeners(projectColumn);
 
             JTextField auxTextField = new JTextField("Afegeix tasca...");
+            auxTextField.setName("" + i);
+            auxTextField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+
+                    if (auxTextField.getText().equals("Afegeix tasca...")){
+
+                        auxTextField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    String text = auxTextField.getText();
+                    if (text == "") {
+                        auxTextField.setText("Afegeix tasca...");
+                    }
+                }
+            });
+
             auxTextField.setPreferredSize(new Dimension(200,25));
             auxTextField.setMaximumSize(new Dimension(200,25));
+
+            textFields.add(auxTextField);
 
             auxPanel.add(auxTextField);
             JButton jbaux = new JButton("Afegeix");
@@ -269,13 +297,15 @@ public class VistaProject extends JFrame{
         newProjectPanel.setBorder(compound);
         //newProjectPanel.setBorder((BorderFactory.createEmptyBorder(60,20,0,0)));
         newProjectPanel.setMaximumSize(new Dimension(200,250));
-        newProjectPanel.setBackground(Color.WHITE);
+        newProjectPanel.setOpaque(false);
 
         JTextField newProjectTextField = new JTextField("Afegeix Columna...");
 
         newProjectPanel.add(newProjectTextField);
 
         boxPanel.add(newProjectPanel);
+
+        boxPanel.setOpaque(false);
 
         JScrollPane jScrollPane2 = new JScrollPane(boxPanel);
         jScrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -340,7 +370,7 @@ public class VistaProject extends JFrame{
 
     }
 
-    public void registerController(ClientController controllerClient, CustomMouseListener customMouseListener) {
+    public void registerController(ClientController controllerClient, CustomMouseListener customMouseListener, KeyListener keyListener) {
         jbUser.setActionCommand("POPUP_PANEL");
         jbUser.addActionListener(controllerClient);
 
@@ -351,6 +381,10 @@ public class VistaProject extends JFrame{
 
         for (int i = 0; i < projectColumns.size(); i++){
             projectColumns.get(i).addMouseListener(customMouseListener);
+        }
+
+        for (int i = 0; i < textFields.size(); i++){
+            textFields.get(i).addKeyListener(keyListener);
         }
     }
 

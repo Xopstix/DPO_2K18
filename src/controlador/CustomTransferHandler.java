@@ -1,6 +1,6 @@
 package controlador;
 
-import views.VistaProject;
+import views.ProjectView;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
@@ -24,14 +24,14 @@ public class CustomTransferHandler extends TransferHandler {
     private int indexDrop;
     private int listDrop;
     private boolean beforeIndex = false;
-    private VistaProject vistaProject;
+    private ProjectView vistaProject;
     private MouseListener mouseListener;
 
     private JList<String> source;
     private JList<String> target;
 
 
-    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser, VistaProject vistaProject, CustomMouseListener mouseListener){
+    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser, ProjectView vistaProject, CustomMouseListener mouseListener){
         this.userColumns = userColumns;
         this.vistaProject = vistaProject;
         this.dataUser = dataUser;

@@ -1,6 +1,6 @@
 package controlador;
 
-import views.VistaProject;
+import views.ProjectView;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -11,12 +11,12 @@ import java.awt.event.MouseListener;
  */
 public class CustomMouseListener implements MouseListener {
 
-    private VistaProject vistaProject;
+    private ProjectView vistaProject;
 
     private int column;
     private int row;
 
-    public CustomMouseListener(VistaProject vistaProject) {
+    public CustomMouseListener(ProjectView vistaProject) {
         this.vistaProject = vistaProject;
     }
 

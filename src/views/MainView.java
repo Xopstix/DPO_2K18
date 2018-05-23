@@ -72,7 +72,7 @@ public class MainView extends JFrame {
 
     private ClientController clientController;
 
-    private VistaProject vistaProject;
+    private ProjectView vistaProject;
 
     public MainView() {
 
@@ -219,7 +219,11 @@ public class MainView extends JFrame {
         jtfProjectName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                jtfProjectName.setText("");
+
+                if (jtfProjectName.getText().equals("Project Name")){
+
+                    jtfProjectName.setText("");
+                }
             }
 
             @Override
@@ -730,15 +734,16 @@ public class MainView extends JFrame {
 
         if (columna.equals("Your")){
 
-            this.vistaProject = new VistaProject(projectManager.getYourProjects().get(fila));
+            this.vistaProject = new ProjectView(projectManager.getYourProjects().get(fila));
         }else{
 
-            this.vistaProject = new VistaProject(projectManager.getSharedProjects().get(fila));
+            this.vistaProject = new ProjectView(projectManager.getSharedProjects().get(fila));
         }
         //CustomListSelectionListener listSelectionListener = new CustomListSelectionListener(vistaProject);
         CustomMouseListener mouseListener = new CustomMouseListener(vistaProject);
         //vistaProject.registerController(clientController, listSelectionListener);
-        vistaProject.registerController(clientController, mouseListener);
+        CustomKeyListener keyListener = new CustomKeyListener(vistaProject);
+        vistaProject.registerController(clientController, mouseListener, keyListener);
         vistaProject.setVisible(true);
         this.setVisible(false);
     }
