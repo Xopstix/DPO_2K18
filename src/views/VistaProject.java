@@ -269,7 +269,7 @@ public class VistaProject extends JFrame{
         newProjectPanel.setBorder(compound);
         //newProjectPanel.setBorder((BorderFactory.createEmptyBorder(60,20,0,0)));
         newProjectPanel.setMaximumSize(new Dimension(200,250));
-        newProjectPanel.setOpaque(false);
+        newProjectPanel.setBackground(Color.WHITE);
 
         JTextField newProjectTextField = new JTextField("Afegeix Columna...");
 

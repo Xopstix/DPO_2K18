@@ -596,16 +596,54 @@ public class MainView extends JFrame {
         Project newProject = new Project();
 
         newProject.setName(jtfProjectName.getText());
-        System.out.println(newProject.getName());
-        newProject.setMembres(new ArrayList<Usuari>());
+
+        ArrayList<String> aux = new ArrayList<>();
+
+        for (int i = 0; i < dataSelected.size(); i++){
+
+            aux.add(dataSelected.get(i));
+        }
+
+        newProject.setMembres(aux);
+
         newProject.setColumnes(new ArrayList<Columna>());
+
         //Guarda la imagen seleccionada como background en la carpeta images y pone su path en
         //el atributo Background del proyecto
         File f = new File(jfChooser.getSelectedFile().getAbsolutePath());
         newProject.setBackground("images/" + f.getName());
         f.renameTo(new File("images/" + f.getName()));
         f.delete();
-        newProject.setEtiquetes(new ArrayList<Etiqueta>());
+
+        ArrayList<Etiqueta> newEtiquetes = new ArrayList<>();
+
+        Etiqueta auxEtiqueta = new Etiqueta();
+        auxEtiqueta.setNom("Etiqueta 1");
+        auxEtiqueta.setColor(Color.YELLOW);
+        newEtiquetes.add(auxEtiqueta);
+
+        auxEtiqueta = new Etiqueta();
+        auxEtiqueta.setNom("Etiqueta 2");
+        auxEtiqueta.setColor(Color.GREEN);
+        newEtiquetes.add(auxEtiqueta);
+
+        auxEtiqueta = new Etiqueta();
+        auxEtiqueta.setNom("Etiqueta 3");
+        auxEtiqueta.setColor(Color.ORANGE);
+        newEtiquetes.add(auxEtiqueta);
+
+        auxEtiqueta = new Etiqueta();
+        auxEtiqueta.setNom("Etiqueta 4");
+        auxEtiqueta.setColor(Color.BLUE);
+        newEtiquetes.add(auxEtiqueta);
+
+        auxEtiqueta = new Etiqueta();
+        auxEtiqueta.setNom("Etiqueta 5");
+        auxEtiqueta.setColor(Color.PINK);
+        newEtiquetes.add(auxEtiqueta);
+
+        newProject.setEtiquetes(newEtiquetes);
+
         newProject.setDate();
 
         return newProject;
@@ -752,4 +790,5 @@ public class MainView extends JFrame {
     public void setClientController(ClientController clientController) {
         this.clientController = clientController;
     }
+
 }

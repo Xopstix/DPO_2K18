@@ -152,8 +152,8 @@ public class ClientController implements ActionListener{
             projecte.setDate();*/
 
             try {
-                project = mainView.createProject();
 
+                project = mainView.createProject();
                 projectManager.setProject(project);
 
             } catch (IOException e1) {
@@ -161,7 +161,6 @@ public class ClientController implements ActionListener{
             }
 
             ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,2);
-
 
             try {
                 serverCommunication.startConnection();

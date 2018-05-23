@@ -13,7 +13,7 @@ public class Project implements Serializable{
 
     private String name;
     private String username;
-    private ArrayList<Usuari> membres;
+    private ArrayList<String> membres;
     private ArrayList<Columna> columnes;
     private String background;
     private ArrayList<Etiqueta> etiquetes;
@@ -37,11 +37,11 @@ public class Project implements Serializable{
         this.name = name;
     }
 
-    public ArrayList<Usuari> getMembres() {
+    public ArrayList<String> getMembres() {
         return membres;
     }
 
-    public void setMembres(ArrayList<Usuari> membres) {
+    public void setMembres(ArrayList<String> membres) {
         this.membres = membres;
     }
 
