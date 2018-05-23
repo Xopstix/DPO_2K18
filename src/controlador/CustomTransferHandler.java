@@ -31,7 +31,7 @@ public class CustomTransferHandler extends TransferHandler {
     private JList<String> target;
 
 
-    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser, ProjectView vistaProject, CustomMouseListener mouseListener){
+    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser, ProjectView vistaProject, CustomMouseListenerProject mouseListener){
         this.userColumns = userColumns;
         this.vistaProject = vistaProject;
         this.dataUser = dataUser;

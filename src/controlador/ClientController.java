@@ -178,8 +178,9 @@ public class ClientController implements ActionListener{
             mainView.initHomeView();
         }
 
-        if (e.getActionCommand().equals("TEXTFIELD")){
+        if (e.getActionCommand().equals("TEXTFIELDNEWTASK")){
 
+            mainView.addColumn(e.getSource().getClass().getName());
         }
     }
 

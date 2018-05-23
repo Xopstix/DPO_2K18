@@ -9,14 +9,14 @@ import java.awt.event.MouseListener;
 /**
  * Created by xaviamorcastillo on 22/5/18.
  */
-public class CustomMouseListener implements MouseListener {
+public class CustomMouseListenerProject implements MouseListener {
 
     private ProjectView vistaProject;
 
     private int column;
     private int row;
 
-    public CustomMouseListener(ProjectView vistaProject) {
+    public CustomMouseListenerProject(ProjectView vistaProject) {
         this.vistaProject = vistaProject;
     }
 
@@ -26,16 +26,10 @@ public class CustomMouseListener implements MouseListener {
     }
 
     public void mouseReleased(MouseEvent e) {
-        saySomething("Mouse released; # of clicks: "
-                + e.getClickCount(), e);
     }
-
     public void mouseEntered(MouseEvent e) {
-        saySomething("Mouse entered", e);
     }
-
     public void mouseExited(MouseEvent e) {
-        saySomething("Mouse exited", e);
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -47,9 +41,6 @@ public class CustomMouseListener implements MouseListener {
         row = ((JList) e.getSource()).getSelectedIndex();
     }
 
-    void saySomething(String eventDescription, MouseEvent e) {
-
-    }
 
     public int getColumn() {
         return column;

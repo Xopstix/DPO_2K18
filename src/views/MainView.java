@@ -72,7 +72,7 @@ public class MainView extends JFrame {
 
     private ClientController clientController;
 
-    private ProjectView vistaProject;
+    private ProjectView projectView;
 
     public MainView() {
 
@@ -110,12 +110,12 @@ public class MainView extends JFrame {
         userProjects.setOpaque(false);
         userProjects.setCellRenderer(new TransparentListCellRenderer());
 
-        userProjects.setName("UserProjects");
+        userProjects.setName("1");
 
         userProjects.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                    System.out.println(userProjects.getSelectedValue());
+                    //System.out.println(userProjects.getSelectedValue());
                 }
             }
         });
@@ -125,12 +125,12 @@ public class MainView extends JFrame {
         sharedProjects.setOpaque(false);
         sharedProjects.setCellRenderer(new TransparentListCellRenderer());
 
-        sharedProjects.setName("SharedProjects");
+        sharedProjects.setName("2");
 
         sharedProjects.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                    System.out.println(sharedProjects.getModel().getElementAt(sharedProjects.getSelectedIndex()));
+                    //System.out.println(sharedProjects.getModel().getElementAt(sharedProjects.getSelectedIndex()));
                 }
             }
         });
@@ -287,7 +287,7 @@ public class MainView extends JFrame {
                 for(int i = 0; i < dataSelected.getSize(); i++) {
                     if (dataSelected.getElementAt(i) == selectedValue) {
                         dataSelected.removeElement(selectedValue);
-                        System.out.println(selectedIndex);
+                        //System.out.println(selectedIndex);
                         break;
                     }
                 }
@@ -442,7 +442,22 @@ public class MainView extends JFrame {
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
                 // Data =? String
-                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+
+                for (int i = 0; i < dataUser.size(); i++){
+
+                    try {
+                        if (dataUser.get(i).equals
+                                ((String)support.getTransferable().getTransferData(DataFlavor.stringFlavor))){
+                        return true;
+                        }
+                    } catch (UnsupportedFlavorException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return false;
             }
 
             @Override
@@ -494,8 +509,22 @@ public class MainView extends JFrame {
 
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
-                // Data =? String
-                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+
+                for (int i = 0; i < dataShared.size(); i++){
+
+                    try {
+                        if (dataShared.get(i).equals
+                                ((String)support.getTransferable().getTransferData(DataFlavor.stringFlavor))){
+                            return true;
+                        }
+                    } catch (UnsupportedFlavorException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return false;
             }
 
             @Override
@@ -664,7 +693,7 @@ public class MainView extends JFrame {
     }
 
     public void registerController(ClientController controllerClient, PopupController controllerPopUp,
-                                   CustomListSelectionListener customListSelectionListenerMain) {
+                                   CustomMouseListenerMain customMouseListenerMain) {
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
@@ -690,8 +719,8 @@ public class MainView extends JFrame {
         menuItem3.setActionCommand("LOGOUT");
         menuItem3.addActionListener(controllerPopUp);
 
-        userProjects.addListSelectionListener(customListSelectionListenerMain);
-        sharedProjects.addListSelectionListener(customListSelectionListenerMain);
+        userProjects.addMouseListener(customMouseListenerMain);
+        sharedProjects.addMouseListener(customMouseListenerMain);
 
     }
 
@@ -734,18 +763,21 @@ public class MainView extends JFrame {
 
         if (columna.equals("Your")){
 
-            this.vistaProject = new ProjectView(projectManager.getYourProjects().get(fila));
+            this.projectView = new ProjectView(projectManager.getYourProjects().get(fila));
         }else{
 
-            this.vistaProject = new ProjectView(projectManager.getSharedProjects().get(fila));
+            this.projectView = new ProjectView(projectManager.getSharedProjects().get(fila));
         }
-        //CustomListSelectionListener listSelectionListener = new CustomListSelectionListener(vistaProject);
-        CustomMouseListener mouseListener = new CustomMouseListener(vistaProject);
-        //vistaProject.registerController(clientController, listSelectionListener);
-        CustomKeyListener keyListener = new CustomKeyListener(vistaProject);
-        vistaProject.registerController(clientController, mouseListener, keyListener);
-        vistaProject.setVisible(true);
+
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        projectView.setVisible(true);
         this.setVisible(false);
+    }
+
+    public void addColumn(String column){
+
+        this.projectView.addColumn(column);
     }
 
     public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){

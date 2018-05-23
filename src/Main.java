@@ -1,7 +1,7 @@
 import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
-import controlador.CustomListSelectionListener;
+import controlador.CustomMouseListenerMain;
 import controlador.PopupController;
 import model.ProjectManager;
 import network.ServerCommunication;
@@ -40,11 +40,10 @@ public class Main {
                     ClientController clientController = new ClientController(authenticationView, mainView, projectManager, data);    //controlador
                     ServerCommunication serverCommunication = clientController.getServerCommunication();
                     PopupController popupController = new PopupController(mainView, serverCommunication);
-                    CustomListSelectionListener listSelectionListenerMain =
-                            new CustomListSelectionListener(mainView);
+                    CustomMouseListenerMain mouseSelectionListenerMain = new CustomMouseListenerMain(mainView);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
-                    mainView.registerController(clientController, popupController, listSelectionListenerMain);
+                    mainView.registerController(clientController, popupController, mouseSelectionListenerMain);
                     mainView.setClientController(clientController);
 
                     authenticationView.setVisible(true);        //Se hace visible la views de autenticación

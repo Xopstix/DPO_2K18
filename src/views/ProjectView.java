@@ -1,7 +1,7 @@
 package views;
 
 import controlador.ClientController;
-import controlador.CustomMouseListener;
+import controlador.CustomMouseListenerProject;
 import controlador.CustomTransferHandler;
 import model.Project;
 import model.ProjectManager;
@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class ProjectView extends JFrame{
     private ArrayList<JList<String>> stringsUser;
     private ArrayList<JList<String>> projectColumns;
     private ArrayList<JTextField> textFields;
-    private CustomMouseListener customMouseListener;
+    private CustomMouseListenerProject customMouseListener;
 
     private JPopupMenu popup;
     private JPopupMenu popupColumn;
@@ -370,7 +369,7 @@ public class ProjectView extends JFrame{
 
     }
 
-    public void registerController(ClientController controllerClient, CustomMouseListener customMouseListener, KeyListener keyListener) {
+    public void registerController(ClientController controllerClient, CustomMouseListenerProject customMouseListener) {
         jbUser.setActionCommand("POPUP_PANEL");
         jbUser.addActionListener(controllerClient);
 
@@ -384,12 +383,19 @@ public class ProjectView extends JFrame{
         }
 
         for (int i = 0; i < textFields.size(); i++){
-            textFields.get(i).addKeyListener(keyListener);
+            textFields.get(i).addActionListener(controllerClient);
+            textFields.get(i).setActionCommand("TEXTFIELDNEWTASK");
+            //textFields.get(i).addKeyListener(keyListener);
         }
     }
 
     public void setProject(Project project){
 
         this.project = project;
+    }
+
+    public void addColumn(String column) {
+
+
     }
 }
