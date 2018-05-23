@@ -3,6 +3,7 @@ package network;
 import config.Config;
 import config.ObjectFile;
 import controlador.ClientController;
+import controlador.CustomListSelectionListener;
 import model.ProjectManager;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class ServerCommunication extends Thread{
     private ProjectManager projectManager;
     private String msg;
     private ClientController clientController;
+    private CustomListSelectionListener customListSelectionListenerMain;
     private int mode;
 
     public ServerCommunication(){

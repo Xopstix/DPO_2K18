@@ -101,7 +101,7 @@ public class ClientController implements ActionListener{
 
                 projectManager.getUsuari().setPassword(authenticationView.getContrasenya());    //A la contraseña se le asigna la contraseña introducida
 
-                ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 1);
+                ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,1);
 
                 System.out.println(projectManager.getYourProjects().get(1).getName() + "hola1");
                 System.out.println(projectManager.getYourProjects().get(2).getName() + "hola2");
@@ -160,7 +160,7 @@ public class ClientController implements ActionListener{
                 e1.printStackTrace();
             }
 
-            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this, 2);
+            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,2);
 
 
             try {
@@ -183,7 +183,8 @@ public class ClientController implements ActionListener{
     public void logInAccepted(){
 
         mainView.setUser(projectManager.getUsuari().getCorreu());
-        mainView.addProjects(projectManager.getYourProjects(), projectManager.getSharedProjects());
+        mainView.setProjectManager(projectManager);
+        mainView.addProjects();
         mainView.revalidate();
         authenticationView.setVisible(false);
         mainView.setVisible(true);
@@ -196,5 +197,10 @@ public class ClientController implements ActionListener{
 
     public ServerCommunication getServerCommunication() {
         return serverCommunication;
+    }
+
+    public ProjectManager getProjectManager(){
+
+        return projectManager;
     }
 }

@@ -1,11 +1,7 @@
 package views;
 
-import controlador.ClientController;
-import controlador.PopupController;
-import model.Columna;
-import model.Etiqueta;
-import model.Project;
-import model.Usuari;
+import controlador.*;
+import model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -72,6 +68,11 @@ public class MainView extends JFrame {
     private JList<String> selected;
     private DefaultListModel<String> dataSelected;
 
+    private ProjectManager projectManager;
+
+    private ClientController clientController;
+
+    private VistaProject vistaProject;
 
     public MainView() {
 
@@ -98,7 +99,6 @@ public class MainView extends JFrame {
         // Esta lista habra que cogerla de la base de datos directamente
         dataUser = new DefaultListModel<>();
 
-
         stringsUser = new JList<String>(dataUser);
 
         dataShared = new DefaultListModel<>();
@@ -109,6 +109,8 @@ public class MainView extends JFrame {
         userProjects.setFixedCellHeight(25);
         userProjects.setOpaque(false);
         userProjects.setCellRenderer(new TransparentListCellRenderer());
+
+        userProjects.setName("UserProjects");
 
         userProjects.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
@@ -122,6 +124,8 @@ public class MainView extends JFrame {
         sharedProjects.setFixedCellHeight(25);
         sharedProjects.setOpaque(false);
         sharedProjects.setCellRenderer(new TransparentListCellRenderer());
+
+        sharedProjects.setName("SharedProjects");
 
         sharedProjects.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
@@ -339,14 +343,27 @@ public class MainView extends JFrame {
         validate();
     }
 
-    public void addProjects (ArrayList<Project> userProjects, ArrayList<Project> sharedProjects){
+    public void addProjects (){
 
-        for (int i = 0; i < userProjects.size(); i++){
+        for (int i = 0; i < projectManager.getYourProjects().size(); i++){
 
-            dataUser.addElement(userProjects.get(i).getName());
             try{
-                //dataShared.addElement(sharedProjects.get(i).getName());
+
+                dataUser.addElement(projectManager.getYourProjects().get(i).getName());
+
             }catch(IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = 0; i < projectManager.getSharedProjects().size(); i++){
+
+            try{
+
+                dataShared.addElement(projectManager.getSharedProjects().get(i).getName());
+
+            }catch(IndexOutOfBoundsException e){
+
                 e.printStackTrace();
             }
         }
@@ -604,7 +621,8 @@ public class MainView extends JFrame {
 
     }
 
-    public void registerController(ClientController controllerClient, PopupController controllerPopUp) {
+    public void registerController(ClientController controllerClient, PopupController controllerPopUp,
+                                   CustomListSelectionListener customListSelectionListenerMain) {
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
@@ -629,6 +647,9 @@ public class MainView extends JFrame {
 
         menuItem3.setActionCommand("LOGOUT");
         menuItem3.addActionListener(controllerPopUp);
+
+        userProjects.addListSelectionListener(customListSelectionListenerMain);
+        sharedProjects.addListSelectionListener(customListSelectionListenerMain);
 
     }
 
@@ -667,6 +688,23 @@ public class MainView extends JFrame {
         validate();
     }
 
+    public void loadProject(String columna, int fila){
+
+        if (columna.equals("Your")){
+
+            this.vistaProject = new VistaProject(projectManager.getYourProjects().get(fila));
+        }else{
+
+            this.vistaProject = new VistaProject(projectManager.getSharedProjects().get(fila));
+        }
+        //CustomListSelectionListener listSelectionListener = new CustomListSelectionListener(vistaProject);
+        CustomMouseListener mouseListener = new CustomMouseListener(vistaProject);
+        //vistaProject.registerController(clientController, listSelectionListener);
+        vistaProject.registerController(clientController, mouseListener);
+        vistaProject.setVisible(true);
+        this.setVisible(false);
+    }
+
     public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){
 
         ArrayList<Project> aux = new ArrayList<>();
@@ -701,5 +739,17 @@ public class MainView extends JFrame {
         }
 
         return aux;
+    }
+
+    public ProjectManager getProjectManager() {
+        return projectManager;
+    }
+
+    public void setProjectManager(ProjectManager projectManager) {
+        this.projectManager = projectManager;
+    }
+
+    public void setClientController(ClientController clientController) {
+        this.clientController = clientController;
     }
 }

@@ -1,13 +1,14 @@
 package views;
 
 import controlador.ClientController;
-import controlador.CustomListSelectionListener;
+import controlador.CustomMouseListener;
 import controlador.CustomTransferHandler;
 import model.Project;
 import model.ProjectManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,66 +19,60 @@ import java.util.ArrayList;
 /**
  * Created by xaviamorcastillo on 17/4/18.
  */
-public class VistaTest extends JFrame{
+public class VistaProject extends JFrame{
 
-    private DefaultListModel<String> dataUser;
+    private ArrayList<DefaultListModel<String>> dataUser;
 
     private JButton jbNew;
     private JButton jbUser;
-    private JList<String> stringsUser;
-    private ArrayList<JList<String>> userColumns;
-    private CustomListSelectionListener customListSelectionListener;
+    private ArrayList<JList<String>> stringsUser;
+    private ArrayList<JList<String>> projectColumns;
+    private CustomMouseListener customMouseListener;
 
     private JPopupMenu popup;
     private JPopupMenu popupColumn;
     private JMenuItem deleteButton;
     private JTextField nameTextField;
+    private JPanel colorLabels;
     private JColorChooser colorChooser;
     private JPanel colorChooserPanel;
 
     private Project project;
     private ProjectManager projectManager;
 
-    public VistaTest(){
+    public VistaProject(Project project){
 
-        initComponents();
-        initVista();
+        this.project = project;
+        initComponentsProject();
+        initVistaProject();
         this.setSize(1200, 600);
         this.setTitle("ProjectManager");
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void initComponents() {
+    private void initComponentsProject() {
 
-        //Habrá que coger de la base de datos los panels e irlos creando
-        //De momento hecho con listas de strings, reaprovechamos nombres
+        stringsUser = new ArrayList<>();
+        dataUser = new ArrayList<>();
 
-        project = new Project();
+        try{
+            for (int i = 0; i < project.getColumnes().size(); i++) {
 
-        projectManager = new ProjectManager();
+                dataUser.add(new DefaultListModel<>());
 
-        dataUser = new DefaultListModel<>();
-        dataUser.addElement("Item1");
-        dataUser.addElement("Item2");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
-        dataUser.addElement("Item3");
+                for (int j = 0; j < project.getColumnes().get(i).getTasques().size(); j++) {
 
-        stringsUser = new JList<String>(dataUser);
+                    dataUser.get(i).addElement(project.getColumnes().get(i).getTasques().get(j).getNom());
+                }
+
+                stringsUser.add(new JList<>(dataUser.get(i)));
+            }
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
 
         jbNew = new JButton("New Project");
         jbUser = new JButton("User");
@@ -109,7 +104,7 @@ public class VistaTest extends JFrame{
 
         colorChooserPanel = new JPanel(new BorderLayout());
 
-        JPanel colorLabels = new JPanel();
+        colorLabels = new JPanel();
 
         colorLabels.setLayout(new BoxLayout(colorLabels, BoxLayout.Y_AXIS));
 
@@ -126,13 +121,13 @@ public class VistaTest extends JFrame{
             colorChooserPanel.add(colorChooser, BorderLayout.WEST);
             colorChooserPanel.add(colorLabels,BorderLayout.CENTER);
 
-        }else{
+        }else {
 
-            for (int i = 0; i < 5; i++){
+            for (int i = 0; i < 5; i++) {
                 JTextField auxColorTextField = new JTextField("Name your task!");
                 auxColorTextField.setMinimumSize(new Dimension(140, 40));
                 auxColorTextField.setMaximumSize(new Dimension(140, 40));
-                auxColorTextField.setBorder(BorderFactory.createMatteBorder(10,5,10,10, Color.LIGHT_GRAY));
+                auxColorTextField.setBorder(BorderFactory.createMatteBorder(10, 5, 10, 10, Color.LIGHT_GRAY));
                 auxColorTextField.setOpaque(false);
                 colorLabels.add(auxColorTextField);
             }
@@ -140,10 +135,9 @@ public class VistaTest extends JFrame{
             colorChooserPanel.add(colorChooser, BorderLayout.WEST);
             colorChooserPanel.add(colorLabels, BorderLayout.CENTER);
         }
-
     }
 
-    private void initVista() {
+    private void initVistaProject() {
 
         this.setResizable(false);
 
@@ -172,7 +166,7 @@ public class VistaTest extends JFrame{
 
         boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
 
-        userColumns = new ArrayList<>();
+        projectColumns = new ArrayList<>();
 
         for (int i = 0; i < dataUser.size(); i++){
 
@@ -182,7 +176,7 @@ public class VistaTest extends JFrame{
             JPanel titlePanel = new JPanel(new FlowLayout());
             titlePanel.setMaximumSize(new Dimension(150,50));
 
-            JButton nameButton = new JButton(dataUser.get(i));
+            JButton nameButton = new JButton(project.getColumnes().get(i).getNom());
             nameButton.setForeground(Color.WHITE);
             nameButton.setBorderPainted(false);
             JButton deleteButton = new JButton();
@@ -208,39 +202,40 @@ public class VistaTest extends JFrame{
             auxPanel.setMaximumSize(new Dimension(200, 500));
             auxPanel.setMinimumSize(new Dimension(200,400));
 
-            JList<String> userColumn = new JList<>(dataUser);     //Clase que contendra la info de la DB
-            userColumn.setFixedCellHeight(35);
-            userColumn.setOpaque(false);
-            userColumn.setCellRenderer(new TransparentListCellRenderer());
+            JList<String> projectColumn = new JList<>(dataUser.get(i));     //Clase que contendra la info de la DB
+            projectColumn.setFixedCellHeight(35);
+            projectColumn.setOpaque(false);
+            projectColumn.setCellRenderer(new TransparentListCellRenderer());
 
-            userColumn.setName(i+"");
-            System.out.println(userColumn.getName());
+            projectColumn.setName(i+"");
 
-            userColumn.setModel(new AbstractListModel() {
+            projectColumn.setModel(new AbstractListModel() {
 
                 @Override
                 public int getSize() {
-                    return stringsUser.getModel().getSize();
+                    return stringsUser.get(Integer.parseInt(projectColumn.getName())).getModel().getSize();
                 }
 
                 @Override
                 public Object getElementAt(int i) {
-                    return stringsUser.getModel().getElementAt(i);
+                    return stringsUser.get(Integer.parseInt(projectColumn.getName())).getModel().getElementAt(i);
                 }
             });
-            userColumns.add(userColumn);
 
-            JScrollPane jScrollPane = new JScrollPane(userColumn);
+            projectColumns.add(projectColumn);
+
+            JScrollPane jScrollPane = new JScrollPane(projectColumn);
             //jScrollPane.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.RIGHT, TitledBorder.TOP, new Font("Arial",Font.PLAIN,12), Color.WHITE));
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            jScrollPane.setMaximumSize(new Dimension(200, userColumn.getModel().getSize()* 35));
+            jScrollPane.setMaximumSize(new Dimension(200, projectColumn.getModel().getSize()* 35));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+            jScrollPane.getVerticalScrollBar().setVisible(false);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             auxPanel.add(jScrollPane);
-            initDragDrop(userColumn, jScrollPane);
-            //initListeners(userColumn);
+            initDragDropProject(projectColumn, jScrollPane);
+            //initListeners(projectColumn);
 
             JTextField auxTextField = new JTextField("Afegeix tasca...");
             auxTextField.setPreferredSize(new Dimension(200,25));
@@ -252,12 +247,35 @@ public class VistaTest extends JFrame{
 
             auxPanel.setPreferredSize(new Dimension(200, 530));
             auxPanel.setMaximumSize(new Dimension(200, 530));
-            auxPanel.setBorder((BorderFactory.createEmptyBorder(20,20,0,0)));
+            auxPanel.setBorder((BorderFactory.createEmptyBorder(0,20,0,0)));
             auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
+
+            auxPanel.setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.WHITE));
+
+            if (i == dataUser.size() - 1){
+
+                auxPanel.setBorder(BorderFactory.createMatteBorder(0,2,0,4,Color.WHITE));
+            }
 
             boxPanel.add(auxPanel);
             boxPanel.setOpaque(false);
         }
+
+        JPanel newProjectPanel = new JPanel(new FlowLayout());
+        //newProjectPanel.setBorder(BorderFactory.createMatteBorder(10,10,10,10, Color.WHITE));
+        Border limits = BorderFactory.createMatteBorder(0,0,0,2,Color.WHITE);
+        Border margin = BorderFactory.createEmptyBorder(60,0,0,0);
+        Border compound = BorderFactory.createCompoundBorder(margin, limits);
+        newProjectPanel.setBorder(compound);
+        //newProjectPanel.setBorder((BorderFactory.createEmptyBorder(60,20,0,0)));
+        newProjectPanel.setMaximumSize(new Dimension(200,250));
+        newProjectPanel.setOpaque(false);
+
+        JTextField newProjectTextField = new JTextField("Afegeix Columna...");
+
+        newProjectPanel.add(newProjectTextField);
+
+        boxPanel.add(newProjectPanel);
 
         JScrollPane jScrollPane2 = new JScrollPane(boxPanel);
         jScrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -270,34 +288,31 @@ public class VistaTest extends JFrame{
 
         getContentPane().add(totalPanel);
 
-        //System.out.println(userColumns.getName());
-        //getSource
-
     }
 
-    private void initDragDrop(JList<String> userColumn, JScrollPane jScrollPane) {
+    private void initDragDropProject(JList<String> column, JScrollPane jScrollPane) {
 
-        userColumn.setDragEnabled(true);
-        userColumn.setDropMode(DropMode.INSERT);
-        userColumn.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        column.setDragEnabled(true);
+        column.setDropMode(DropMode.INSERT);
+        column.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        CustomTransferHandler customTransferHandler = new CustomTransferHandler(userColumn, dataUser, jScrollPane);
-        userColumn.setTransferHandler(customTransferHandler);
+        CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectColumns, dataUser, this, customMouseListener);
+        column.setTransferHandler(customTransferHandler);
     }
 
-    /*private void jListUserValueChanged(ListSelectionEvent evt, JList<String> userColumn) {
+    /*private void jListUserValueChanged(ListSelectionEvent evt, JList<String> column) {
         //set text on right here
-        String s = (String) userColumn.getSelectedValue();
+        String s = (String) column.getSelectedValue();
     }
 
-    private void initListeners(JList<String> userColumn) {
+    private void initListeners(JList<String> column) {
 
         //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
-        userColumn.addListSelectionListener(new ListSelectionListener() {
+        column.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                jListUserValueChanged(evt, userColumn);
+                jListUserValueChanged(evt, column);
             }
         });
     }*/
@@ -309,7 +324,13 @@ public class VistaTest extends JFrame{
         popup.add(deleteButton);
 
         popup.setPopupSize(new Dimension(200,264));
-        popup.show(this, columna * 200 + 23, fila * 35 + 120);
+        //popup.show(this, columna * 200 + 23, fila * 35 + 120);
+        popup.setLocation((int) projectColumns.get(columna).getLocationOnScreen().getY(),
+                (int) projectColumns.get(columna).getLocationOnScreen().getX());
+
+        popup.show(this, (int) projectColumns.get(columna).getLocationOnScreen().getX() + 75,
+                (int) projectColumns.get(columna).getLocationOnScreen().getY() + fila * 35 - 100);
+        //popup.show(this, projectColumns.get(columna).getY(), projectColumns.get(fila).getX());
     }
 
     public void initPopUpColumn(){
@@ -319,19 +340,22 @@ public class VistaTest extends JFrame{
 
     }
 
-    public void registerController(ClientController controllerClient, CustomListSelectionListener listSelectionListener) {
-
+    public void registerController(ClientController controllerClient, CustomMouseListener customMouseListener) {
         jbUser.setActionCommand("POPUP_PANEL");
         jbUser.addActionListener(controllerClient);
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
 
-        for (int i = 0; i < userColumns.size(); i++){
-            userColumns.get(i).addListSelectionListener(listSelectionListener);
+        this.customMouseListener = customMouseListener;
+
+        for (int i = 0; i < projectColumns.size(); i++){
+            projectColumns.get(i).addMouseListener(customMouseListener);
         }
+    }
 
+    public void setProject(Project project){
 
-
+        this.project = project;
     }
 }

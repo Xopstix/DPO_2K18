@@ -7,7 +7,6 @@ import model.ProjectManager;
 import network.ServerCommunication;
 import views.AuthenticationView;
 import views.MainView;
-import views.VistaTest;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
@@ -35,23 +34,23 @@ public class Main {
                     AuthenticationView authenticationView = new AuthenticationView();                  //views de autenticación
                     MainView mainView = new MainView();
                     ProjectManager projectManager = new ProjectManager();                              //modelo
-                    VistaTest vistaTest = new VistaTest();
                     //ServerCommunication serverCommunication = new ServerCommunication(projectManager); //network
                     //serverCommunication.startConnection();
 
                     ClientController clientController = new ClientController(authenticationView, mainView, projectManager, data);    //controlador
                     ServerCommunication serverCommunication = clientController.getServerCommunication();
                     PopupController popupController = new PopupController(mainView, serverCommunication);
-                    CustomListSelectionListener listSelectionListener = new CustomListSelectionListener(vistaTest);
+                    CustomListSelectionListener listSelectionListenerMain =
+                            new CustomListSelectionListener(mainView);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
-                    mainView.registerController(clientController, popupController);
+                    mainView.registerController(clientController, popupController, listSelectionListenerMain);
+                    mainView.setClientController(clientController);
 
                     authenticationView.setVisible(true);        //Se hace visible la views de autenticación
 
                     //Zona Test
-                    vistaTest.registerController(clientController, listSelectionListener);
-                    vistaTest.setVisible(true);
+                    //vistaProject.setVisible(false);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

@@ -1,70 +1,163 @@
 package controlador;
 
+import views.VistaProject;
+
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by xaviamorcastillo on 14/5/18.
  */
 public class CustomTransferHandler extends TransferHandler {
 
-        private DefaultListModel<String> dataUser;
+    private ArrayList<DefaultListModel<String>> dataUser;
+    private ArrayList<JList<String>> userColumns;
 
-        private int index;
-        private boolean beforeIndex = false;
-        private JList<String> userColumn;
-        private JScrollPane jScrollPane;
+    private int indexOrigin;
+    private int listOrigin;
+    private int indexDrop;
+    private int listDrop;
+    private boolean beforeIndex = false;
+    private VistaProject vistaProject;
+    private MouseListener mouseListener;
 
-        public CustomTransferHandler(JList<String> userColumn, DefaultListModel<String> dataUser, JScrollPane jScrollPane){
-            this.userColumn = userColumn;
-            this.jScrollPane = jScrollPane;
-            this.dataUser = dataUser;
-        }
+    private JList<String> source;
+    private JList<String> target;
 
-        @Override
-        public int getSourceActions(JComponent comp) {
-            return COPY_OR_MOVE;
-        }
 
-        @Override
-        public Transferable createTransferable(JComponent comp) {
-            index = userColumn.getSelectedIndex();
-            return new StringSelection((String) userColumn.getSelectedValue());
-        }
+    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser, VistaProject vistaProject, CustomMouseListener mouseListener){
+        this.userColumns = userColumns;
+        this.vistaProject = vistaProject;
+        this.dataUser = dataUser;
+        this.mouseListener = mouseListener;
+    }
 
-        @Override
-        public void exportDone(JComponent comp, Transferable trans, int action) {
-            if (action == MOVE) {
+    @Override
+    public int getSourceActions(JComponent comp) {
+        return COPY_OR_MOVE;
+    }
+
+    @Override
+    public Transferable createTransferable(JComponent comp) {
+        indexOrigin = userColumns.get(Integer.parseInt(comp.getName())).getSelectedIndex();
+        listOrigin = Integer.parseInt(userColumns.get(Integer.parseInt(comp.getName())).getName());
+
+        return new StringSelection((String) userColumns.get(Integer.parseInt(comp.getName())).getSelectedValue());
+    }
+
+    @Override
+    public void exportDone(JComponent comp, Transferable trans, int action) {
+        if (action == MOVE) {
+            System.out.println("1.1");
+            System.out.println("Index Drop: "+ indexDrop);
+            System.out.println("List Drop: "+ listDrop);
+            System.out.println("Index Origin: " + indexOrigin);
+            System.out.println("List Origin: " + listOrigin);
+
+            if (listDrop == listOrigin){
+                System.out.println("2.1");
+
                 if (beforeIndex) {
-                    dataUser.remove(index + 1);
+                    System.out.println("3.1");
+                    dataUser.get(listOrigin).remove(indexOrigin + 1);
+
                 } else {
-                    dataUser.remove(index);
+                    System.out.println("4.1");
+                    dataUser.get(listOrigin).remove(indexOrigin);
                 }
-                jScrollPane.updateUI();
+
+                System.out.println(dataUser);
+
+            }else{
+                dataUser.get(listOrigin).remove(indexOrigin);
+                System.out.println("diferente");
             }
+
         }
 
-        @Override
-        public boolean canImport(TransferHandler.TransferSupport support) {
-            // Data =? String
-            return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+        vistaProject.revalidate();
+    }
+
+    @Override
+    public boolean canImport(TransferHandler.TransferSupport support) {
+        // Data =? String
+        return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+    }
+
+    @Override
+    public boolean importData(TransferSupport t) {
+
+        //if (!canImport(comp, t.getTransferDataFlavors())) {
+          //  System.out.println("Mal");
+            //return false;
+        //}
+
+        JList.DropLocation dl = (JList.DropLocation) t.getDropLocation();
+
+        indexDrop = dl.getIndex();
+        listDrop = Integer.parseInt(userColumns.get(Integer.parseInt(t.getComponent().getName())).getName());
+        //System.out.println("importData: List: " + listDrop+ " Index: " + indexDrop);
+
+        Transferable transferable = t.getTransferable();
+        try {
+            String data = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+            dataUser.get(listDrop).add(indexDrop, data);
+
+        } catch (UnsupportedFlavorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        public boolean importData(TransferHandler.TransferSupport support) {
-            try {
-                // Data to String
-                String s = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-                JList.DropLocation dl = (JList.DropLocation) support.getDropLocation();
-                dataUser.add(dl.getIndex(), s);
-                beforeIndex = dl.getIndex() < index ? true : false;
-                return true;
-            } catch (UnsupportedFlavorException | IOException e) {
-            }
-            return false;
+        if(listDrop == listOrigin){
+
+            beforeIndex = dl.getIndex() < indexOrigin ? true : false;
         }
+
+        return true;
+    }
+
+    public MouseListener getMouseListener() {
+        return mouseListener;
+    }
+
+    public void setMouseListener(MouseListener mouseListener) {
+        this.mouseListener = mouseListener;
+    }
+
+    public void actualizarInfo(){
+
+    }
+
+    public int getIndexOrigin(){
+        return indexOrigin;
+    }
+    public void setIndexOrigin(){
+        this.indexOrigin = indexOrigin;
+    }
+    public int getListOrigin(){
+        return listOrigin;
+    }
+    public void setListOrigin(){
+        this.listOrigin = listOrigin;
+    }
+    public int getIndexDrop() {
+        return indexDrop;
+    }
+    public void setIndexDrop(){
+        this.indexDrop = indexDrop;
+    }
+    public int getListDrop() {
+        return listDrop;
+    }
+    public void setListDrop(){
+        this.listDrop = listDrop;
+    }
+
 }
