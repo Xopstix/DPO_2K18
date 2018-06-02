@@ -1,7 +1,11 @@
 package views;
 
-import controlador.*;
-import model.*;
+import controlador.ClientController;
+import controlador.PopupController;
+import model.Columna;
+import model.Etiqueta;
+import model.Project;
+import model.Usuari;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -68,11 +72,6 @@ public class MainView extends JFrame {
     private JList<String> selected;
     private DefaultListModel<String> dataSelected;
 
-    private ProjectManager projectManager;
-
-    private ClientController clientController;
-
-    private ProjectView projectView;
 
     public MainView() {
 
@@ -99,6 +98,7 @@ public class MainView extends JFrame {
         // Esta lista habra que cogerla de la base de datos directamente
         dataUser = new DefaultListModel<>();
 
+
         stringsUser = new JList<String>(dataUser);
 
         dataShared = new DefaultListModel<>();
@@ -110,12 +110,10 @@ public class MainView extends JFrame {
         userProjects.setOpaque(false);
         userProjects.setCellRenderer(new TransparentListCellRenderer());
 
-        userProjects.setName("1");
-
         userProjects.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                    //System.out.println(userProjects.getSelectedValue());
+                    System.out.println(userProjects.getSelectedValue());
                 }
             }
         });
@@ -125,12 +123,10 @@ public class MainView extends JFrame {
         sharedProjects.setOpaque(false);
         sharedProjects.setCellRenderer(new TransparentListCellRenderer());
 
-        sharedProjects.setName("2");
-
         sharedProjects.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                    //System.out.println(sharedProjects.getModel().getElementAt(sharedProjects.getSelectedIndex()));
+                    System.out.println(sharedProjects.getModel().getElementAt(sharedProjects.getSelectedIndex()));
                 }
             }
         });
@@ -219,11 +215,7 @@ public class MainView extends JFrame {
         jtfProjectName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-
-                if (jtfProjectName.getText().equals("Project Name")){
-
-                    jtfProjectName.setText("");
-                }
+                jtfProjectName.setText("");
             }
 
             @Override
@@ -287,7 +279,7 @@ public class MainView extends JFrame {
                 for(int i = 0; i < dataSelected.getSize(); i++) {
                     if (dataSelected.getElementAt(i) == selectedValue) {
                         dataSelected.removeElement(selectedValue);
-                        //System.out.println(selectedIndex);
+                        System.out.println(selectedIndex);
                         break;
                     }
                 }
@@ -347,27 +339,14 @@ public class MainView extends JFrame {
         validate();
     }
 
-    public void addProjects (){
+    public void addProjects (ArrayList<Project> userProjects, ArrayList<Project> sharedProjects){
 
-        for (int i = 0; i < projectManager.getYourProjects().size(); i++){
+        for (int i = 0; i < userProjects.size(); i++){
 
+            dataUser.addElement(userProjects.get(i).getName());
             try{
-
-                dataUser.addElement(projectManager.getYourProjects().get(i).getName());
-
+                //dataShared.addElement(sharedProjects.get(i).getName());
             }catch(IndexOutOfBoundsException e){
-                e.printStackTrace();
-            }
-        }
-
-        for (int i = 0; i < projectManager.getSharedProjects().size(); i++){
-
-            try{
-
-                dataShared.addElement(projectManager.getSharedProjects().get(i).getName());
-
-            }catch(IndexOutOfBoundsException e){
-
                 e.printStackTrace();
             }
         }
@@ -442,22 +421,7 @@ public class MainView extends JFrame {
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
                 // Data =? String
-
-                for (int i = 0; i < dataUser.size(); i++){
-
-                    try {
-                        if (dataUser.get(i).equals
-                                ((String)support.getTransferable().getTransferData(DataFlavor.stringFlavor))){
-                        return true;
-                        }
-                    } catch (UnsupportedFlavorException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                return false;
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
             }
 
             @Override
@@ -509,22 +473,8 @@ public class MainView extends JFrame {
 
             @Override
             public boolean canImport(TransferHandler.TransferSupport support) {
-
-                for (int i = 0; i < dataShared.size(); i++){
-
-                    try {
-                        if (dataShared.get(i).equals
-                                ((String)support.getTransferable().getTransferData(DataFlavor.stringFlavor))){
-                            return true;
-                        }
-                    } catch (UnsupportedFlavorException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                return false;
+                // Data =? String
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
             }
 
             @Override
@@ -629,54 +579,16 @@ public class MainView extends JFrame {
         Project newProject = new Project();
 
         newProject.setName(jtfProjectName.getText());
-
-        ArrayList<String> aux = new ArrayList<>();
-
-        for (int i = 0; i < dataSelected.size(); i++){
-
-            aux.add(dataSelected.get(i));
-        }
-
-        newProject.setMembres(aux);
-
+        System.out.println(newProject.getName());
+        newProject.setMembres(new ArrayList<Usuari>());
         newProject.setColumnes(new ArrayList<Columna>());
-
         //Guarda la imagen seleccionada como background en la carpeta images y pone su path en
         //el atributo Background del proyecto
         File f = new File(jfChooser.getSelectedFile().getAbsolutePath());
         newProject.setBackground("images/" + f.getName());
         f.renameTo(new File("images/" + f.getName()));
         f.delete();
-
-        ArrayList<Etiqueta> newEtiquetes = new ArrayList<>();
-
-        Etiqueta auxEtiqueta = new Etiqueta();
-        auxEtiqueta.setNom("Etiqueta 1");
-        auxEtiqueta.setColor(Color.YELLOW);
-        newEtiquetes.add(auxEtiqueta);
-
-        auxEtiqueta = new Etiqueta();
-        auxEtiqueta.setNom("Etiqueta 2");
-        auxEtiqueta.setColor(Color.GREEN);
-        newEtiquetes.add(auxEtiqueta);
-
-        auxEtiqueta = new Etiqueta();
-        auxEtiqueta.setNom("Etiqueta 3");
-        auxEtiqueta.setColor(Color.ORANGE);
-        newEtiquetes.add(auxEtiqueta);
-
-        auxEtiqueta = new Etiqueta();
-        auxEtiqueta.setNom("Etiqueta 4");
-        auxEtiqueta.setColor(Color.BLUE);
-        newEtiquetes.add(auxEtiqueta);
-
-        auxEtiqueta = new Etiqueta();
-        auxEtiqueta.setNom("Etiqueta 5");
-        auxEtiqueta.setColor(Color.PINK);
-        newEtiquetes.add(auxEtiqueta);
-
-        newProject.setEtiquetes(newEtiquetes);
-
+        newProject.setEtiquetes(new ArrayList<Etiqueta>());
         newProject.setDate();
 
         return newProject;
@@ -692,8 +604,7 @@ public class MainView extends JFrame {
 
     }
 
-    public void registerController(ClientController controllerClient, PopupController controllerPopUp,
-                                   CustomMouseListenerMain customMouseListenerMain) {
+    public void registerController(ClientController controllerClient, PopupController controllerPopUp) {
 
         jbNew.setActionCommand("NEW_PROJECT");
         jbNew.addActionListener(controllerClient);
@@ -718,9 +629,6 @@ public class MainView extends JFrame {
 
         menuItem3.setActionCommand("LOGOUT");
         menuItem3.addActionListener(controllerPopUp);
-
-        userProjects.addMouseListener(customMouseListenerMain);
-        sharedProjects.addMouseListener(customMouseListenerMain);
 
     }
 
@@ -759,27 +667,6 @@ public class MainView extends JFrame {
         validate();
     }
 
-    public void loadProject(String columna, int fila){
-
-        if (columna.equals("Your")){
-
-            this.projectView = new ProjectView(projectManager.getYourProjects().get(fila));
-        }else{
-
-            this.projectView = new ProjectView(projectManager.getSharedProjects().get(fila));
-        }
-
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        projectView.setVisible(true);
-        this.setVisible(false);
-    }
-
-    public void addColumn(String column){
-
-        this.projectView.addColumn(column);
-    }
-
     public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){
 
         ArrayList<Project> aux = new ArrayList<>();
@@ -815,17 +702,4 @@ public class MainView extends JFrame {
 
         return aux;
     }
-
-    public ProjectManager getProjectManager() {
-        return projectManager;
-    }
-
-    public void setProjectManager(ProjectManager projectManager) {
-        this.projectManager = projectManager;
-    }
-
-    public void setClientController(ClientController clientController) {
-        this.clientController = clientController;
-    }
-
 }
