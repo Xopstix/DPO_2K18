@@ -87,6 +87,16 @@ public class ServerCommunication extends Thread{
 
                 if (mode == 2) {
                     projectManager.setMode(2);
+                    //System.out.println("Imagen: " + projectManager.getProject().getBackground());
+                    oos.writeObject(projectManager);
+                    this.projectManager = (ProjectManager) ois.readObject();
+                    msg = dis.readUTF();
+                    autentica(msg);
+                    endConnection();
+                }
+
+                if (mode == 3) {
+                    projectManager.setMode(3);
                     oos.writeObject(projectManager);
                     this.projectManager = (ProjectManager) ois.readObject();
                     msg = dis.readUTF();

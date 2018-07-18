@@ -13,6 +13,15 @@ public class Tasca implements Serializable{
     private String descripcio;
     private Etiqueta etiqueta;
     private Usuari usuari;
+    private int completa;
+
+    public int isCompleta() {
+        return completa;
+    }
+
+    public void setCompleta(int completa) {
+        this.completa = completa;
+    }
 
     public String getNom() {
         return nom;
