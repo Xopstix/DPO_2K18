@@ -19,6 +19,7 @@ public class CustomTransferHandler extends TransferHandler {
     private ArrayList<DefaultListModel<String>> dataUser;
     private ArrayList<JList<String>> userColumns;
 
+
     private int indexOrigin;
     private int listOrigin;
     private int indexDrop;
