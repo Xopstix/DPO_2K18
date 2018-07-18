@@ -763,10 +763,11 @@ public class MainView extends JFrame {
 
         if (columna.equals("Your")){
 
-            this.projectView = new ProjectView(projectManager.getYourProjects().get(fila));
+            this.projectView = new ProjectView(projectManager.getYourProjects().get(fila), 1);
+
         }else{
 
-            this.projectView = new ProjectView(projectManager.getSharedProjects().get(fila));
+            this.projectView = new ProjectView(projectManager.getSharedProjects().get(fila), 2);
         }
 
         CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
@@ -775,9 +776,96 @@ public class MainView extends JFrame {
         this.setVisible(false);
     }
 
-    public void addColumn(String column){
+    public void addTask(String task, int column){
 
-        this.projectView.addColumn(column);
+        //this.projectView.addTask(task, column);
+        Tasca newTask = new Tasca();
+        newTask.setNom(task);
+
+        if (this.projectView.getList() == 1){
+
+            this.projectManager.getYourProjects().get(findByIdYours(
+                    this.projectView.getProject())).getColumnes().get(column).getTasques().add(newTask);
+            this.projectView.setProject(this.projectManager.getYourProjects().get(findByIdYours(
+                    this.projectView.getProject())));
+
+            this.projectView.getContentPane().removeAll();
+            this.projectView.initComponentsProject();
+            this.projectView.initVistaProject();
+            CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+            projectView.registerController(clientController, mouseListener);
+            this.projectView.revalidate();
+
+        }else{
+
+            this.projectManager.getSharedProjects().get(findByIdShared(
+                    this.projectView.getProject())).getColumnes().get(column).getTasques().add(newTask);
+
+            this.projectView.getContentPane().removeAll();
+            this.projectView.initComponentsProject();
+            this.projectView.initVistaProject();
+            CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+            projectView.registerController(clientController, mouseListener);
+            this.projectView.revalidate();
+        }
+
+    }
+
+    public void addColumn(String columnName){
+
+        Columna newColumna = new Columna();
+        newColumna.setNom(columnName);
+
+        if (this.projectView.getList() == 1){
+
+            this.projectManager.getYourProjects().get(findByIdYours(
+                    this.projectView.getProject())).getColumnes().add(newColumna);
+
+            this.projectView.getContentPane().removeAll();
+            this.projectView.initComponentsProject();
+            this.projectView.initVistaProject();
+            CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+            projectView.registerController(clientController, mouseListener);
+            this.projectView.revalidate();
+
+        }else{
+
+            this.projectManager.getSharedProjects().get(findByIdShared(
+                    this.projectView.getProject())).getColumnes().add(newColumna);
+
+            this.projectView.getContentPane().removeAll();
+            this.projectView.initComponentsProject();
+            this.projectView.initVistaProject();
+            CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+            projectView.registerController(clientController, mouseListener);
+            this.projectView.revalidate();
+        }
+    }
+
+    public int findByIdYours(Project project){
+
+        for (int i = 0; i < this.projectManager.getYourProjects().size(); i++){
+
+            if (this.projectManager.getYourProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
+
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    public int findByIdShared(Project project){
+
+        for (int i = 0; i < this.projectManager.getSharedProjects().size(); i++){
+
+            if (this.projectManager.getSharedProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
+
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){

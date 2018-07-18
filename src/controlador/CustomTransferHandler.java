@@ -26,16 +26,19 @@ public class CustomTransferHandler extends TransferHandler {
     private boolean beforeIndex = false;
     private ProjectView vistaProject;
     private MouseListener mouseListener;
+    private ClientController clientController;
 
     private JList<String> source;
     private JList<String> target;
 
 
-    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser, ProjectView vistaProject, CustomMouseListenerProject mouseListener){
+    public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser,
+                                 ProjectView vistaProject, CustomMouseListenerProject mouseListener, ClientController clientController){
         this.userColumns = userColumns;
         this.vistaProject = vistaProject;
         this.dataUser = dataUser;
         this.mouseListener = mouseListener;
+        this.clientController = clientController;
     }
 
     @Override
@@ -66,21 +69,30 @@ public class CustomTransferHandler extends TransferHandler {
                 if (beforeIndex) {
                     System.out.println("3.1");
                     dataUser.get(listOrigin).remove(indexOrigin + 1);
+                    //this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin + 1);
+
 
                 } else {
                     System.out.println("4.1");
                     dataUser.get(listOrigin).remove(indexOrigin);
+                    //this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
                 }
 
                 System.out.println(dataUser);
 
             }else{
                 dataUser.get(listOrigin).remove(indexOrigin);
+                //this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
                 System.out.println("diferente");
             }
 
         }
 
+        /*vistaProject.getContentPane().removeAll();
+        vistaProject.initComponentsProject();
+        vistaProject.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(vistaProject);
+        vistaProject.registerController(clientController, mouseListener);*/
         vistaProject.revalidate();
     }
 
@@ -108,6 +120,8 @@ public class CustomTransferHandler extends TransferHandler {
         try {
             String data = (String) transferable.getTransferData(DataFlavor.stringFlavor);
             dataUser.get(listDrop).add(indexDrop, data);
+            //this.vistaProject.getProject().getColumnes().get(listDrop).getTasques()
+                    //.add(indexDrop, this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().get(indexOrigin));
 
         } catch (UnsupportedFlavorException e) {
             e.printStackTrace();

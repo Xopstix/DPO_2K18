@@ -25,6 +25,7 @@ public class CustomListSelectionListener implements ListSelectionListener {
 
         if (((JList) e.getSource()).getName().equals("UserProjects")){
 
+            ((JList) e.getSource()).getName().equals("UserProjects");
             mainView.loadProject("Your", ((JList) e.getSource()).getSelectedIndex());
 
         }else{

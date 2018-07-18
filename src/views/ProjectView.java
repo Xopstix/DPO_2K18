@@ -4,7 +4,7 @@ import controlador.ClientController;
 import controlador.CustomMouseListenerProject;
 import controlador.CustomTransferHandler;
 import model.Project;
-import model.ProjectManager;
+import model.Tasca;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,7 +30,9 @@ public class ProjectView extends JFrame{
     private ArrayList<JList<String>> stringsUser;
     private ArrayList<JList<String>> projectColumns;
     private ArrayList<JTextField> textFields;
+    private JTextField newColumnTextField;
     private CustomMouseListenerProject customMouseListener;
+    private ClientController clientController;
 
     private JPopupMenu popup;
     private JPopupMenu popupColumn;
@@ -41,11 +43,12 @@ public class ProjectView extends JFrame{
     private JPanel colorChooserPanel;
 
     private Project project;
-    private ProjectManager projectManager;
+    private int type;
 
-    public ProjectView(Project project){
+    public ProjectView(Project project, int type){
 
         this.project = project;
+        this.type = type;
         initComponentsProject();
         initVistaProject();
         this.setSize(1200, 600);
@@ -54,7 +57,9 @@ public class ProjectView extends JFrame{
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void initComponentsProject() {
+    public void initComponentsProject() {
+
+        System.out.println(project.getColumnes().get(0).getTasques().get(0).getNom());
 
         stringsUser = new ArrayList<>();
         dataUser = new ArrayList<>();
@@ -77,7 +82,6 @@ public class ProjectView extends JFrame{
 
             e.printStackTrace();
         }
-
 
         jbNew = new JButton("New Project");
         jbUser = new JButton("User");
@@ -142,7 +146,7 @@ public class ProjectView extends JFrame{
         }
     }
 
-    private void initVistaProject() {
+    public void initVistaProject() {
 
         this.setResizable(false);
 
@@ -234,12 +238,12 @@ public class ProjectView extends JFrame{
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            jScrollPane.setMaximumSize(new Dimension(200, projectColumn.getModel().getSize()* 35));
+            jScrollPane.setMaximumSize(new Dimension(200, dataUser.get(i).size() * 36));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             jScrollPane.getVerticalScrollBar().setVisible(false);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             auxPanel.add(jScrollPane);
-            initDragDropProject(projectColumn, jScrollPane);
+            initDragDropProject(projectColumn, jScrollPane, clientController);
             //initListeners(projectColumn);
 
             JTextField auxTextField = new JTextField("Afegeix tasca...");
@@ -269,8 +273,6 @@ public class ProjectView extends JFrame{
             textFields.add(auxTextField);
 
             auxPanel.add(auxTextField);
-            JButton jbaux = new JButton("Afegeix");
-            jbaux.setName(i+"");
 
             auxPanel.setPreferredSize(new Dimension(200, 530));
             auxPanel.setMaximumSize(new Dimension(200, 530));
@@ -288,6 +290,11 @@ public class ProjectView extends JFrame{
             boxPanel.setOpaque(false);
         }
 
+        for (int i = 0; i < textFields.size(); i++){
+
+            textFields.get(i).updateUI();
+        }
+
         JPanel newProjectPanel = new JPanel(new FlowLayout());
         //newProjectPanel.setBorder(BorderFactory.createMatteBorder(10,10,10,10, Color.WHITE));
         Border limits = BorderFactory.createMatteBorder(0,0,0,2,Color.WHITE);
@@ -298,9 +305,27 @@ public class ProjectView extends JFrame{
         newProjectPanel.setMaximumSize(new Dimension(200,250));
         newProjectPanel.setOpaque(false);
 
-        JTextField newProjectTextField = new JTextField("Afegeix Columna...");
+        newColumnTextField = new JTextField("Afegeix columna...");
+        newColumnTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
 
-        newProjectPanel.add(newProjectTextField);
+                if (newColumnTextField.getText().equals("Afegeix columna...")){
+
+                    newColumnTextField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String text = newColumnTextField.getText();
+                if (text == "") {
+                    newColumnTextField.setText("Afegeix tasca...");
+                }
+            }
+        });
+
+        newProjectPanel.add(newColumnTextField);
 
         boxPanel.add(newProjectPanel);
 
@@ -316,16 +341,17 @@ public class ProjectView extends JFrame{
         totalPanel.add(jScrollPane2, BorderLayout.CENTER);
 
         getContentPane().add(totalPanel);
+        revalidate();
 
     }
 
-    private void initDragDropProject(JList<String> column, JScrollPane jScrollPane) {
+    private void initDragDropProject(JList<String> column, JScrollPane jScrollPane, ClientController clientController) {
 
         column.setDragEnabled(true);
         column.setDropMode(DropMode.INSERT);
         column.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectColumns, dataUser, this, customMouseListener);
+        CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectColumns, dataUser, this, customMouseListener, clientController);
         column.setTransferHandler(customTransferHandler);
     }
 
@@ -365,11 +391,24 @@ public class ProjectView extends JFrame{
     public void initPopUpColumn(){
 
         popupColumn.add(new TextField(10));
+    }
 
+    public void addTask(String task, int column) {
 
+        this.jbUser.grabFocus();
+        //dataUser.get(column).addElement(task);
+        Tasca newTask = new Tasca();
+        newTask.setNom(task);
+        project.getColumnes().get(column).getTasques().add(newTask);
+        initComponentsProject();
+        initVistaProject();
+        revalidate();
     }
 
     public void registerController(ClientController controllerClient, CustomMouseListenerProject customMouseListener) {
+
+        this.clientController = controllerClient;
+
         jbUser.setActionCommand("POPUP_PANEL");
         jbUser.addActionListener(controllerClient);
 
@@ -387,6 +426,14 @@ public class ProjectView extends JFrame{
             textFields.get(i).setActionCommand("TEXTFIELDNEWTASK");
             //textFields.get(i).addKeyListener(keyListener);
         }
+
+        newColumnTextField.addActionListener(controllerClient);
+        newColumnTextField.setActionCommand("TEXTFIELDNEWCOLUMN");
+    }
+
+    public Project getProject(){
+
+        return this.project;
     }
 
     public void setProject(Project project){
@@ -394,8 +441,11 @@ public class ProjectView extends JFrame{
         this.project = project;
     }
 
-    public void addColumn(String column) {
+    public int getList() {
+        return type;
+    }
 
-
+    public void setType(int type) {
+        this.type = type;
     }
 }

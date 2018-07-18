@@ -7,6 +7,7 @@ import network.ServerCommunication;
 import views.AuthenticationView;
 import views.MainView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -180,7 +181,14 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("TEXTFIELDNEWTASK")){
 
-            mainView.addColumn(e.getSource().getClass().getName());
+            mainView.addTask(((JTextField) e.getSource()).getText(), Integer.parseInt(((JTextField) e.getSource()).getName()));
+
+        }
+
+        if (e.getActionCommand().equals("TEXTFIELDNEWCOLUMN")){
+
+            mainView.addColumn(((JTextField) e.getSource()).getText());
+
         }
     }
 
