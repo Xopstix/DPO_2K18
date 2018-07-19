@@ -34,9 +34,11 @@ public class CustomMouseListenerProject implements MouseListener {
 
     public void mouseClicked(MouseEvent e) {
 
+        vistaProject.setPopupTaskColumn(Integer.parseInt(((JList) e.getSource()).getName()));
+        vistaProject.setPopupTaskRow(((JList) e.getSource()).getSelectedIndex());
+
         vistaProject.initPopupTasca(Integer.parseInt(((JList) e.getSource()).getName()), ((JList) e.getSource()).getSelectedIndex());
-        System.out.println(((JList) e.getSource()).getName());
-        System.out.println(((JList) e.getSource()).getSelectedIndex());
+
         column = Integer.parseInt(((JList) e.getSource()).getName());
         row = ((JList) e.getSource()).getSelectedIndex();
     }

@@ -916,4 +916,73 @@ public class MainView extends JFrame {
         this.clientController = clientController;
     }
 
+    public void setChecked(int selected) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+
+        } else{
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+        }
+
+        this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
+                getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+
+        this.projectView.revalidate();
+
+    }
+
+    public void changeName(String text) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+        }
+
+        this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
+                getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+    }
+
+    public void deleteColumn(int column) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().remove(column);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().remove(column);
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+
+    }
 }

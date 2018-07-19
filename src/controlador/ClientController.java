@@ -190,6 +190,30 @@ public class ClientController implements ActionListener{
             mainView.addColumn(((JTextField) e.getSource()).getText());
 
         }
+
+        if (e.getActionCommand().equals("DONECHECKBOX")){
+
+            AbstractButton abstractButton = (AbstractButton) e.getSource();
+
+            if (abstractButton.getModel().isSelected()) {
+
+                mainView.setChecked(1);
+
+            } else {
+
+                mainView.setChecked(0);
+            }
+        }
+
+        if (e.getActionCommand().equals("NEWTASKNAME")){
+
+            mainView.changeName(((JTextField) e.getSource()).getText());
+        }
+
+        if (e.getActionCommand().equals("DELETECOLUMN")){
+
+            mainView.deleteColumn(Integer.parseInt(((JButton)e.getSource()).getName()));
+        }
     }
 
     public void logInAccepted(){

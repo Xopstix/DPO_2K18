@@ -29,13 +29,19 @@ public class ProjectView extends JFrame{
     private JButton jbUser;
     private ArrayList<JList<String>> stringsUser;
     private ArrayList<JList<String>> projectColumns;
+    private ArrayList<JButton> titleButtons;
+    private ArrayList<JButton> deleteButtons;
     private ArrayList<JTextField> textFields;
     private JTextField newColumnTextField;
     private CustomMouseListenerProject customMouseListener;
     private ClientController clientController;
 
     private JPopupMenu popup;
+    private int popupTaskColumn;
+    private int popupTaskRow;
     private JPopupMenu popupColumn;
+    private JLabel doneLabel;
+    private JCheckBox doneCheckbox;
     private JMenuItem deleteButton;
     private JTextField nameTextField;
     private JPanel colorLabels;
@@ -59,10 +65,11 @@ public class ProjectView extends JFrame{
 
     public void initComponentsProject() {
 
-        System.out.println(project.getColumnes().get(0).getTasques().get(0).getNom());
-
         stringsUser = new ArrayList<>();
         dataUser = new ArrayList<>();
+
+        titleButtons = new ArrayList<>();
+        deleteButtons = new ArrayList<>();
 
         textFields = new ArrayList<>();
 
@@ -87,6 +94,9 @@ public class ProjectView extends JFrame{
         jbUser = new JButton("User");
 
         popup = new JPopupMenu();
+
+        doneLabel = new JLabel("Task completed");
+        doneCheckbox = new JCheckBox();
 
         deleteButton = new JMenuItem("Delete", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
@@ -183,13 +193,18 @@ public class ProjectView extends JFrame{
             auxPanel.setLayout(new BoxLayout(auxPanel, BoxLayout.Y_AXIS));
 
             JPanel titlePanel = new JPanel(new FlowLayout());
-            titlePanel.setMaximumSize(new Dimension(150,50));
+            titlePanel.setMaximumSize(new Dimension(300,50));
 
             JButton nameButton = new JButton(project.getColumnes().get(i).getNom());
+            nameButton.setName(i+"");
             nameButton.setForeground(Color.WHITE);
             nameButton.setBorderPainted(false);
             JButton deleteButton = new JButton();
+            deleteButton.setName((i+""));
             deleteButton.setBorderPainted(false);
+
+            titleButtons.add(nameButton);
+            deleteButtons.add(deleteButton);
 
             try {
                 Image img = ImageIO.read(new File("icons/delete_icon.png")).
@@ -374,11 +389,26 @@ public class ProjectView extends JFrame{
 
     public void initPopupTasca(int columna, int fila){
 
+        nameTextField.setText("Nou nom");
         popup.add(nameTextField);
+
+        if (project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskColumn).getCompleta() == 1){
+
+            doneCheckbox.setSelected(true);
+
+        } else{
+
+            doneCheckbox.setSelected(false);
+        }
+
+        JPanel doneCheckboxPanel = new JPanel(new FlowLayout());
+        doneCheckboxPanel.add(doneLabel);
+        doneCheckboxPanel.add(doneCheckbox);
+        popup.add(doneCheckboxPanel);
         popup.add(colorChooserPanel);
         popup.add(deleteButton);
 
-        popup.setPopupSize(new Dimension(200,264));
+        popup.setPopupSize(new Dimension(200,300));
         //popup.show(this, columna * 200 + 23, fila * 35 + 120);
         popup.setLocation((int) projectColumns.get(columna).getLocationOnScreen().getY(),
                 (int) projectColumns.get(columna).getLocationOnScreen().getX());
@@ -421,6 +451,18 @@ public class ProjectView extends JFrame{
             projectColumns.get(i).addMouseListener(customMouseListener);
         }
 
+        for (int i = 0; i < titleButtons.size(); i++){
+
+            titleButtons.get(i).addActionListener(controllerClient);
+            titleButtons.get(i).setActionCommand("TITLEPOPUP");
+        }
+
+        for (int i = 0; i < deleteButtons.size(); i++){
+
+            deleteButtons.get(i).addActionListener(controllerClient);
+            deleteButtons.get(i).setActionCommand("DELETECOLUMN");
+        }
+
         for (int i = 0; i < textFields.size(); i++){
             textFields.get(i).addActionListener(controllerClient);
             textFields.get(i).setActionCommand("TEXTFIELDNEWTASK");
@@ -429,6 +471,12 @@ public class ProjectView extends JFrame{
 
         newColumnTextField.addActionListener(controllerClient);
         newColumnTextField.setActionCommand("TEXTFIELDNEWCOLUMN");
+
+        doneCheckbox.addActionListener(controllerClient);
+        doneCheckbox.setActionCommand("DONECHECKBOX");
+
+        nameTextField.addActionListener(controllerClient);
+        nameTextField.setActionCommand("NEWTASKNAME");
     }
 
     public Project getProject(){
@@ -439,6 +487,25 @@ public class ProjectView extends JFrame{
     public void setProject(Project project){
 
         this.project = project;
+    }
+
+    public void setPopupTaskColumn (int column){
+
+        this.popupTaskColumn = column;
+    }
+
+    public int getPopupTaskColumn(){
+
+        return this.popupTaskColumn;
+    }
+    public void setPopupTaskRow (int row){
+
+        this.popupTaskRow = row;
+    }
+
+    public int getPopupTaskRow(){
+
+        return this.popupTaskRow;
     }
 
     public int getList() {
