@@ -985,4 +985,28 @@ public class MainView extends JFrame {
         this.projectView.revalidate();
 
     }
+
+    public void deleteTask() {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().remove(projectView.getPopupTaskRow());
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().remove(projectView.getPopupTaskRow());
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+
+    }
 }

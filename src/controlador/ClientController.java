@@ -214,6 +214,11 @@ public class ClientController implements ActionListener{
 
             mainView.deleteColumn(Integer.parseInt(((JButton)e.getSource()).getName()));
         }
+
+        if (e.getActionCommand().equals("DELETETASK")){
+
+            mainView.deleteTask();
+        }
     }
 
     public void logInAccepted(){

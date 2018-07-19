@@ -477,6 +477,9 @@ public class ProjectView extends JFrame{
 
         nameTextField.addActionListener(controllerClient);
         nameTextField.setActionCommand("NEWTASKNAME");
+
+        deleteButton.addActionListener(controllerClient);
+        deleteButton.setActionCommand("DELETETASK");
     }
 
     public Project getProject(){
