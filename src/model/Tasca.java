@@ -11,13 +11,8 @@ public class Tasca implements Serializable{
     private String nom;
     private int ordre;
     private String descripcio;
-    private Etiqueta etiqueta;
+    private int id_etiqueta;
     private Usuari usuari;
-
-    public int getCompleta() {
-        return completa;
-    }
-
     private int completa;
 
     public int isCompleta() {
@@ -52,14 +47,6 @@ public class Tasca implements Serializable{
         this.descripcio = descripcio;
     }
 
-    public Etiqueta getEtiqueta() {
-        return etiqueta;
-    }
-
-    public void setEtiqueta(Etiqueta etiqueta) {
-        this.etiqueta = etiqueta;
-    }
-
     public Usuari getUsuari() {
         return usuari;
     }
@@ -68,4 +55,11 @@ public class Tasca implements Serializable{
         this.usuari = usuari;
     }
 
+    public int getId_etiqueta() {
+        return id_etiqueta;
+    }
+
+    public void setId_etiqueta(int id_etiqueta) {
+        this.id_etiqueta = id_etiqueta;
+    }
 }
