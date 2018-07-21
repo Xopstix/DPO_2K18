@@ -14,13 +14,6 @@ public class Etiqueta implements Serializable{
     private int id_etiqueta;
 
 
-    public int getId_etiqueta() {
-        return id_etiqueta;
-    }
-
-    public void setId_etiqueta(int id_etiqueta) {
-        this.id_etiqueta = id_etiqueta;
-    }
 
     public int getId_etiqueta() {
         return id_etiqueta;
@@ -30,7 +23,6 @@ public class Etiqueta implements Serializable{
         this.id_etiqueta = id_etiqueta;
     }
 
-    private int id_etiqueta;
 
     public String getNom() {
         return nom;

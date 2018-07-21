@@ -9,6 +9,7 @@ import model.Tasca;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -33,8 +34,10 @@ public class ProjectView extends JFrame{
     private ArrayList<JButton> titleButtons;
     private ArrayList<JButton> deleteButtons;
     private ArrayList<JTextField> textFields;
+    private ArrayList<JTextField> etiquetasTextfields;
     private JTextField newColumnTextField;
     private CustomMouseListenerProject customMouseListener;
+    private CustomTransferHandler customTransferHandler;
     private ClientController clientController;
 
     private JPopupMenu popupUser;
@@ -51,6 +54,7 @@ public class ProjectView extends JFrame{
     private JCheckBox doneCheckbox;
     private JMenuItem deleteButton;
     private JTextField nameTextField;
+    private JTextField descriptionArea;
     private JPanel colorLabels;
     private JColorChooser colorChooser;
     private ArrayList<JButton> colorIcons;
@@ -103,6 +107,7 @@ public class ProjectView extends JFrame{
         deleteButtons = new ArrayList<>();
 
         colorIcons = new ArrayList<>();
+        etiquetasTextfields = new ArrayList<>();
 
         textFields = new ArrayList<>();
 
@@ -131,7 +136,7 @@ public class ProjectView extends JFrame{
         doneLabel = new JLabel("Task completed");
         doneCheckbox = new JCheckBox();
 
-        deleteButton = new JMenuItem("Delete", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
+        deleteButton = new JMenuItem("Delete this task", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
         deleteButton.setMnemonic(KeyEvent.VK_P);
         deleteButton.getAccessibleContext().setAccessibleDescription("Delete task");
@@ -144,13 +149,14 @@ public class ProjectView extends JFrame{
         nameTextField.setMinimumSize(new Dimension(200,30));
         nameTextField.setMaximumSize(new Dimension(200,30));
 
+        descriptionArea = new JTextField("Add a description..");
+        descriptionArea.setBorder(new TitledBorder("Description"));
+
         colorLabels = new JPanel();
         colorLabels.setLayout(new BoxLayout(colorLabels, BoxLayout.Y_AXIS));
 
         colorIconsPanel = new JPanel();
         colorIconsPanel.setLayout(new BoxLayout(colorIconsPanel, BoxLayout.Y_AXIS));
-
-        colorLabels.setSize(new Dimension(150,50));
 
         colorButton = new JButton();
         colorButton.setName("1");
@@ -158,7 +164,7 @@ public class ProjectView extends JFrame{
 
         try {
             Image img = ImageIO.read(new File("icons/greensticker.png")).
-                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+                    getScaledInstance(33, 33,  java.awt.Image.SCALE_SMOOTH ) ;
             colorButton.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println(ex);
@@ -173,7 +179,7 @@ public class ProjectView extends JFrame{
 
         try {
             Image img = ImageIO.read(new File("icons/redsticker.png")).
-                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+                    getScaledInstance(33, 33,  java.awt.Image.SCALE_SMOOTH ) ;
             colorButton.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println(ex);
@@ -188,7 +194,7 @@ public class ProjectView extends JFrame{
 
         try {
             Image img = ImageIO.read(new File("icons/yellowsticker.png")).
-                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+                    getScaledInstance(33, 33,  java.awt.Image.SCALE_SMOOTH ) ;
             colorButton.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println(ex);
@@ -203,7 +209,7 @@ public class ProjectView extends JFrame{
 
         try {
             Image img = ImageIO.read(new File("icons/bluesticker.png")).
-                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+                    getScaledInstance(33, 33,  java.awt.Image.SCALE_SMOOTH ) ;
             colorButton.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println(ex);
@@ -218,7 +224,7 @@ public class ProjectView extends JFrame{
 
         try {
             Image img = ImageIO.read(new File("icons/purplesticker.png")).
-                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+                    getScaledInstance(33, 33,  java.awt.Image.SCALE_SMOOTH ) ;
             colorButton.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             System.out.println(ex);
@@ -227,43 +233,25 @@ public class ProjectView extends JFrame{
         colorIconsPanel.add(colorButton);
         colorIcons.add(colorButton);
 
-        colorChooserPanel = new JPanel(new FlowLayout());
+        colorChooserPanel = new JPanel(new BorderLayout());
 
         if (project.getEtiquetes() != null){
 
-            System.out.println("entra1");
             for (int i = 0; i < 5; i++){
-                System.out.println("entra2");
+                JTextField auxColorTextField = new JTextField("Tasca");
+                auxColorTextField.setName(i+"");
+                auxColorTextField.setColumns(13);
                 JPanel auxiliar = new JPanel();
-                //JLabel auxLabelColor = new JLabel(project.getEtiquetes().get(i).getNom());
-                JTextField auxColorTextField = new JTextField("Name your task!");
-                auxColorTextField.setMinimumSize(new Dimension(100, 50));
-                auxColorTextField.setMaximumSize(new Dimension(100, 50));
                 auxiliar.add(auxColorTextField);
-                auxiliar.setBorder(BorderFactory.createEmptyBorder(3, 0, 3, 0));
+                //auxiliar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+                etiquetasTextfields.add(auxColorTextField);
                 colorLabels.add(auxiliar);
             }
 
-            colorChooserPanel.add(colorIconsPanel);
-            colorChooserPanel.add(colorLabels);
+            colorChooserPanel.add(colorIconsPanel, BorderLayout.LINE_START);
+            colorChooserPanel.add(colorLabels, BorderLayout.CENTER);
 
-
-        }/*else {
-
-            System.out.println("entra3");
-            for (int i = 0; i < 5; i++) {
-                System.out.println("entra4");
-                JTextField auxColorTextField = new JTextField("Name your task!");
-                auxColorTextField.setMinimumSize(new Dimension(100, 40));
-                auxColorTextField.setMaximumSize(new Dimension(100, 40));
-                auxColorTextField.setBorder(BorderFactory.createMatteBorder(10, 5, 10, 10, Color.LIGHT_GRAY));
-                //auxColorTextField.setOpaque(false);
-                colorLabels.add(auxColorTextField);
-            }
-
-            colorChooserPanel.add(colorIconsPanel);
-            colorChooserPanel.add(colorLabels);
-        }*/
+        }
 
         titleTextField = new JTextField("Nou nom");
     }
@@ -399,7 +387,7 @@ public class ProjectView extends JFrame{
             jScrollPane.getVerticalScrollBar().setVisible(false);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             auxPanel.add(jScrollPane);
-            initDragDropProject(projectColumn, jScrollPane, clientController);
+            //initDragDropProject(/*projectColumn*/);
             //initListeners(projectColumn);
 
             JTextField auxTextField = new JTextField("Afegeix tasca...");
@@ -504,14 +492,23 @@ public class ProjectView extends JFrame{
 
     }
 
-    private void initDragDropProject(JList<String> column, JScrollPane jScrollPane, ClientController clientController) {
+    public void initDragDropProject() {
 
-        column.setDragEnabled(true);
-        column.setDropMode(DropMode.INSERT);
-        column.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        for (int i = 0; i < dataUser.size(); i++) {
 
-        CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectColumns, dataUser, this, customMouseListener, clientController);
-        column.setTransferHandler(customTransferHandler);
+            JList<String> column = projectColumns.get(i);
+
+            column.setDragEnabled(true);
+            column.setDropMode(DropMode.INSERT);
+            column.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+            if (i == 0){
+
+                System.out.println(column);
+            }
+
+            column.setTransferHandler(customTransferHandler);
+        }
     }
 
     /*private void jListUserValueChanged(ListSelectionEvent evt, JList<String> column) {
@@ -554,9 +551,13 @@ public class ProjectView extends JFrame{
         doneCheckboxPanel.add(doneCheckbox);
         popup.add(doneCheckboxPanel);
         popup.add(colorChooserPanel);
+
+        descriptionArea.setText(project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).getDescripcio());
+        popup.add(descriptionArea);
+
         popup.add(deleteButton);
 
-        popup.setPopupSize(new Dimension(200,320));
+        popup.setPopupSize(new Dimension(225,370));
         //popup.show(this, columna * 200 + 23, fila * 35 + 120);
         popup.setLocation((int) projectColumns.get(columna).getLocationOnScreen().getY(),
                 (int) projectColumns.get(columna).getLocationOnScreen().getX());
@@ -758,5 +759,32 @@ public class ProjectView extends JFrame{
             colorIcons.get(i).addActionListener(clientController);
         }
 
+        for (int i = 0; i < etiquetasTextfields.size(); i++){
+
+            etiquetasTextfields.get(i).setActionCommand("ETIQUETA");
+            etiquetasTextfields.get(i).addActionListener(clientController);
+        }
+
+        descriptionArea.setActionCommand("DESCRIPTION");
+        descriptionArea.addActionListener(clientController);
+
+    }
+
+    public CustomTransferHandler getCustomTransferHandler() {
+        return customTransferHandler;
+    }
+
+    public void setCustomTransferHandler(CustomTransferHandler customTransferHandler) {
+        this.customTransferHandler = customTransferHandler;
+    }
+
+    public ArrayList getProjectColumns(){
+
+        return projectColumns;
+    }
+
+    public ArrayList getDataUser(){
+
+        return dataUser;
     }
 }

@@ -1,5 +1,9 @@
 package controlador;
 
+import model.Project;
+import model.ProjectManager;
+import model.Tasca;
+import views.MainView;
 import views.ProjectView;
 
 import javax.swing.*;
@@ -7,7 +11,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,21 +28,23 @@ public class CustomTransferHandler extends TransferHandler {
     private int indexDrop;
     private int listDrop;
     private boolean beforeIndex = false;
-    private ProjectView vistaProject;
-    private MouseListener mouseListener;
+    private ProjectView projectView;
     private ClientController clientController;
+    private MainView mainView;
+    private ProjectManager projectManager;
 
     private JList<String> source;
     private JList<String> target;
 
 
     public CustomTransferHandler(ArrayList<JList<String>> userColumns, ArrayList<DefaultListModel<String>> dataUser,
-                                 ProjectView vistaProject, CustomMouseListenerProject mouseListener, ClientController clientController){
+                                 ProjectView vistaProject, ClientController clientController, MainView mainView){
         this.userColumns = userColumns;
-        this.vistaProject = vistaProject;
+        this.projectView = vistaProject;
         this.dataUser = dataUser;
-        this.mouseListener = mouseListener;
         this.clientController = clientController;
+        this.mainView = mainView;
+        this.projectManager = mainView.getProjectManager();
     }
 
     @Override
@@ -68,33 +73,59 @@ public class CustomTransferHandler extends TransferHandler {
                 System.out.println("2.1");
 
                 if (beforeIndex) {
-                    System.out.println("3.1");
-                    dataUser.get(listOrigin).remove(indexOrigin + 1);
-                    //this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin + 1);
+                    //System.out.println("3.1");
+                    //dataUser.get(listOrigin).remove(indexOrigin + 1);
+
+                    if (this.projectView.getList() == 1){
+
+                        mainView.getProjectManager().getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                                getColumnes().get(listOrigin).getTasques().remove(indexOrigin + 1);
+
+                    } else {
+
+                        mainView.getProjectManager().getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                                getColumnes().get(listOrigin).getTasques().remove(indexOrigin + 1);
+                    }
 
 
                 } else {
                     System.out.println("4.1");
-                    dataUser.get(listOrigin).remove(indexOrigin);
-                    //this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+                    //dataUser.get(listOrigin).remove(indexOrigin);
+                    //this.projectView.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+
+                    if (this.projectView.getList() == 1){
+
+                        mainView.getProjectManager().getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                                getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+
+                    } else {
+
+                        mainView.getProjectManager().getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                                getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+                    }
                 }
 
-                System.out.println(dataUser);
+                //System.out.println(dataUser);
 
             }else{
-                dataUser.get(listOrigin).remove(indexOrigin);
-                //this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
-                System.out.println("diferente");
+                //dataUser.get(listOrigin).remove(indexOrigin);
+                //this.projectView.getProject().getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+
+                if (this.projectView.getList() == 1){
+
+                    mainView.getProjectManager().getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                            getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+
+                } else {
+
+                    mainView.getProjectManager().getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                            getColumnes().get(listOrigin).getTasques().remove(indexOrigin);
+                }
             }
 
         }
 
-        /*vistaProject.getContentPane().removeAll();
-        vistaProject.initComponentsProject();
-        vistaProject.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(vistaProject);
-        vistaProject.registerController(clientController, mouseListener);*/
-        vistaProject.revalidate();
+        mainView.refreshView();
     }
 
     @Override
@@ -119,10 +150,35 @@ public class CustomTransferHandler extends TransferHandler {
 
         Transferable transferable = t.getTransferable();
         try {
-            String data = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-            dataUser.get(listDrop).add(indexDrop, data);
-            //this.vistaProject.getProject().getColumnes().get(listDrop).getTasques()
-                    //.add(indexDrop, this.vistaProject.getProject().getColumnes().get(listOrigin).getTasques().get(indexOrigin));
+
+            Tasca data;
+            if (this.projectView.getList() == 1){
+
+                data = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                        getColumnes().get(listOrigin).getTasques().get(indexOrigin);
+
+            } else {
+
+                data = projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                        getColumnes().get(listOrigin).getTasques().get(indexOrigin);
+            }
+
+            String notUsed = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+            //dataUser.get(listDrop).add(indexDrop, data);
+
+            //this.projectView.getProject().getColumnes().get(listDrop).getTasques()
+                    //.add(indexDrop, this.projectView.getProject().getColumnes().get(listOrigin).getTasques().get(indexOrigin));
+
+            if (this.projectView.getList() == 1){
+
+                projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                        getColumnes().get(listDrop).getTasques().add(indexDrop, data);
+
+            } else {
+
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                        getColumnes().get(listDrop).getTasques().add(indexDrop, data);
+            }
 
         } catch (UnsupportedFlavorException e) {
             e.printStackTrace();
@@ -138,16 +194,30 @@ public class CustomTransferHandler extends TransferHandler {
         return true;
     }
 
-    public MouseListener getMouseListener() {
-        return mouseListener;
+    public int findByIdYours(Project project){
+
+        for (int i = 0; i < this.projectManager.getYourProjects().size(); i++){
+
+            if (this.projectManager.getYourProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
+
+                return i;
+            }
+        }
+
+        return 0;
     }
 
-    public void setMouseListener(MouseListener mouseListener) {
-        this.mouseListener = mouseListener;
-    }
+    public int findByIdShared(Project project){
 
-    public void actualizarInfo(){
+        for (int i = 0; i < this.projectManager.getSharedProjects().size(); i++){
 
+            if (this.projectManager.getSharedProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
+
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     public int getIndexOrigin(){

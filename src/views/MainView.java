@@ -733,6 +733,10 @@ public class MainView extends JFrame {
             this.projectView = new ProjectView(projectManager.getSharedProjects().get(fila), 2);
         }
 
+        CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectView.getProjectColumns(),
+                projectView.getDataUser(), projectView, clientController, this);
+        projectView.setCustomTransferHandler(customTransferHandler);
+        projectView.initDragDropProject();
         CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
         projectView.registerController(clientController, mouseListener);
         projectView.setVisible(true);
@@ -804,36 +808,15 @@ public class MainView extends JFrame {
             this.projectView.getContentPane().removeAll();
             this.projectView.initComponentsProject();
             this.projectView.initVistaProject();
+            CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectView.getProjectColumns(),
+                    projectView.getDataUser(), projectView, clientController, this);
+            projectView.setCustomTransferHandler(customTransferHandler);
+            projectView.initDragDropProject();
             CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+
             projectView.registerController(clientController, mouseListener);
             this.projectView.revalidate();
         }
-    }
-
-    public int findByIdYours(Project project){
-
-        for (int i = 0; i < this.projectManager.getYourProjects().size(); i++){
-
-            if (this.projectManager.getYourProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
-
-                return i;
-            }
-        }
-
-        return 0;
-    }
-
-    public int findByIdShared(Project project){
-
-        for (int i = 0; i < this.projectManager.getSharedProjects().size(); i++){
-
-            if (this.projectManager.getSharedProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
-
-                return i;
-            }
-        }
-
-        return 0;
     }
 
     public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){
@@ -1166,6 +1149,47 @@ public class MainView extends JFrame {
         }
 
         this.revalidate();
+    }
+
+    public int findByIdYours(Project project){
+
+        for (int i = 0; i < this.projectManager.getYourProjects().size(); i++){
+
+            if (this.projectManager.getYourProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
+
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    public int findByIdShared(Project project){
+
+        for (int i = 0; i < this.projectManager.getSharedProjects().size(); i++){
+
+            if (this.projectManager.getSharedProjects().get(i).getIdProyecto() == this.projectView.getProject().getIdProyecto()) {
+
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    public void refreshView(){
+
+        projectView.getContentPane().removeAll();
+        projectView.initComponentsProject();
+        projectView.initVistaProject();
+        CustomTransferHandler customTransferHandler = new CustomTransferHandler(projectView.getProjectColumns(),
+                projectView.getDataUser(), projectView, clientController, this);
+        projectView.setCustomTransferHandler(customTransferHandler);
+        projectView.initDragDropProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        projectView.setVisible(true);
+        this.setVisible(false);
     }
 
     public void registerController(ClientController controllerClient, PopupController controllerPopUp,

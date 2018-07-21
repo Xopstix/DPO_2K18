@@ -6,7 +6,6 @@ import controlador.PopupController;
 import model.ProjectManager;
 import network.ServerCommunication;
 import views.AuthenticationView;
-import views.ColorChooserPanel;
 import views.MainView;
 
 import javax.swing.*;

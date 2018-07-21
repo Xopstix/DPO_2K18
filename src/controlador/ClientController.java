@@ -280,6 +280,11 @@ public class ClientController implements ActionListener{
 
             mainView.putEtiqueta(Integer.parseInt(((JButton)e.getSource()).getName()));
         }
+
+        if (e.getActionCommand().equals("DESCRIPTION")){
+
+            //mainView.syncDescription(((JTextField) e.getSource()).getText());
+        }
     }
 
     public void logInAccepted(){
