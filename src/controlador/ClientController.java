@@ -180,7 +180,6 @@ public class ClientController implements ActionListener{
 
             mainView.initHome();
             mainView.addProject(project.getName());
-            mainView.addBackground(project.getBackground());
             mainView.registerController(this, popupController, mouseSelectionListenerMain);
             mainView.setClientController(this);
             mainView.revalidate();

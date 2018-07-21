@@ -274,19 +274,36 @@ public class ProjectView extends JFrame{
 
         JPanel totalPanel;
 
-        File image = new File("images/dgreen.jpg");
+        if(project.getBackground() == null) {
+            File image = new File("images/dgreen.jpg");
 
-        totalPanel = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                try {
-                    g.drawImage(ImageIO.read(image),0, 0, null);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            totalPanel = new JPanel(new BorderLayout()) {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    try {
+                        g.drawImage(ImageIO.read(image),0, 0, null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        };
+            };
+        }
+        else{
+            File image = new File(project.getBackground()+".jpg");
+            totalPanel = new JPanel(new BorderLayout()) {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    try {
+                        g.drawImage(ImageIO.read(image),0, 0, null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+        }
+
 
         JPanel boxPanel = new JPanel(new BorderLayout());
 

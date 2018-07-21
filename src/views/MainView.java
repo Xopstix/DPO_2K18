@@ -731,6 +731,7 @@ public class MainView extends JFrame {
         }else{
 
             this.projectView = new ProjectView(projectManager.getSharedProjects().get(fila), 2);
+
         }
 
         CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
