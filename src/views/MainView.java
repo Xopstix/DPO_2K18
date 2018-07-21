@@ -1094,27 +1094,15 @@ public class MainView extends JFrame {
 
         if (this.projectView.getList() == 1) {
 
-            etiqueta = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
-                    getEtiquetes().get(color);
-
-        } else {
-
-            etiqueta = projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
-                    getEtiquetes().get(color);
-
-        }
-
-        if (this.projectView.getList() == 1) {
-
             projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
                     getColumnes().get((projectView.getPopupTaskColumn())).
-                    getTasques().get(projectView.getPopupTaskRow()).setEtiqueta(etiqueta);
+                    getTasques().get(projectView.getPopupTaskRow()).setId_etiqueta(color);
 
         } else {
 
             projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
                     getColumnes().get((projectView.getPopupTaskColumn())).
-                    getTasques().get(projectView.getPopupTaskRow()).setEtiqueta(etiqueta);
+                    getTasques().get(projectView.getPopupTaskRow()).setId_etiqueta(color);
         }
 
         this.projectView.getContentPane().removeAll();

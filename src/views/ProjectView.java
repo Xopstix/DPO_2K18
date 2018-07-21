@@ -153,7 +153,7 @@ public class ProjectView extends JFrame{
         colorLabels.setSize(new Dimension(150,50));
 
         colorButton = new JButton();
-        colorButton.setName("0");
+        colorButton.setName("1");
         colorButton.setBorderPainted(false);
 
         try {
@@ -168,7 +168,7 @@ public class ProjectView extends JFrame{
         colorIconsPanel.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("1");
+        colorButton.setName("2");
         colorButton.setBorderPainted(false);
 
         try {
@@ -183,7 +183,7 @@ public class ProjectView extends JFrame{
         colorIcons.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("2");
+        colorButton.setName("3");
         colorButton.setBorderPainted(false);
 
         try {
@@ -198,7 +198,7 @@ public class ProjectView extends JFrame{
         colorIcons.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("3");
+        colorButton.setName("4");
         colorButton.setBorderPainted(false);
 
         try {
@@ -213,7 +213,7 @@ public class ProjectView extends JFrame{
         colorIcons.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("4");
+        colorButton.setName("5");
         colorButton.setBorderPainted(false);
 
         try {
@@ -536,7 +536,7 @@ public class ProjectView extends JFrame{
 
         System.out.println(project.getColumnes());
 
-        if (project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).getCompleta() == 1){
+        if (project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).isCompleta() == 1){
 
             doneCheckbox.setSelected(true);
 
