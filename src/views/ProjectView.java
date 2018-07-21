@@ -232,19 +232,23 @@ public class ProjectView extends JFrame{
         if (project.getEtiquetes() != null){
 
             System.out.println("entra1");
-            for (int i = 0; i < project.getEtiquetes().size(); i++){
+            for (int i = 0; i < 5; i++){
                 System.out.println("entra2");
+                JPanel auxiliar = new JPanel();
                 //JLabel auxLabelColor = new JLabel(project.getEtiquetes().get(i).getNom());
-                JLabel auxLabelColor = new JLabel("Label");
-                auxLabelColor.setBorder(BorderFactory.createEmptyBorder(5,0,5,10));
-                colorLabels.add(auxLabelColor);
+                JTextField auxColorTextField = new JTextField("Name your task!");
+                auxColorTextField.setMinimumSize(new Dimension(100, 50));
+                auxColorTextField.setMaximumSize(new Dimension(100, 50));
+                auxiliar.add(auxColorTextField);
+                auxiliar.setBorder(BorderFactory.createEmptyBorder(3, 0, 3, 0));
+                colorLabels.add(auxiliar);
             }
 
             colorChooserPanel.add(colorIconsPanel);
             colorChooserPanel.add(colorLabels);
 
 
-        }else {
+        }/*else {
 
             System.out.println("entra3");
             for (int i = 0; i < 5; i++) {
@@ -259,7 +263,7 @@ public class ProjectView extends JFrame{
 
             colorChooserPanel.add(colorIconsPanel);
             colorChooserPanel.add(colorLabels);
-        }
+        }*/
 
         titleTextField = new JTextField("Nou nom");
     }
@@ -552,7 +556,7 @@ public class ProjectView extends JFrame{
         popup.add(colorChooserPanel);
         popup.add(deleteButton);
 
-        popup.setPopupSize(new Dimension(200,300));
+        popup.setPopupSize(new Dimension(200,320));
         //popup.show(this, columna * 200 + 23, fila * 35 + 120);
         popup.setLocation((int) projectColumns.get(columna).getLocationOnScreen().getY(),
                 (int) projectColumns.get(columna).getLocationOnScreen().getX());
