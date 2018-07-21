@@ -9,7 +9,6 @@ import model.Tasca;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -25,22 +24,41 @@ public class ProjectView extends JFrame{
 
     private ArrayList<DefaultListModel<String>> dataUser;
 
-    private JButton jbNew;
+    private JButton jbProjects;
     private JButton jbUser;
     private ArrayList<JList<String>> stringsUser;
     private ArrayList<JList<String>> projectColumns;
+    private ArrayList<JButton> rightButtons;
+    private ArrayList<JButton> leftButtons;
+    private ArrayList<JButton> titleButtons;
+    private ArrayList<JButton> deleteButtons;
     private ArrayList<JTextField> textFields;
     private JTextField newColumnTextField;
     private CustomMouseListenerProject customMouseListener;
     private ClientController clientController;
 
+    private JPopupMenu popupUser;
+    private JMenuItem menuItem1;
+    private JMenuItem menuItem2;
+    private JMenuItem menuItem3;
+
     private JPopupMenu popup;
+    private int popupTaskColumn;
+    private int popupTaskRow;
+    private int changingTitle;
     private JPopupMenu popupColumn;
+    private JLabel doneLabel;
+    private JCheckBox doneCheckbox;
     private JMenuItem deleteButton;
     private JTextField nameTextField;
     private JPanel colorLabels;
     private JColorChooser colorChooser;
+    private ArrayList<JButton> colorIcons;
+    private JButton colorButton;
     private JPanel colorChooserPanel;
+    private JPanel colorIconsPanel;
+    private JPopupMenu popupTitle;
+    private JTextField titleTextField;
 
     private Project project;
     private int type;
@@ -54,15 +72,37 @@ public class ProjectView extends JFrame{
         this.setSize(1200, 600);
         this.setTitle("ProjectManager");
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public void initComponentsProject() {
 
-        System.out.println(project.getColumnes().get(0).getTasques().get(0).getNom());
+        menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem1.setMnemonic(KeyEvent.VK_P);
+        menuItem1.getAccessibleContext().setAccessibleDescription(
+                "Go to the Home screen");
+
+        menuItem2 = new JMenuItem("Delete Project", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem2.setMnemonic(KeyEvent.VK_P);
+        menuItem2.getAccessibleContext().setAccessibleDescription(
+                "Deletes the Project");
+
+        menuItem3 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem3.setMnemonic(KeyEvent.VK_P);
 
         stringsUser = new ArrayList<>();
         dataUser = new ArrayList<>();
+
+        rightButtons = new ArrayList<>();
+        leftButtons = new ArrayList<>();
+
+        titleButtons = new ArrayList<>();
+        deleteButtons = new ArrayList<>();
+
+        colorIcons = new ArrayList<>();
 
         textFields = new ArrayList<>();
 
@@ -83,10 +123,13 @@ public class ProjectView extends JFrame{
             e.printStackTrace();
         }
 
-        jbNew = new JButton("New Project");
+        jbProjects = new JButton("Projects");
         jbUser = new JButton("User");
 
         popup = new JPopupMenu();
+
+        doneLabel = new JLabel("Task completed");
+        doneCheckbox = new JCheckBox();
 
         deleteButton = new JMenuItem("Delete", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
@@ -101,49 +144,124 @@ public class ProjectView extends JFrame{
         nameTextField.setMinimumSize(new Dimension(200,30));
         nameTextField.setMaximumSize(new Dimension(200,30));
 
-        colorChooser = new JColorChooser(Color.WHITE);
-
-        colorChooser.setPreviewPanel(new JPanel());
-
-        AbstractColorChooserPanel panels[] = { new ColorChooserPanel() };
-        colorChooser.setChooserPanels(panels);
-
-        colorChooser.setMaximumSize(new Dimension(50, 50));
-        colorChooser.setMinimumSize(new Dimension(50, 50));
-
-        colorChooserPanel = new JPanel(new BorderLayout());
-
         colorLabels = new JPanel();
-
         colorLabels.setLayout(new BoxLayout(colorLabels, BoxLayout.Y_AXIS));
+
+        colorIconsPanel = new JPanel();
+        colorIconsPanel.setLayout(new BoxLayout(colorIconsPanel, BoxLayout.Y_AXIS));
 
         colorLabels.setSize(new Dimension(150,50));
 
+        colorButton = new JButton();
+        colorButton.setName("0");
+        colorButton.setBorderPainted(false);
+
+        try {
+            Image img = ImageIO.read(new File("icons/greensticker.png")).
+                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+            colorButton.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        colorIcons.add(colorButton);
+        colorIconsPanel.add(colorButton);
+
+        colorButton = new JButton();
+        colorButton.setName("1");
+        colorButton.setBorderPainted(false);
+
+        try {
+            Image img = ImageIO.read(new File("icons/redsticker.png")).
+                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+            colorButton.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        colorIconsPanel.add(colorButton);
+        colorIcons.add(colorButton);
+
+        colorButton = new JButton();
+        colorButton.setName("2");
+        colorButton.setBorderPainted(false);
+
+        try {
+            Image img = ImageIO.read(new File("icons/yellowsticker.png")).
+                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+            colorButton.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        colorIconsPanel.add(colorButton);
+        colorIcons.add(colorButton);
+
+        colorButton = new JButton();
+        colorButton.setName("3");
+        colorButton.setBorderPainted(false);
+
+        try {
+            Image img = ImageIO.read(new File("icons/bluesticker.png")).
+                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+            colorButton.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        colorIconsPanel.add(colorButton);
+        colorIcons.add(colorButton);
+
+        colorButton = new JButton();
+        colorButton.setName("4");
+        colorButton.setBorderPainted(false);
+
+        try {
+            Image img = ImageIO.read(new File("icons/purplesticker.png")).
+                    getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH ) ;
+            colorButton.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        colorIconsPanel.add(colorButton);
+        colorIcons.add(colorButton);
+
+        colorChooserPanel = new JPanel(new FlowLayout());
+
         if (project.getEtiquetes() != null){
 
+            System.out.println("entra1");
             for (int i = 0; i < project.getEtiquetes().size(); i++){
-                JLabel auxLabelColor = new JLabel(project.getEtiquetes().get(i).getNom());
+                System.out.println("entra2");
+                //JLabel auxLabelColor = new JLabel(project.getEtiquetes().get(i).getNom());
+                JLabel auxLabelColor = new JLabel("Label");
                 auxLabelColor.setBorder(BorderFactory.createEmptyBorder(5,0,5,10));
                 colorLabels.add(auxLabelColor);
             }
 
-            colorChooserPanel.add(colorChooser, BorderLayout.WEST);
-            colorChooserPanel.add(colorLabels,BorderLayout.CENTER);
+            colorChooserPanel.add(colorIconsPanel);
+            colorChooserPanel.add(colorLabels);
+
 
         }else {
 
+            System.out.println("entra3");
             for (int i = 0; i < 5; i++) {
+                System.out.println("entra4");
                 JTextField auxColorTextField = new JTextField("Name your task!");
-                auxColorTextField.setMinimumSize(new Dimension(140, 40));
-                auxColorTextField.setMaximumSize(new Dimension(140, 40));
+                auxColorTextField.setMinimumSize(new Dimension(100, 40));
+                auxColorTextField.setMaximumSize(new Dimension(100, 40));
                 auxColorTextField.setBorder(BorderFactory.createMatteBorder(10, 5, 10, 10, Color.LIGHT_GRAY));
-                auxColorTextField.setOpaque(false);
+                //auxColorTextField.setOpaque(false);
                 colorLabels.add(auxColorTextField);
             }
 
-            colorChooserPanel.add(colorChooser, BorderLayout.WEST);
-            colorChooserPanel.add(colorLabels, BorderLayout.CENTER);
+            colorChooserPanel.add(colorIconsPanel);
+            colorChooserPanel.add(colorLabels);
         }
+
+        titleTextField = new JTextField("Nou nom");
     }
 
     public void initVistaProject() {
@@ -170,7 +288,7 @@ public class ProjectView extends JFrame{
 
         JPanel jpButtons = new JPanel(new BorderLayout());
         jpButtons.setOpaque(false);
-        jpButtons.add(jbNew, BorderLayout.LINE_START);
+        jpButtons.add(jbProjects, BorderLayout.LINE_START);
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
         boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
@@ -182,14 +300,46 @@ public class ProjectView extends JFrame{
             JPanel auxPanel = new JPanel();
             auxPanel.setLayout(new BoxLayout(auxPanel, BoxLayout.Y_AXIS));
 
+            JButton rightButton = new JButton();
+            rightButton.setName((i+""));
+            rightButton.setBorderPainted(false);
+
+            JButton leftButton = new JButton();
+            leftButton.setName((i+""));
+            leftButton.setBorderPainted(false);
+
+            try {
+                Image img = ImageIO.read(new File("icons/right.png")).
+                        getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+                rightButton.setIcon(new ImageIcon(img));
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+
+            try {
+                Image img = ImageIO.read(new File("icons/left.png")).
+                        getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+                leftButton.setIcon(new ImageIcon(img));
+            } catch (Exception ex) {
+                System.out.println(ex);
+            }
+
+            rightButtons.add(rightButton);
+            leftButtons.add(leftButton);
+
             JPanel titlePanel = new JPanel(new FlowLayout());
-            titlePanel.setMaximumSize(new Dimension(150,50));
+            titlePanel.setMaximumSize(new Dimension(350,50));
 
             JButton nameButton = new JButton(project.getColumnes().get(i).getNom());
+            nameButton.setName(i+"");
             nameButton.setForeground(Color.WHITE);
             nameButton.setBorderPainted(false);
             JButton deleteButton = new JButton();
+            deleteButton.setName((i+""));
             deleteButton.setBorderPainted(false);
+
+            titleButtons.add(nameButton);
+            deleteButtons.add(deleteButton);
 
             try {
                 Image img = ImageIO.read(new File("icons/delete_icon.png")).
@@ -200,16 +350,18 @@ public class ProjectView extends JFrame{
             }
 
             titlePanel.setOpaque(false);
+            titlePanel.add(leftButton);
             titlePanel.add(nameButton);
             titlePanel.add(deleteButton);
+            titlePanel.add(rightButton);
 
             auxPanel.setOpaque(false);
-            auxPanel.add(titlePanel, BorderLayout.NORTH);
+            auxPanel.add(titlePanel);
 
             //JPanel scrollable = new JPanel();
             //scrollable.setLayout(new BoxLayout(scrollable, BoxLayout.Y_AXIS));
-            auxPanel.setMaximumSize(new Dimension(200, 500));
-            auxPanel.setMinimumSize(new Dimension(200,400));
+            auxPanel.setMaximumSize(new Dimension(250, 500));
+            auxPanel.setMinimumSize(new Dimension(250,400));
 
             JList<String> projectColumn = new JList<>(dataUser.get(i));     //Clase que contendra la info de la DB
             projectColumn.setFixedCellHeight(35);
@@ -238,7 +390,7 @@ public class ProjectView extends JFrame{
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            jScrollPane.setMaximumSize(new Dimension(200, dataUser.get(i).size() * 36));
+            jScrollPane.setMaximumSize(new Dimension(250, dataUser.get(i).size() * 36 + 5));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             jScrollPane.getVerticalScrollBar().setVisible(false);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -267,17 +419,17 @@ public class ProjectView extends JFrame{
                 }
             });
 
-            auxTextField.setPreferredSize(new Dimension(200,25));
-            auxTextField.setMaximumSize(new Dimension(200,25));
+            auxTextField.setPreferredSize(new Dimension(250,25));
+            auxTextField.setMaximumSize(new Dimension(250,25));
 
             textFields.add(auxTextField);
 
             auxPanel.add(auxTextField);
 
-            auxPanel.setPreferredSize(new Dimension(200, 530));
-            auxPanel.setMaximumSize(new Dimension(200, 530));
+            auxPanel.setPreferredSize(new Dimension(250, 530));
+            auxPanel.setMaximumSize(new Dimension(250, 530));
             auxPanel.setBorder((BorderFactory.createEmptyBorder(0,20,0,0)));
-            auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
+            //auxPanel.setAlignmentY(boxPanel.TOP_ALIGNMENT);
 
             auxPanel.setBorder(BorderFactory.createMatteBorder(0,2,0,2,Color.WHITE));
 
@@ -302,11 +454,13 @@ public class ProjectView extends JFrame{
         Border compound = BorderFactory.createCompoundBorder(margin, limits);
         newProjectPanel.setBorder(compound);
         //newProjectPanel.setBorder((BorderFactory.createEmptyBorder(60,20,0,0)));
-        newProjectPanel.setMaximumSize(new Dimension(200,250));
+        newProjectPanel.setMinimumSize(new Dimension(300,250));
+        newProjectPanel.setMaximumSize(new Dimension(300,250));
         newProjectPanel.setOpaque(false);
 
         newColumnTextField = new JTextField("Afegeix columna...");
         newColumnTextField.addFocusListener(new FocusListener() {
+
             @Override
             public void focusGained(FocusEvent e) {
 
@@ -328,6 +482,7 @@ public class ProjectView extends JFrame{
         newProjectPanel.add(newColumnTextField);
 
         boxPanel.add(newProjectPanel);
+        newProjectPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
         boxPanel.setOpaque(false);
 
@@ -374,11 +529,30 @@ public class ProjectView extends JFrame{
 
     public void initPopupTasca(int columna, int fila){
 
+        popup = new JPopupMenu();
+
+        nameTextField.setText("Nou nom");
         popup.add(nameTextField);
+
+        System.out.println(project.getColumnes());
+
+        if (project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).getCompleta() == 1){
+
+            doneCheckbox.setSelected(true);
+
+        } else{
+
+            doneCheckbox.setSelected(false);
+        }
+
+        JPanel doneCheckboxPanel = new JPanel(new FlowLayout());
+        doneCheckboxPanel.add(doneLabel);
+        doneCheckboxPanel.add(doneCheckbox);
+        popup.add(doneCheckboxPanel);
         popup.add(colorChooserPanel);
         popup.add(deleteButton);
 
-        popup.setPopupSize(new Dimension(200,264));
+        popup.setPopupSize(new Dimension(200,300));
         //popup.show(this, columna * 200 + 23, fila * 35 + 120);
         popup.setLocation((int) projectColumns.get(columna).getLocationOnScreen().getY(),
                 (int) projectColumns.get(columna).getLocationOnScreen().getX());
@@ -386,6 +560,48 @@ public class ProjectView extends JFrame{
         popup.show(this, (int) projectColumns.get(columna).getLocationOnScreen().getX() + 75,
                 (int) projectColumns.get(columna).getLocationOnScreen().getY() + fila * 35 - 100);
         //popup.show(this, projectColumns.get(columna).getY(), projectColumns.get(fila).getX());
+    }
+
+    public void closePopupTask(){
+
+        System.out.println("yes");
+        this.popup.setVisible(false);
+    }
+
+    public void titlePopup(int column){
+
+        popupTitle = new JPopupMenu();
+
+        changingTitle = column;
+
+        JLabel titleSelect = new JLabel("Escolleix un nou nom:");
+        popupTitle.add(titleSelect);
+
+        popupTitle.add(titleTextField);
+
+        popupTitle.setPopupSize(new Dimension(250, 50));
+        popupTitle.setLocation((int) projectColumns.get(column).getLocationOnScreen().getY(),
+                (int) projectColumns.get(column).getLocationOnScreen().getX());
+
+        popupTitle.show(this, (int) leftButtons.get(column).getLocationOnScreen().getX() + 30,
+                (int) leftButtons.get(column).getLocationOnScreen().getY() -50);
+
+    }
+
+    public void popupUser(){
+
+        popupUser = new JPopupMenu();
+
+        popupUser.add(menuItem1);
+        popupUser.add(menuItem2);
+        popupUser.add(menuItem3);
+
+        popupUser.show(jbUser, -95, jbUser.getBounds().y + jbUser.getBounds().height);
+    }
+
+    public void closePopupTitle() {
+
+        this.popupTitle.setVisible(false);
     }
 
     public void initPopUpColumn(){
@@ -405,30 +621,19 @@ public class ProjectView extends JFrame{
         revalidate();
     }
 
-    public void registerController(ClientController controllerClient, CustomMouseListenerProject customMouseListener) {
+    public void putEtiqueta (Color color){
 
-        this.clientController = controllerClient;
+        if (color == Color.green){
 
-        jbUser.setActionCommand("POPUP_PANEL");
-        jbUser.addActionListener(controllerClient);
+        } else if (color == Color.red){
 
-        jbNew.setActionCommand("NEW_PROJECT");
-        jbNew.addActionListener(controllerClient);
+        } else if (color == Color.yellow){
 
-        this.customMouseListener = customMouseListener;
+        } else if (color == Color.blue){
 
-        for (int i = 0; i < projectColumns.size(); i++){
-            projectColumns.get(i).addMouseListener(customMouseListener);
+        } else if (color == Color.pink){
+
         }
-
-        for (int i = 0; i < textFields.size(); i++){
-            textFields.get(i).addActionListener(controllerClient);
-            textFields.get(i).setActionCommand("TEXTFIELDNEWTASK");
-            //textFields.get(i).addKeyListener(keyListener);
-        }
-
-        newColumnTextField.addActionListener(controllerClient);
-        newColumnTextField.setActionCommand("TEXTFIELDNEWCOLUMN");
     }
 
     public Project getProject(){
@@ -441,11 +646,113 @@ public class ProjectView extends JFrame{
         this.project = project;
     }
 
+    public void setPopupTaskColumn (int column){
+
+        this.popupTaskColumn = column;
+    }
+
+    public int getPopupTaskColumn(){
+
+        return this.popupTaskColumn;
+    }
+    public void setPopupTaskRow (int row){
+
+        this.popupTaskRow = row;
+    }
+
+    public int getPopupTaskRow(){
+
+        return this.popupTaskRow;
+    }
+
     public int getList() {
         return type;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getChangingTitle() {
+        return changingTitle;
+    }
+
+    public void setChangingTitle(int changingTitle) {
+        this.changingTitle = changingTitle;
+    }
+
+    public void registerController(ClientController controllerClient, CustomMouseListenerProject customMouseListener) {
+
+        this.clientController = controllerClient;
+
+        jbUser.setActionCommand("POPUPUSER");
+        jbUser.addActionListener(controllerClient);
+
+        jbProjects.setActionCommand("PROJECTS");
+        jbProjects.addActionListener(controllerClient);
+
+        this.customMouseListener = customMouseListener;
+
+        for (int i = 0; i < projectColumns.size(); i++){
+            projectColumns.get(i).addMouseListener(customMouseListener);
+        }
+
+        for (int i = 0; i < titleButtons.size(); i++){
+
+            titleButtons.get(i).addActionListener(controllerClient);
+            titleButtons.get(i).setActionCommand("TITLEPOPUP");
+        }
+
+        for (int i = 0; i < deleteButtons.size(); i++){
+
+            deleteButtons.get(i).addActionListener(controllerClient);
+            deleteButtons.get(i).setActionCommand("DELETECOLUMN");
+        }
+
+        for (int i = 0; i < textFields.size(); i++){
+            textFields.get(i).addActionListener(controllerClient);
+            textFields.get(i).setActionCommand("TEXTFIELDNEWTASK");
+            //textFields.get(i).addKeyListener(keyListener);
+        }
+
+        newColumnTextField.addActionListener(controllerClient);
+        newColumnTextField.setActionCommand("TEXTFIELDNEWCOLUMN");
+
+        doneCheckbox.addActionListener(controllerClient);
+        doneCheckbox.setActionCommand("DONECHECKBOX");
+
+        nameTextField.addActionListener(controllerClient);
+        nameTextField.setActionCommand("NEWTASKNAME");
+
+        deleteButton.addActionListener(controllerClient);
+        deleteButton.setActionCommand("DELETETASK");
+
+        for (int i = 0; i < rightButtons.size(); i++){
+
+            rightButtons.get(i).addActionListener(controllerClient);
+            rightButtons.get(i).setActionCommand("MOVERIGHT");
+
+            leftButtons.get(i).addActionListener(controllerClient);
+            leftButtons.get(i).setActionCommand("MOVELEFT");
+        }
+
+        titleTextField.addActionListener(controllerClient);
+        titleTextField.setActionCommand("NEWTITLE");
+
+        menuItem1.setActionCommand("PROJECTS");
+        menuItem1.addActionListener(clientController);
+
+        menuItem2.setActionCommand("DELETEPROJECT");
+        menuItem2.addActionListener(clientController);
+
+        menuItem3.setActionCommand("LOGOUT");
+        menuItem3.addActionListener(clientController);
+
+        for (int i = 0; i < colorIcons.size(); i++){
+
+            colorIcons.get(i).setActionCommand("COLORCHOSEN");
+            colorIcons.get(i).addActionListener(clientController);
+        }
+
     }
 }

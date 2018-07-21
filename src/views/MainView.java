@@ -16,6 +16,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,7 +88,6 @@ public class MainView extends JFrame {
 
         this.getContentPane().removeAll();
         initComponents();
-        initComponentsProject();
         initHomeView();
         initListeners();
         initDragDrop();
@@ -305,11 +305,6 @@ public class MainView extends JFrame {
 
         jbCreate = new JButton("Create");
         jbCancel = new JButton("Cancel");
-
-    }
-
-    private void initComponentsProject(){
-
 
     }
 
@@ -692,38 +687,6 @@ public class MainView extends JFrame {
 
     }
 
-    public void registerController(ClientController controllerClient, PopupController controllerPopUp,
-                                   CustomMouseListenerMain customMouseListenerMain) {
-
-        jbNew.setActionCommand("NEW_PROJECT");
-        jbNew.addActionListener(controllerClient);
-
-        jbUser.setActionCommand("POPUP");
-        jbUser.addActionListener(controllerClient);
-
-        jbBackground.setActionCommand("BROWSE");
-        jbBackground.addActionListener(controllerClient);
-
-        jbCreate.setActionCommand("CREATE");
-        jbCreate.addActionListener(controllerClient);
-
-        jbCancel.setActionCommand("CANCEL");
-        jbCancel.addActionListener(controllerClient);
-
-        menuItem1.setActionCommand("HOME");
-        menuItem1.addActionListener(controllerPopUp);
-
-        menuItem2.setActionCommand("NEW_PROJECT");
-        menuItem2.addActionListener(controllerPopUp);
-
-        menuItem3.setActionCommand("LOGOUT");
-        menuItem3.addActionListener(controllerPopUp);
-
-        userProjects.addMouseListener(customMouseListenerMain);
-        sharedProjects.addMouseListener(customMouseListenerMain);
-
-    }
-
     public String getUser() {
         return user;
     }
@@ -778,9 +741,12 @@ public class MainView extends JFrame {
 
     public void addTask(String task, int column){
 
+        int id = this.projectView.getProject().getIdProyecto();
+        int list = this.projectView.getList();
         //this.projectView.addTask(task, column);
         Tasca newTask = new Tasca();
         newTask.setNom(task);
+        newTask.setCompleta(0);
 
         if (this.projectView.getList() == 1){
 
@@ -813,6 +779,8 @@ public class MainView extends JFrame {
 
     public void addColumn(String columnName){
 
+        int id = this.projectView.getProject().getIdProyecto();
+        int list = this.projectView.getList();
         Columna newColumna = new Columna();
         newColumna.setNom(columnName);
 
@@ -916,4 +884,331 @@ public class MainView extends JFrame {
         this.clientController = clientController;
     }
 
+    public void setChecked(int selected) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+
+        } else{
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+        }
+
+        this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
+                getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+
+        this.projectView.revalidate();
+
+    }
+
+    public void changeName(String text) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+        }
+
+        this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
+                getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+    }
+
+    public void deleteColumn(int column) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().remove(column);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().remove(column);
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+
+    }
+
+    public void deleteTask() {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().remove(projectView.getPopupTaskRow());
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().remove(projectView.getPopupTaskRow());
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+
+    }
+
+    public void closeProject(){
+
+        this.projectView.dispatchEvent(new WindowEvent(projectView, WindowEvent.WINDOW_CLOSING));
+    }
+
+    public void moveRight(int column) {
+
+        if (this.projectView.getList() == 1){
+
+            if (column < projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().size() - 1) {
+
+
+                Columna movingColumn = new Columna();
+                movingColumn = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                        getColumnes().get(column);
+
+                Columna nextColumn = new Columna();
+                nextColumn = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                        getColumnes().get(column + 1);
+
+                projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).getColumnes().
+                        set(column, nextColumn);
+
+                projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).getColumnes().
+                        set(column + 1, movingColumn);
+            }
+
+        } else {
+
+            if (column < projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().size() - 1) {
+
+                Columna movingColumn = new Columna();
+                movingColumn = projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                        getColumnes().get(column);
+
+                Columna nextColumn = new Columna();
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                        getColumnes().get(column + 1);
+
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).getColumnes().
+                        set(column, nextColumn);
+
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).getColumnes().
+                        set(column + 1, movingColumn);
+            }
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+    }
+
+    public void moveLeft(int column) {
+
+        System.out.println(column);
+        if (this.projectView.getList() == 1){
+
+            if (column > 0) {
+
+                Columna movingColumn = new Columna();
+                movingColumn = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                        getColumnes().get(column);
+
+                Columna previousColumn = new Columna();
+                previousColumn = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                        getColumnes().get(column - 1);
+
+                projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).getColumnes().
+                        set(column, previousColumn);
+
+                projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).getColumnes().
+                        set(column - 1, movingColumn);
+            }
+
+        } else {
+
+            if (column > 0) {
+
+                Columna movingColumn = new Columna();
+                movingColumn = projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                        getColumnes().get(column);
+
+                Columna previousColumn = new Columna();
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                        getColumnes().get(column - 1);
+
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).getColumnes().
+                        set(column, previousColumn);
+
+                projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).getColumnes().
+                        set(column - 1, movingColumn);
+            }
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+
+    }
+
+    public void putEtiqueta(int color) {
+
+        System.out.println("entra");
+
+        Etiqueta etiqueta = new Etiqueta();
+
+        if (this.projectView.getList() == 1) {
+
+            etiqueta = projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getEtiquetes().get(color);
+
+        } else {
+
+            etiqueta = projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getEtiquetes().get(color);
+
+        }
+
+        if (this.projectView.getList() == 1) {
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().get(projectView.getPopupTaskRow()).setEtiqueta(etiqueta);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().get(projectView.getPopupTaskRow()).setEtiqueta(etiqueta);
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+    }
+
+    public void titlePopup(int i) {
+
+        projectView.titlePopup(i);
+    }
+
+    public void showPopupUser(){
+
+        projectView.popupUser();
+    }
+
+    public void newColumnTitle(String newName) {
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(projectView.getChangingTitle()).setNom(newName);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(projectView.getChangingTitle()).setNom(newName);
+        }
+
+        this.projectView.getContentPane().removeAll();
+        this.projectView.initComponentsProject();
+        this.projectView.initVistaProject();
+        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
+        projectView.registerController(clientController, mouseListener);
+        this.projectView.revalidate();
+
+    }
+
+    public void closePopupTitle() {
+
+        this.projectView.closePopupTitle();
+    }
+
+    public void closePopupTask() {
+
+        this.projectView.closePopupTask();
+    }
+
+    public void deleteProject(){
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.getYourProjects().remove(findByIdYours(this.projectView.getProject()));
+        } else {
+
+            projectManager.getSharedProjects().remove(findByIdShared(this.projectView.getProject()));
+        }
+
+        this.revalidate();
+    }
+
+    public void registerController(ClientController controllerClient, PopupController controllerPopUp,
+                                   CustomMouseListenerMain customMouseListenerMain) {
+
+        jbNew.setActionCommand("NEW_PROJECT");
+        jbNew.addActionListener(controllerClient);
+
+        jbUser.setActionCommand("POPUP");
+        jbUser.addActionListener(controllerClient);
+
+        jbBackground.setActionCommand("BROWSE");
+        jbBackground.addActionListener(controllerClient);
+
+        jbCreate.setActionCommand("CREATE");
+        jbCreate.addActionListener(controllerClient);
+
+        jbCancel.setActionCommand("CANCEL");
+        jbCancel.addActionListener(controllerClient);
+
+        menuItem1.setActionCommand("HOME");
+        menuItem1.addActionListener(controllerPopUp);
+
+        menuItem2.setActionCommand("NEW_PROJECT");
+        menuItem2.addActionListener(controllerPopUp);
+
+        menuItem3.setActionCommand("LOGOUT");
+        menuItem3.addActionListener(controllerPopUp);
+
+        userProjects.addMouseListener(customMouseListenerMain);
+        sharedProjects.addMouseListener(customMouseListenerMain);
+
+    }
 }
