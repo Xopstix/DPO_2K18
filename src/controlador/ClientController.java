@@ -26,6 +26,7 @@ public class ClientController implements ActionListener{
     private ServerCommunication serverCommunication;
     private Project project;
 
+
     private PopupController popupController;
     private CustomMouseListenerMain mouseSelectionListenerMain;
 
