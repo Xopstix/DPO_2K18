@@ -13,6 +13,7 @@ public class Etiqueta implements Serializable{
     private Color color;
     private int id_etiqueta;
 
+
     public int getId_etiqueta() {
         return id_etiqueta;
     }
