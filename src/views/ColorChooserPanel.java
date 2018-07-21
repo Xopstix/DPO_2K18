@@ -11,7 +11,9 @@ import java.awt.event.ActionListener;
  * Created by xaviamorcastillo on 18/5/18.
  */
 
-class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListener{
+public class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListener{
+
+    private MainView mainView;
 
     JToggleButton red;
     JToggleButton yellow;
@@ -62,10 +64,6 @@ class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListe
         ButtonGroup boxOfCrayons = new ButtonGroup();
         Border border = BorderFactory.createEmptyBorder(4,14,4,4);
 
-        yellow = createColor("yellowsticker", border);
-        boxOfCrayons.add(yellow);
-        add(yellow);
-
         green = createColor("greensticker", border);
         boxOfCrayons.add(green);
         add(green);
@@ -73,6 +71,10 @@ class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListe
         red = createColor("redsticker", border);
         boxOfCrayons.add(red);
         add(red);
+
+        yellow = createColor("yellowsticker", border);
+        boxOfCrayons.add(yellow);
+        add(yellow);
 
         blue = createColor("bluesticker", border);
         boxOfCrayons.add(blue);
@@ -114,6 +116,6 @@ class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListe
         } else if ("purplesticker".equals(command)) {
             newColor = Color.pink;
         }
-        getColorSelectionModel().setSelectedColor(newColor);
+        System.out.println(newColor);
     }
 }

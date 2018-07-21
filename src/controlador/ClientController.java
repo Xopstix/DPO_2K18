@@ -26,6 +26,9 @@ public class ClientController implements ActionListener{
     private ServerCommunication serverCommunication;
     private Project project;
 
+    private PopupController popupController;
+    private CustomMouseListenerMain mouseSelectionListenerMain;
+
     /**
      * Constructor del controlador que se encarga de poner las condiciones de inicio a partir de la vista y
      * el modelo recibidos por parámetros
@@ -134,6 +137,11 @@ public class ClientController implements ActionListener{
             mainView.showPopupMenu();
         }
 
+        if (e.getActionCommand().equals("POPUPUSER")){
+
+            mainView.showPopupUser();
+        }
+
         if (e.getActionCommand().equals("BROWSE")){
 
             mainView.showBrowseMenu();
@@ -169,9 +177,12 @@ public class ClientController implements ActionListener{
                 e1.printStackTrace();
             }
 
-            mainView.initHomeView();
+            mainView.initHome();
             mainView.addProject(project.getName());
             mainView.addBackground(project.getBackground());
+            mainView.registerController(this, popupController, mouseSelectionListenerMain);
+            mainView.setClientController(this);
+            mainView.revalidate();
 
         }
 
@@ -208,6 +219,7 @@ public class ClientController implements ActionListener{
         if (e.getActionCommand().equals("NEWTASKNAME")){
 
             mainView.changeName(((JTextField) e.getSource()).getText());
+            mainView.closePopupTask();
         }
 
         if (e.getActionCommand().equals("DELETECOLUMN")){
@@ -218,6 +230,54 @@ public class ClientController implements ActionListener{
         if (e.getActionCommand().equals("DELETETASK")){
 
             mainView.deleteTask();
+        }
+
+        if (e.getActionCommand().equals("MOVERIGHT")){
+
+            mainView.moveRight(Integer.parseInt(((JButton)e.getSource()).getName()));
+        }
+
+        if (e.getActionCommand().equals("MOVELEFT")){
+
+            mainView.moveLeft(Integer.parseInt(((JButton)e.getSource()).getName()));
+        }
+
+        if (e.getActionCommand().equals("PROJECTS")){
+
+            this.mainView.closeProject();
+            this.mainView.setVisible(true);
+        }
+
+        if (e.getActionCommand().equals("TITLEPOPUP")){
+
+            this.mainView.titlePopup(Integer.parseInt(((JButton)e.getSource()).getName()));
+        }
+
+        if (e.getActionCommand().equals("NEWTITLE")){
+
+            this.mainView.newColumnTitle(((JTextField) e.getSource()).getText());
+            this.mainView.closePopupTitle();
+        }
+
+        if (e.getActionCommand().equals("DELETEPROJECT")){
+
+            mainView.closeProject();
+            mainView.deleteProject();
+            System.out.println(projectManager.getYourProjects().size());
+            mainView.setVisible(false);
+            mainView.revalidate();
+            mainView.setVisible(true);
+        }
+
+        if (e.getActionCommand().equals("LOGOUT")){
+
+            //serverCommunication.endConnection();
+            mainView.dispose();
+        }
+
+        if (e.getActionCommand().equals("COLORCHOSEN")){
+
+            mainView.putEtiqueta(Integer.parseInt(((JButton)e.getSource()).getName()));
         }
     }
 
@@ -243,5 +303,21 @@ public class ClientController implements ActionListener{
     public ProjectManager getProjectManager(){
 
         return projectManager;
+    }
+
+    public PopupController getPopupController() {
+        return popupController;
+    }
+
+    public void setPopupController(PopupController popupController) {
+        this.popupController = popupController;
+    }
+
+    public CustomMouseListenerMain getMouseSelectionListenerMain() {
+        return mouseSelectionListenerMain;
+    }
+
+    public void setMouseSelectionListenerMain(CustomMouseListenerMain mouseSelectionListenerMain) {
+        this.mouseSelectionListenerMain = mouseSelectionListenerMain;
     }
 }

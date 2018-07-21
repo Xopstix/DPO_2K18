@@ -6,6 +6,7 @@ import controlador.PopupController;
 import model.ProjectManager;
 import network.ServerCommunication;
 import views.AuthenticationView;
+import views.ColorChooserPanel;
 import views.MainView;
 
 import javax.swing.*;
@@ -18,7 +19,6 @@ import java.io.FileNotFoundException;
 public class Main {
 
     public static void main(String[] args){
-
 
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -41,6 +41,9 @@ public class Main {
                     ServerCommunication serverCommunication = clientController.getServerCommunication();
                     PopupController popupController = new PopupController(mainView, serverCommunication);
                     CustomMouseListenerMain mouseSelectionListenerMain = new CustomMouseListenerMain(mainView);
+
+                    clientController.setMouseSelectionListenerMain(mouseSelectionListenerMain);
+                    clientController.setPopupController(popupController);
 
                     authenticationView.registerController(clientController);    //Relación controlador --> views
                     mainView.registerController(clientController, popupController, mouseSelectionListenerMain);
