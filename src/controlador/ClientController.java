@@ -128,7 +128,16 @@ public class ClientController implements ActionListener{
                 e1.printStackTrace();
             }
 
-            mainView.refreshView();
+        }
+
+        if (e.getActionCommand().equals("PUSHME")){
+
+            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,3);
+            try {
+                serverCommunication.startConnection();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
         }
 
         if (e.getActionCommand().equals("LOGOUT")){ //Si se quiere salir del programa
@@ -358,5 +367,14 @@ public class ClientController implements ActionListener{
 
     public void setMouseSelectionListenerMain(CustomMouseListenerMain mouseSelectionListenerMain) {
         this.mouseSelectionListenerMain = mouseSelectionListenerMain;
+    }
+
+    public void pull(ProjectManager projectManager) {
+
+        if (this.projectManager == projectManager){
+
+            System.out.println("same");
+            mainView.useNewPM(projectManager);
+        }
     }
 }

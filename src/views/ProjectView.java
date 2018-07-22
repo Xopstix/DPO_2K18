@@ -802,6 +802,9 @@ public class ProjectView extends JFrame{
         jbPull.setActionCommand("PULLME");
         jbPull.addActionListener(controllerClient);
 
+        jbPush.setActionCommand("PUSHME");
+        jbPush.addActionListener(controllerClient);
+
         this.customMouseListener = customMouseListener;
 
         for (int i = 0; i < projectColumns.size(); i++){

@@ -1168,6 +1168,15 @@ public class MainView extends JFrame {
         this.revalidate();
     }
 
+
+    public void useNewPM(ProjectManager projectManager) {
+
+        System.out.println("new");
+        this.projectManager = projectManager;
+        refreshView();
+
+    }
+
     public void syncDescription(String description){
 
         if (this.projectView.getList() == 1) {
@@ -1270,4 +1279,5 @@ public class MainView extends JFrame {
         sharedProjects.addMouseListener(customMouseListenerMain);
 
     }
+
 }
