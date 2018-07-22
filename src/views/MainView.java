@@ -190,6 +190,7 @@ public class MainView extends JFrame {
         jsc1.setOpaque(false);
         jsc1.getViewport().setOpaque(false);
 
+
         //jsc1.setMinimumSize(new Dimension(250, 50));
         //jsc1.setMaximumSize(new Dimension(250, 50));
 
