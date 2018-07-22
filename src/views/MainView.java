@@ -645,7 +645,6 @@ public class MainView extends JFrame {
         int result = jfChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = jfChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
         }
     }
 
@@ -1081,13 +1080,15 @@ public class MainView extends JFrame {
 
             projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
                     getColumnes().get((projectView.getPopupTaskColumn())).
-                    getTasques().get(projectView.getPopupTaskRow()).setId_etiqueta(color);
+                    getTasques().get(projectView.getPopupTaskRow()).
+                    setId_etiqueta(projectView.getProject().getEtiquetes().get(color).getId_etiqueta());
 
         } else {
 
             projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
                     getColumnes().get((projectView.getPopupTaskColumn())).
-                    getTasques().get(projectView.getPopupTaskRow()).setId_etiqueta(color);
+                    getTasques().get(projectView.getPopupTaskRow()).
+                    setId_etiqueta(projectView.getProject().getEtiquetes().get(color).getId_etiqueta());
         }
 
         refreshView();
@@ -1172,6 +1173,9 @@ public class MainView extends JFrame {
     public void useNewPM(ProjectManager projectManager) {
 
         System.out.println("new");
+        System.out.println(projectManager.getYourProjects().get(0).getColumnes().
+                get(projectManager.getYourProjects().get(0).getColumnes().size()-1)
+                .getTasques().get(0).getNom());
         this.projectManager = projectManager;
         refreshView();
 

@@ -188,7 +188,7 @@ public class ClientController implements ActionListener{
             projecte.setName(mainView.getProjectName());
             projecte.setDate();*/
 
-            ProjectManager auxManager = new ProjectManager();
+            //ProjectManager auxManager = new ProjectManager();
 
             try {
 
@@ -200,7 +200,7 @@ public class ClientController implements ActionListener{
             }
 
             ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,2);
-            auxManager = serverCommunication.getProjectManager();
+            //auxManager = serverCommunication.getProjectManager();
 
 
             try {
@@ -314,7 +314,7 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("LOGOUT")){
 
-            //serverCommunication.endConnection();
+            serverCommunication.endConnection();
             mainView.dispose();
         }
 

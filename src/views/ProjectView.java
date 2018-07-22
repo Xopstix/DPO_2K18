@@ -189,7 +189,7 @@ public class ProjectView extends JFrame{
         colorIconsPanel.setLayout(new BoxLayout(colorIconsPanel, BoxLayout.Y_AXIS));
 
         colorButton = new JButton();
-        colorButton.setName("1");
+        colorButton.setName("0");
         colorButton.setBorderPainted(false);
 
         try {
@@ -204,7 +204,7 @@ public class ProjectView extends JFrame{
         colorIconsPanel.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("2");
+        colorButton.setName("1");
         colorButton.setBorderPainted(false);
 
         try {
@@ -219,7 +219,7 @@ public class ProjectView extends JFrame{
         colorIcons.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("3");
+        colorButton.setName("2");
         colorButton.setBorderPainted(false);
 
         try {
@@ -234,7 +234,7 @@ public class ProjectView extends JFrame{
         colorIcons.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("4");
+        colorButton.setName("3");
         colorButton.setBorderPainted(false);
 
         try {
@@ -249,7 +249,7 @@ public class ProjectView extends JFrame{
         colorIcons.add(colorButton);
 
         colorButton = new JButton();
-        colorButton.setName("5");
+        colorButton.setName("4");
         colorButton.setBorderPainted(false);
 
         try {
@@ -385,7 +385,7 @@ public class ProjectView extends JFrame{
 
             try {
                 Image img = ImageIO.read(new File("icons/right.png")).
-                        getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+                        getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;
                 rightButton.setIcon(new ImageIcon(img));
             } catch (Exception ex) {
                 System.out.println(ex);
@@ -393,7 +393,7 @@ public class ProjectView extends JFrame{
 
             try {
                 Image img = ImageIO.read(new File("icons/left.png")).
-                        getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+                        getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;
                 leftButton.setIcon(new ImageIcon(img));
             } catch (Exception ex) {
                 System.out.println(ex);
@@ -403,7 +403,8 @@ public class ProjectView extends JFrame{
             leftButtons.add(leftButton);
 
             JPanel titlePanel = new JPanel(new FlowLayout());
-            titlePanel.setMaximumSize(new Dimension(350,50));
+            titlePanel.setMinimumSize(new Dimension(390,50));
+            titlePanel.setMaximumSize(new Dimension(390,50));
 
             JButton nameButton = new JButton(project.getColumnes().get(i).getNom());
             nameButton.setName(i+"");
@@ -439,7 +440,7 @@ public class ProjectView extends JFrame{
             auxPanel.setMinimumSize(new Dimension(250,400));
 
             JList<String> projectColumn = new JList<>(dataUser.get(i));     //Clase que contendra la info de la DB
-            projectColumn.setFixedCellHeight(35);
+            projectColumn.setFixedCellHeight(45);
             projectColumn.setOpaque(false);
             projectColumn.setName(i+"");
             projectColumn.setCellRenderer(new CustomListCellRenderer(this, projectColumn));
@@ -464,7 +465,7 @@ public class ProjectView extends JFrame{
             jScrollPane.getVerticalScrollBar().setOpaque(false);
             jScrollPane.setOpaque(false);
             jScrollPane.getViewport().setOpaque(false);
-            jScrollPane.setMaximumSize(new Dimension(250, dataUser.get(i).size() * 36 + 5));
+            jScrollPane.setMaximumSize(new Dimension(250, dataUser.get(i).size() * 46 + 5));
             jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
             jScrollPane.getVerticalScrollBar().setVisible(false);
             jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -521,15 +522,16 @@ public class ProjectView extends JFrame{
             textFields.get(i).updateUI();
         }
 
-        JPanel newProjectPanel = new JPanel(new FlowLayout());
+        JPanel newProjectPanel = new JPanel();
+        newProjectPanel.setLayout(new BoxLayout(newProjectPanel, BoxLayout.Y_AXIS));
         //newProjectPanel.setBorder(BorderFactory.createMatteBorder(10,10,10,10, Color.WHITE));
         Border limits = BorderFactory.createMatteBorder(0,0,0,2,Color.WHITE);
-        Border margin = BorderFactory.createEmptyBorder(60,0,0,0);
+        Border margin = BorderFactory.createEmptyBorder(5,0,300,0);
         Border compound = BorderFactory.createCompoundBorder(margin, limits);
         newProjectPanel.setBorder(compound);
         //newProjectPanel.setBorder((BorderFactory.createEmptyBorder(60,20,0,0)));
-        newProjectPanel.setMinimumSize(new Dimension(300,250));
-        newProjectPanel.setMaximumSize(new Dimension(300,250));
+        newProjectPanel.setMinimumSize(new Dimension(250,50));
+        newProjectPanel.setMaximumSize(new Dimension(250,50));
         newProjectPanel.setOpaque(false);
 
         newColumnTextField = new JTextField("Afegeix columna...");
@@ -548,15 +550,18 @@ public class ProjectView extends JFrame{
             public void focusLost(FocusEvent e) {
                 String text = newColumnTextField.getText();
                 if (text == "") {
-                    newColumnTextField.setText("Afegeix tasca...");
+                    newColumnTextField.setText("Afegeix columna...");
                 }
+                newColumnTextField.updateUI();
             }
         });
+
+        newColumnTextField.setMinimumSize(new Dimension(240,30));
+        newColumnTextField.setMaximumSize(new Dimension(240,30));
 
         newProjectPanel.add(newColumnTextField);
 
         boxPanel.add(newProjectPanel);
-        newProjectPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 
         boxPanel.setOpaque(false);
 

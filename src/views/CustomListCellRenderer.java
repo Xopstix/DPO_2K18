@@ -32,23 +32,23 @@ public class CustomListCellRenderer extends DefaultListCellRenderer {
 
                     setOpaque(true);
 
-                    if (etiqueta == 1) {
+                    if (etiqueta == projectView.getProject().getEtiquetes().get(0).getId_etiqueta()) {
                         setBackground(Color.green);
                         setForeground(Color.black);
                     }
-                    if (etiqueta == 2) {
+                    if (etiqueta == projectView.getProject().getEtiquetes().get(1).getId_etiqueta()) {
                         setBackground(Color.red);
                         setForeground(Color.black);
                     }
-                    if (etiqueta == 3) {
+                    if (etiqueta == projectView.getProject().getEtiquetes().get(2).getId_etiqueta()) {
                         setBackground(Color.yellow);
                         setForeground(Color.black);
                     }
-                    if (etiqueta == 4) {
+                    if (etiqueta == projectView.getProject().getEtiquetes().get(3).getId_etiqueta()) {
                         setBackground(Color.blue);
                         setForeground(Color.white);
                     }
-                    if (etiqueta == 5) {
+                    if (etiqueta == projectView.getProject().getEtiquetes().get(4).getId_etiqueta()) {
                         setBackground(Color.pink);
                         setForeground(Color.black);
                     }
@@ -56,8 +56,8 @@ public class CustomListCellRenderer extends DefaultListCellRenderer {
                 } else {
 
                     setOpaque(false);
-                    setBackground(Color.white);
-                    setForeground(Color.black);
+                    setBackground(Color.darkGray);
+                    setForeground(Color.white);
                 }
             }else{
 

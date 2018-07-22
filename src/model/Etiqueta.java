@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.*;
 import java.io.Serializable;
 
 /**
@@ -14,8 +13,6 @@ public class Etiqueta implements Serializable{
     private int id_etiqueta;
     private int id_proyecto;
 
-
-
     public int getId_etiqueta() {
         return id_etiqueta;
     }
@@ -23,7 +20,6 @@ public class Etiqueta implements Serializable{
     public void setId_etiqueta(int id_etiqueta) {
         this.id_etiqueta = id_etiqueta;
     }
-
 
     public String getNom() {
         return nom;
