@@ -44,12 +44,12 @@ public class ProjectView extends JFrame{
     private JMenuItem menuItem1;
     private JMenuItem menuItem2;
     private JMenuItem menuItem3;
+    private JMenuItem menuItem4;
 
     private JPopupMenu popup;
     private int popupTaskColumn;
     private int popupTaskRow;
     private int changingTitle;
-    private JPopupMenu popupColumn;
     private JLabel doneLabel;
     private JCheckBox doneCheckbox;
     private JMenuItem deleteButton;
@@ -63,6 +63,8 @@ public class ProjectView extends JFrame{
     private JPanel colorIconsPanel;
     private JPopupMenu popupTitle;
     private JTextField titleTextField;
+
+    private JPopupMenu popupColors;
 
     private Project project;
     private int type;
@@ -87,15 +89,21 @@ public class ProjectView extends JFrame{
         menuItem1.getAccessibleContext().setAccessibleDescription(
                 "Go to the Home screen");
 
-        menuItem2 = new JMenuItem("Delete Project", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
+        menuItem2 = new JMenuItem("Assign markers", new ImageIcon(((new ImageIcon("icons/paperclip_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
         menuItem2.setMnemonic(KeyEvent.VK_P);
         menuItem2.getAccessibleContext().setAccessibleDescription(
-                "Deletes the Project");
+                "Sets name for each marker");
 
-        menuItem3 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+        menuItem3 = new JMenuItem("Delete Project", new ImageIcon(((new ImageIcon("icons/delete_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
         menuItem3.setMnemonic(KeyEvent.VK_P);
+        menuItem3.getAccessibleContext().setAccessibleDescription(
+                "Deletes the Project");
+
+        menuItem4 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem4.setMnemonic(KeyEvent.VK_P);
 
         stringsUser = new ArrayList<>();
         dataUser = new ArrayList<>();
@@ -238,9 +246,36 @@ public class ProjectView extends JFrame{
         if (project.getEtiquetes() != null){
 
             for (int i = 0; i < 5; i++){
-                JTextField auxColorTextField = new JTextField("Tasca");
+                JTextField auxColorTextField = new JTextField();
+                //if (project.getEtiquetes().get(i).getNom().equals("")){
+
+                    auxColorTextField.setText("New task name");
+                //}else{
+
+                    //auxColorTextField.setText(project.getEtiquetes().get(i).getNom());
+                //}
                 auxColorTextField.setName(i+"");
                 auxColorTextField.setColumns(13);
+
+                auxColorTextField.addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+
+                        if (auxColorTextField.getText().equals("New task name")){
+
+                            auxColorTextField.setText("");
+                        }
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+                        String text = auxColorTextField.getText();
+                        if (text == "") {
+                            auxColorTextField.setText("New Task name");
+                        }
+                    }
+                });
+
                 JPanel auxiliar = new JPanel();
                 auxiliar.add(auxColorTextField);
                 //auxiliar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -375,9 +410,8 @@ public class ProjectView extends JFrame{
             JList<String> projectColumn = new JList<>(dataUser.get(i));     //Clase que contendra la info de la DB
             projectColumn.setFixedCellHeight(35);
             projectColumn.setOpaque(false);
-            projectColumn.setCellRenderer(new TransparentListCellRenderer());
-
             projectColumn.setName(i+"");
+            projectColumn.setCellRenderer(new CustomListCellRenderer(this, projectColumn));
 
             projectColumn.setModel(new AbstractListModel() {
 
@@ -528,23 +562,6 @@ public class ProjectView extends JFrame{
         }
     }
 
-    /*private void jListUserValueChanged(ListSelectionEvent evt, JList<String> column) {
-        //set text on right here
-        String s = (String) column.getSelectedValue();
-    }
-
-    private void initListeners(JList<String> column) {
-
-        //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
-        column.addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                jListUserValueChanged(evt, column);
-            }
-        });
-    }*/
-
     public void initPopupTasca(int columna, int fila){
 
         popup = new JPopupMenu();
@@ -575,13 +592,9 @@ public class ProjectView extends JFrame{
         popup.add(deleteButton);
 
         popup.setPopupSize(new Dimension(225,370));
-        //popup.show(this, columna * 200 + 23, fila * 35 + 120);
-        popup.setLocation((int) projectColumns.get(columna).getLocationOnScreen().getY(),
-                (int) projectColumns.get(columna).getLocationOnScreen().getX());
 
-        popup.show(this, (int) projectColumns.get(columna).getLocationOnScreen().getX() + 75,
+        popup.show(this, (int) projectColumns.get(columna).getLocationOnScreen().getX() + 150,
                 (int) projectColumns.get(columna).getLocationOnScreen().getY() + fila * 35 - 100);
-        //popup.show(this, projectColumns.get(columna).getY(), projectColumns.get(fila).getX());
     }
 
     public void closePopupTask(){
@@ -610,13 +623,14 @@ public class ProjectView extends JFrame{
 
     }
 
-    public void popupUser(){
+    public void initPopupUser(){
 
         popupUser = new JPopupMenu();
 
         popupUser.add(menuItem1);
         popupUser.add(menuItem2);
         popupUser.add(menuItem3);
+        popupUser.add(menuItem4);
 
         popupUser.show(jbUser, -95, jbUser.getBounds().y + jbUser.getBounds().height);
     }
@@ -626,9 +640,13 @@ public class ProjectView extends JFrame{
         this.popupTitle.setVisible(false);
     }
 
-    public void initPopUpColumn(){
+    public void initPopupColors(){
 
-        popupColumn.add(new TextField(10));
+        popup.add(colorChooserPanel);
+
+        popup.setPopupSize(new Dimension(225,230));
+
+        popup.show(this, 960, 95);
     }
 
     public void addTask(String task, int column) {
@@ -677,6 +695,7 @@ public class ProjectView extends JFrame{
 
         return this.popupTaskColumn;
     }
+
     public void setPopupTaskRow (int row){
 
         this.popupTaskRow = row;
@@ -701,6 +720,24 @@ public class ProjectView extends JFrame{
 
     public void setChangingTitle(int changingTitle) {
         this.changingTitle = changingTitle;
+    }
+
+    public CustomTransferHandler getCustomTransferHandler() {
+        return customTransferHandler;
+    }
+
+    public void setCustomTransferHandler(CustomTransferHandler customTransferHandler) {
+        this.customTransferHandler = customTransferHandler;
+    }
+
+    public ArrayList getProjectColumns(){
+
+        return projectColumns;
+    }
+
+    public ArrayList getDataUser(){
+
+        return dataUser;
     }
 
     public void registerController(ClientController controllerClient, CustomMouseListenerProject customMouseListener) {
@@ -764,11 +801,14 @@ public class ProjectView extends JFrame{
         menuItem1.setActionCommand("PROJECTS");
         menuItem1.addActionListener(clientController);
 
-        menuItem2.setActionCommand("DELETEPROJECT");
+        menuItem2.setActionCommand("POPUPCOLORS");
         menuItem2.addActionListener(clientController);
 
-        menuItem3.setActionCommand("LOGOUT");
+        menuItem3.setActionCommand("DELETEPROJECT");
         menuItem3.addActionListener(clientController);
+
+        menuItem4.setActionCommand("LOGOUT");
+        menuItem4.addActionListener(clientController);
 
         for (int i = 0; i < colorIcons.size(); i++){
 
@@ -785,23 +825,5 @@ public class ProjectView extends JFrame{
         descriptionArea.setActionCommand("DESCRIPTION");
         descriptionArea.addActionListener(clientController);
 
-    }
-
-    public CustomTransferHandler getCustomTransferHandler() {
-        return customTransferHandler;
-    }
-
-    public void setCustomTransferHandler(CustomTransferHandler customTransferHandler) {
-        this.customTransferHandler = customTransferHandler;
-    }
-
-    public ArrayList getProjectColumns(){
-
-        return projectColumns;
-    }
-
-    public ArrayList getDataUser(){
-
-        return dataUser;
     }
 }

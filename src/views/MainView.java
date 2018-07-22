@@ -84,6 +84,16 @@ public class MainView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    public MainView(ProjectManager projectManager) {
+
+        this.projectManager = projectManager;
+        initHome();
+        this.setSize(600, 300);
+        this.setTitle("ProjectManager");
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
     public void initHome() {
 
         this.getContentPane().removeAll();
@@ -905,15 +915,10 @@ public class MainView extends JFrame {
                     getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
         }
 
-        this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
-                getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
+        //this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
+                //getTasques().get(this.projectView.getPopupTaskRow()).setNom(text);
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+        refreshView();
     }
 
     public void deleteColumn(int column) {
@@ -929,12 +934,7 @@ public class MainView extends JFrame {
                     getColumnes().remove(column);
         }
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+        refreshView();
 
     }
 
@@ -953,12 +953,7 @@ public class MainView extends JFrame {
                     getTasques().remove(projectView.getPopupTaskRow());
         }
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+        refreshView();
 
     }
 
@@ -1011,12 +1006,7 @@ public class MainView extends JFrame {
             }
         }
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+        refreshView();
     }
 
     public void moveLeft(int column) {
@@ -1061,16 +1051,11 @@ public class MainView extends JFrame {
             }
         }
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+        refreshView();
 
     }
 
-    public void putEtiqueta(int color) {
+    public void putEtiqueta (int color) {
 
         System.out.println("entra");
 
@@ -1089,12 +1074,22 @@ public class MainView extends JFrame {
                     getTasques().get(projectView.getPopupTaskRow()).setId_etiqueta(color);
         }
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+    }
+
+    public void fixEtiqueta (int etiqueta, String nom){
+
+        if (this.projectView.getList() == 1) {
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getEtiquetes().get(etiqueta).setNom(nom);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getEtiquetes().get(etiqueta).setNom(nom);
+        }
+
+        refreshView();
     }
 
     public void titlePopup(int i) {
@@ -1102,9 +1097,15 @@ public class MainView extends JFrame {
         projectView.titlePopup(i);
     }
 
-    public void showPopupUser(){
+    public void initPopupUser(){
 
-        projectView.popupUser();
+        projectView.initPopupUser();
+    }
+
+    public void initPopupColors(){
+
+        projectView.initPopupColors();
+        projectView.initPopupColors();
     }
 
     public void newColumnTitle(String newName) {
@@ -1120,12 +1121,7 @@ public class MainView extends JFrame {
                     getColumnes().get(projectView.getChangingTitle()).setNom(newName);
         }
 
-        this.projectView.getContentPane().removeAll();
-        this.projectView.initComponentsProject();
-        this.projectView.initVistaProject();
-        CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
-        projectView.registerController(clientController, mouseListener);
-        this.projectView.revalidate();
+        refreshView();
 
     }
 
@@ -1150,6 +1146,24 @@ public class MainView extends JFrame {
         }
 
         this.revalidate();
+    }
+
+    public void syncDescription(String description){
+
+        if (this.projectView.getList() == 1) {
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().get(projectView.getPopupTaskRow()).setDescripcio(description);
+
+        } else {
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get((projectView.getPopupTaskColumn())).
+                    getTasques().get(projectView.getPopupTaskRow()).setDescripcio(description);
+        }
+
+        refreshView();
     }
 
     public int findByIdYours(Project project){

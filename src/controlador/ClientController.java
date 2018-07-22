@@ -140,7 +140,7 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("POPUPUSER")){
 
-            mainView.showPopupUser();
+            mainView.initPopupUser();
         }
 
         if (e.getActionCommand().equals("BROWSE")){
@@ -263,8 +263,15 @@ public class ClientController implements ActionListener{
 
             mainView.closeProject();
             mainView.deleteProject();
-            System.out.println(projectManager.getYourProjects().size());
-            mainView.setVisible(false);
+            ProjectManager auxManager = mainView.getProjectManager();
+
+            mainView = new MainView(auxManager);
+
+            mainView.addProjects();
+            mainView.registerController(this, popupController, mouseSelectionListenerMain);
+            mainView.setClientController(this);
+
+
             mainView.revalidate();
             mainView.setVisible(true);
         }
@@ -282,7 +289,17 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("DESCRIPTION")){
 
-            //mainView.syncDescription(((JTextField) e.getSource()).getText());
+            mainView.syncDescription(((JTextField) e.getSource()).getText());
+        }
+
+        if (e.getActionCommand().equals("POPUPCOLORS")){
+
+            mainView.initPopupColors();
+        }
+
+        if (e.getActionCommand().equals("ETIQUETA")){
+
+            mainView.fixEtiqueta(Integer.parseInt(((JTextField) e.getSource()).getName()), ((JTextField) e.getSource()).getText());
         }
     }
 

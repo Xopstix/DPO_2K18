@@ -21,5 +21,4 @@ public class TransparentListCellRenderer extends DefaultListCellRenderer {
         }
         return this;
     }
-
 }
