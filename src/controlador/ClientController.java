@@ -132,6 +132,11 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("PUSHME")){
 
+            for (int i = 0; i < mainView.getProjectView().getProject().getColumnes().size(); i++){
+
+                mainView.getProjectView().getProject().getColumnes().get(i).setOrdre(i);
+            }
+
             projectManager.setProject(mainView.getProjectView().getProject());
             ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,3);
             try {
@@ -183,9 +188,12 @@ public class ClientController implements ActionListener{
             projecte.setName(mainView.getProjectName());
             projecte.setDate();*/
 
+            ProjectManager auxManager = new ProjectManager();
+
             try {
 
                 project = mainView.createProject();
+                projectManager.getYourProjects().add(project);
                 projectManager.setProject(project);
 
             } catch (IOException e1) {
@@ -193,6 +201,8 @@ public class ClientController implements ActionListener{
             }
 
             ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,2);
+            auxManager = serverCommunication.getProjectManager();
+
 
             try {
                 serverCommunication.startConnection();
@@ -200,11 +210,16 @@ public class ClientController implements ActionListener{
                 e1.printStackTrace();
             }
 
+
+            mainView.setProjectManager(this.projectManager);
             mainView.initHome();
-            mainView.addProject(project.getName());
+            mainView.addProjects();
+
             mainView.registerController(this, popupController, mouseSelectionListenerMain);
             mainView.setClientController(this);
+
             mainView.revalidate();
+            mainView.setVisible(true);
 
         }
 
@@ -377,5 +392,10 @@ public class ClientController implements ActionListener{
             System.out.println("same");
             mainView.useNewPM(projectManager);
         }
+    }
+
+    public void setMainPM(ProjectManager projectManager) {
+
+        mainView.setProjectManager(projectManager);
     }
 }

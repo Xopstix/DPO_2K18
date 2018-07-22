@@ -1077,10 +1077,6 @@ public class MainView extends JFrame {
 
     public void putEtiqueta (int color) {
 
-        System.out.println("entra");
-
-        Etiqueta etiqueta = new Etiqueta();
-
         if (this.projectView.getList() == 1) {
 
             projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
@@ -1093,6 +1089,8 @@ public class MainView extends JFrame {
                     getColumnes().get((projectView.getPopupTaskColumn())).
                     getTasques().get(projectView.getPopupTaskRow()).setId_etiqueta(color);
         }
+
+        refreshView();
 
     }
 
