@@ -106,7 +106,9 @@ public class ServerCommunication extends Thread{
                 if (mode == 4) {
                     projectManager.setMode(4);
                     oos.writeObject(projectManager);
+                    System.out.println(projectManager.getYourProjects().get(9).getColumnes().get(0).getTasques().get(0).getNom());
                     this.projectManager = (ProjectManager) ois.readObject();
+                    clientController.setProjectManager(projectManager);
                     msg = dis.readUTF();
                     autentica(msg);
                     endConnection();

@@ -97,6 +97,7 @@ public class MainView extends JFrame {
     public void initHome() {
 
         this.getContentPane().removeAll();
+        this.setResizable(false);
         initComponents();
         initHomeView();
         initListeners();
@@ -173,20 +174,37 @@ public class MainView extends JFrame {
         });
 
         // Adición al window de los Java Components
-        userProjects.setPreferredSize(new Dimension(270,130));
-        sharedProjects.setPreferredSize(new Dimension(270,130));
+        userProjects.setFixedCellHeight(35);
+        //userProjects.setPreferredSize(new Dimension(30, 50));
+
+        sharedProjects.setFixedCellHeight(35);
+        //sharedProjects.setPreferredSize(new Dimension(70,50));
 
         jsc1 = new JScrollPane(userProjects);
-        JScrollBar jScrollBar1 = new JScrollBar();
-        jsc1.setVerticalScrollBar(jScrollBar1);
+
+        jsc1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jsc1.getVerticalScrollBar().setVisible(false);
+        jsc1.getVerticalScrollBar().setOpaque(false);
+        jsc1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         jsc1.setOpaque(false);
         jsc1.getViewport().setOpaque(false);
 
+        //jsc1.setMinimumSize(new Dimension(250, 50));
+        //jsc1.setMaximumSize(new Dimension(250, 50));
+
         jsc2 = new JScrollPane(sharedProjects);
-        JScrollBar jScrollBar2 = new JScrollBar();
-        jsc1.setVerticalScrollBar(jScrollBar2);
+
+        jsc2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jsc2.getVerticalScrollBar().setVisible(false);
+        jsc2.getVerticalScrollBar().setOpaque(false);
+        jsc2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         jsc2.setOpaque(false);
         jsc2.getViewport().setOpaque(false);
+
+        //jsc2.setMinimumSize(new Dimension(250, 50));
+        //jsc2.setMaximumSize(new Dimension(250, 50));
 
         jsc1.setBorder(BorderFactory.createTitledBorder(null, "Your Projects", TitledBorder.RIGHT, TitledBorder.TOP,
                 new Font("Arial",Font.PLAIN,12), Color.WHITE));
@@ -327,7 +345,8 @@ public class MainView extends JFrame {
         jpButtons.add(jbNew, BorderLayout.LINE_START);
         jpButtons.add(jbUser, BorderLayout.LINE_END);
 
-        jpLists = new JPanel(new FlowLayout());
+        jpLists = new JPanel();
+        jpLists.setLayout(new BoxLayout(jpLists, BoxLayout.X_AXIS));
         jpLists.setOpaque(false);
         jpLists.add(jsc1);
         jpLists.add(jsc2);
