@@ -677,27 +677,27 @@ public class MainView extends JFrame {
 
         Etiqueta auxEtiqueta = new Etiqueta();
         auxEtiqueta.setNom("Etiqueta 1");
-        auxEtiqueta.setColor(Color.YELLOW);
+        //auxEtiqueta.setColor(Color.YELLOW);
         newEtiquetes.add(auxEtiqueta);
 
         auxEtiqueta = new Etiqueta();
         auxEtiqueta.setNom("Etiqueta 2");
-        auxEtiqueta.setColor(Color.GREEN);
+        //auxEtiqueta.setColor(Color.GREEN);
         newEtiquetes.add(auxEtiqueta);
 
         auxEtiqueta = new Etiqueta();
         auxEtiqueta.setNom("Etiqueta 3");
-        auxEtiqueta.setColor(Color.ORANGE);
+        //auxEtiqueta.setColor(Color.ORANGE);
         newEtiquetes.add(auxEtiqueta);
 
         auxEtiqueta = new Etiqueta();
         auxEtiqueta.setNom("Etiqueta 4");
-        auxEtiqueta.setColor(Color.BLUE);
+        //auxEtiqueta.setColor(Color.BLUE);
         newEtiquetes.add(auxEtiqueta);
 
         auxEtiqueta = new Etiqueta();
         auxEtiqueta.setNom("Etiqueta 5");
-        auxEtiqueta.setColor(Color.PINK);
+        //auxEtiqueta.setColor(Color.PINK);
         newEtiquetes.add(auxEtiqueta);
 
         newProject.setEtiquetes(newEtiquetes);
