@@ -106,15 +106,13 @@ public class ServerCommunication extends Thread{
                 if (mode == 4) {
                     projectManager.setMode(4);
                     oos.writeObject(projectManager);
-                    System.out.println("enviado");
                     this.projectManager = (ProjectManager) ois.readObject();
                     clientController.setProjectManager(this.projectManager);
                     clientController.pull(this.projectManager);
                     msg = dis.readUTF();
-                    //autentica(msg);
+                    autentica(msg);
                     endConnection();
                 }
-
             }
 
         }catch (IOException ioe) {
