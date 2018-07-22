@@ -107,11 +107,14 @@ public class ServerCommunication extends Thread{
                     projectManager.setMode(4);
                     oos.writeObject(projectManager);
                     this.projectManager = (ProjectManager) ois.readObject();
-                    clientController.setProjectManager(this.projectManager);
-                    clientController.doPull();
                     msg = dis.readUTF();
-                    autentica(msg);
+
+                    //autentica(msg);
                     endConnection();
+
+                    clientController.setProjectManager(this.projectManager);
+                    clientController.useNewPM();
+
                 }
             }
 

@@ -20,6 +20,8 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by xavipargela on 12/3/18.
@@ -184,6 +186,7 @@ public class MainView extends JFrame {
 
         jsc1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         jsc1.getVerticalScrollBar().setVisible(false);
+        jsc1.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jsc1.getVerticalScrollBar().setOpaque(false);
         jsc1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -198,6 +201,7 @@ public class MainView extends JFrame {
 
         jsc2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         jsc2.getVerticalScrollBar().setVisible(false);
+        jsc2.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
         jsc2.getVerticalScrollBar().setOpaque(false);
         jsc2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -899,17 +903,49 @@ public class MainView extends JFrame {
 
     public void setChecked(int selected) {
 
+        java.util.Date fecha = new Date();
+
         if (this.projectView.getList() == 1){
 
             projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
                     getColumnes().get(this.projectView.getPopupTaskColumn()).
                     getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
 
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).
+                    setDia_tarea(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).
+                    setMes_tarea(Calendar.getInstance().get(Calendar.MONTH) + 1);
+
+            projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).
+                    setAno_tarea(Calendar.getInstance().get(Calendar.YEAR));
+
         } else{
 
             projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
                     getColumnes().get(this.projectView.getPopupTaskColumn()).
                     getTasques().get(this.projectView.getPopupTaskRow()).setCompleta(selected);
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).
+                    setDia_tarea(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).
+                    setMes_tarea(Calendar.getInstance().get(Calendar.MONTH) + 1);
+
+            projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
+                    getColumnes().get(this.projectView.getPopupTaskColumn()).
+                    getTasques().get(this.projectView.getPopupTaskRow()).
+                    setAno_tarea(Calendar.getInstance().get(Calendar.YEAR));
         }
 
         this.projectView.getProject().getColumnes().get(this.projectView.getPopupTaskColumn()).
@@ -979,6 +1015,8 @@ public class MainView extends JFrame {
     public void closeProject(){
 
         this.projectView.dispatchEvent(new WindowEvent(projectView, WindowEvent.WINDOW_CLOSING));
+
+        this.setVisible(true);
     }
 
     public void moveRight(int column) {
@@ -1180,19 +1218,6 @@ public class MainView extends JFrame {
         System.out.println("new");
 
         this.projectManager = projectManager;
-        //System.out.println(projectManager.getYourProjects().get(0).getColumnes().
-                //get(projectManager.getYourProjects().get(0).getColumnes().size()-1)
-                //.getTasques().get(0).getNom());
-
-        if (this.projectView.getList() == 1){
-
-            projectManager.setProject(projectManager.getYourProjects().
-                    get(findByIdYours(this.projectView.getProject())));
-        } else {
-
-            projectManager.setProject(projectManager.getSharedProjects().
-                    get(findByIdYours(this.projectView.getProject())));
-        }
 
         refreshView();
     }
@@ -1303,5 +1328,4 @@ public class MainView extends JFrame {
         sharedProjects.addMouseListener(customMouseListenerMain);
 
     }
-
 }

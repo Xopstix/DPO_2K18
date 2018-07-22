@@ -245,4 +245,8 @@ public class CustomTransferHandler extends TransferHandler {
         this.listDrop = listDrop;
     }
 
+    public void showMainOnly() {
+
+        mainView.closeProject();
+    }
 }

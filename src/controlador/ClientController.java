@@ -127,7 +127,6 @@ public class ClientController implements ActionListener{
             } catch (FileNotFoundException e1) {
                 e1.printStackTrace();
             }
-
         }
 
         if (e.getActionCommand().equals("PUSHME")){
@@ -288,6 +287,16 @@ public class ClientController implements ActionListener{
         if (e.getActionCommand().equals("PROJECTS")){
 
             this.mainView.closeProject();
+            
+            mainView.initHome();
+            mainView.addProjects();
+
+            mainView.registerController(this, popupController, mouseSelectionListenerMain);
+            mainView.setClientController(this);
+
+            mainView.revalidate();
+            mainView.setVisible(true);
+
             this.mainView.setVisible(true);
         }
 
@@ -391,12 +400,11 @@ public class ClientController implements ActionListener{
         this.mouseSelectionListenerMain = mouseSelectionListenerMain;
     }
 
-    public void doPull() {
+    public void useNewPM() {
 
-        if (this.projectManager == projectManager){
-
-            mainView.useNewPM(projectManager);
-        }
+        mainView.setProjectManager(this.projectManager);
+        mainView.refreshView();
+        mainView.useNewPM(projectManager);
     }
 
     public void setMainPM(ProjectManager projectManager) {

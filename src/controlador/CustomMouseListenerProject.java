@@ -59,4 +59,5 @@ public class CustomMouseListenerProject implements MouseListener {
     public void setRow(int row) {
         this.row = row;
     }
+
 }
