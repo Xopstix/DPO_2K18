@@ -132,6 +132,7 @@ public class ClientController implements ActionListener{
 
         if (e.getActionCommand().equals("PUSHME")){
 
+            projectManager.setProject(mainView.getProjectView().getProject());
             ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,3);
             try {
                 serverCommunication.startConnection();

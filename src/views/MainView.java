@@ -1109,6 +1109,8 @@ public class MainView extends JFrame {
                     getEtiquetes().get(etiqueta).setNom(nom);
         }
 
+        System.out.println(projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                getEtiquetes().get(etiqueta).getNom());
         refreshView();
     }
 
@@ -1193,6 +1195,11 @@ public class MainView extends JFrame {
         }
 
         refreshView();
+    }
+
+    public ProjectView getProjectView(){
+
+        return this.projectView;
     }
 
     public int findByIdYours(Project project){
