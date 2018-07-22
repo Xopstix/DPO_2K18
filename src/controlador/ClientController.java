@@ -202,6 +202,8 @@ public class ClientController implements ActionListener{
                 projectManager.setProject(project);
 
             } catch (IOException e1) {
+                JOptionPane.showMessageDialog(null,
+                        "Fill in all the requested information, please");
                 e1.printStackTrace();
             }
 
@@ -212,6 +214,8 @@ public class ClientController implements ActionListener{
             try {
                 serverCommunication.startConnection();
             } catch (FileNotFoundException e1) {
+                JOptionPane.showMessageDialog(null,
+                        "Select a file and make sure it's a JPG file");
                 e1.printStackTrace();
             }
 
@@ -287,7 +291,7 @@ public class ClientController implements ActionListener{
         if (e.getActionCommand().equals("PROJECTS")){
 
             this.mainView.closeProject();
-            
+
             mainView.initHome();
             mainView.addProjects();
 

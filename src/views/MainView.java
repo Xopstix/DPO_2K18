@@ -26,6 +26,9 @@ import java.util.Date;
 /**
  * Created by xavipargela on 12/3/18.
  */
+
+//Classe que conté la vista principal, de nou projecte i de projecte
+// interconecta controlador i les tres vistes
 public class MainView extends JFrame {
 
     private String user;
@@ -77,6 +80,7 @@ public class MainView extends JFrame {
 
     private ProjectView projectView;
 
+    // Constructor de la vista principal
     public MainView() {
 
         initHome();
@@ -86,6 +90,7 @@ public class MainView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    //Constructor de la vista principal amb projectManager
     public MainView(ProjectManager projectManager) {
 
         this.projectManager = projectManager;
@@ -96,6 +101,7 @@ public class MainView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    //Inicia tot per la vista principal
     public void initHome() {
 
         this.getContentPane().removeAll();
@@ -106,6 +112,7 @@ public class MainView extends JFrame {
         initDragDrop();
     }
 
+    //Inicia els components de la mainView
     private void initComponents(){
 
         //Componentes Vista Home
@@ -253,7 +260,7 @@ public class MainView extends JFrame {
             @Override
             public void focusGained(FocusEvent e) {
 
-                if (jtfProjectName.getText().equals("Project Name")){
+                if (jtfProjectName.getText().equals("Project name")){
 
                     jtfProjectName.setText("");
                 }
@@ -263,7 +270,7 @@ public class MainView extends JFrame {
             public void focusLost(FocusEvent e) {
                 String text = jtfProjectName.getText();
                 if (text == "") {
-                    jtfProjectName.setText("Project Name");
+                    jtfProjectName.setText("Project name");
                 }
             }
         });
@@ -341,6 +348,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Disposa els elements de la view principal i setVisible
     public void initHomeView(){
 
         getContentPane().removeAll();
@@ -376,6 +384,7 @@ public class MainView extends JFrame {
         validate();
     }
 
+    //Carrega els projectes sobre les dues llistes de la view
     public void addProjects (){
 
         for (int i = 0; i < projectManager.getYourProjects().size(); i++){
@@ -404,16 +413,21 @@ public class MainView extends JFrame {
         this.revalidate();
     }
 
+    //Afegeix tots els possibles contribuidors a les llistes
     public void addContributors (ArrayList<String> contributors){
+
+        dataContributors.clear();
 
         for (int i = 0; i < contributors.size(); i++){
 
-            dataContributors.addElement(contributors.get(i));
+            System.out.println(dataContributors);
+            dataContributors.add(i, contributors.get(i));
         }
 
         this.revalidate();
     }
 
+    //Assigna listeners
     private void initListeners(){
 
         //Action Listeners de las dos listas, User y Shared -- Más abajo están los procedimientos a seguir
@@ -434,6 +448,7 @@ public class MainView extends JFrame {
         });
     }
 
+    //Encarregada de possibilitar el drag and drop de les dues llistes
     private void initDragDrop() {
 
         userProjects.setDragEnabled(true);
@@ -573,6 +588,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Mostra el menu de User
     public void showPopupMenu() {
 
         // New project menu item
@@ -589,6 +605,7 @@ public class MainView extends JFrame {
         popup.show(jbUser, -75, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
+    //Inicia la vista per a crear un projecte
     public void initNewProjectView() {
 
         this.getContentPane().removeAll();
@@ -641,6 +658,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Obra file selecter
     public void showBrowseMenu() {
 
         jfChooser = new JFileChooser();
@@ -652,6 +670,7 @@ public class MainView extends JFrame {
         }
     }
 
+    //Crea un porjecte nou inicialitzat
     public Project createProject() throws IOException {
 
         Project newProject = new Project();
@@ -710,6 +729,7 @@ public class MainView extends JFrame {
         return newProject;
     }
 
+    //Registra quan canvia una selecció a una llista
     private void jListUserValueChanged(javax.swing.event.ListSelectionEvent evt) {
         String s = (String) userProjects.getSelectedValue();
 
@@ -720,18 +740,22 @@ public class MainView extends JFrame {
 
     }
 
+    //Retorna l'usuari ue ha fet login
     public String getUser() {
         return user;
     }
 
+    //Assigna el user que ha fet login al projecte
     public void setUser(String user) {
         this.user = user;
     }
 
+    //Afegeix un projecte a la llista auxiliar
     public void addProject(String project){
         dataUser.addElement(project);
     }
 
+    //Afegeix un fons
     public void addBackground(String path){
         finalPanel.removeAll();
 
@@ -755,6 +779,7 @@ public class MainView extends JFrame {
         validate();
     }
 
+    //Carrega el projecte a la vista
     public void loadProject(String columna, int fila){
 
         if (columna.equals("Your")){
@@ -776,6 +801,7 @@ public class MainView extends JFrame {
         projectView.setVisible(true);
         this.setVisible(false);
     }
+
 
     public void addTask(String task, int column){
 
@@ -1140,19 +1166,12 @@ public class MainView extends JFrame {
             projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
                     getEtiquetes().get(etiqueta).setNom(nom);
 
-            System.out.println(projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
-                    getEtiquetes().get(etiqueta).getNom());
-            System.out.println(projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
-                    getEtiquetes().get(etiqueta).getId_etiqueta());
-
         } else {
 
             projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
                     getEtiquetes().get(etiqueta).setNom(nom);
         }
 
-        System.out.println(projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
-                getEtiquetes().get(etiqueta).getNom());
         refreshView();
     }
 

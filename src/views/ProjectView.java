@@ -177,7 +177,29 @@ public class ProjectView extends JFrame{
         nameTextField.setMinimumSize(new Dimension(200,30));
         nameTextField.setMaximumSize(new Dimension(200,30));
 
-        descriptionArea = new JTextField("Add a description..");
+        descriptionArea = new JTextField();
+
+        descriptionArea.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+
+                if (descriptionArea.getText().equals("Afegeix una descripció")){
+
+                    descriptionArea.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                String text = descriptionArea.getText();
+                if (text == "") {
+                    descriptionArea.setText("Afegeix una descripció");
+                }
+            }
+        });
+
+
+
         descriptionArea.setBorder(new TitledBorder("Description"));
 
         colorLabels = new JPanel();
@@ -268,8 +290,17 @@ public class ProjectView extends JFrame{
             for (int i = 0; i < 5; i++){
                 JTextField auxColorTextField = new JTextField();
                 //if (project.getEtiquetes().get(i).getNom().equals("")){
+                    if (project.getEtiquetes().get(i).getNom().equals("Verde")
+                            || project.getEtiquetes().get(i).getNom().equals("Naranja")
+                            || project.getEtiquetes().get(i).getNom().equals("Amarillo")
+                            || project.getEtiquetes().get(i).getNom().equals("Azul")
+                            || project.getEtiquetes().get(i).getNom().equals("Morado")) {
 
-                    auxColorTextField.setText("New task name");
+                        auxColorTextField.setText("New task name");
+                    }else{
+
+                        auxColorTextField.setText(project.getEtiquetes().get(i).getNom());
+                    }
                 //}else{
 
                     //auxColorTextField.setText(project.getEtiquetes().get(i).getNom());
@@ -621,12 +652,20 @@ public class ProjectView extends JFrame{
         popup.add(doneCheckboxPanel);
         popup.add(colorChooserPanel);
 
-        descriptionArea.setText(project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).getDescripcio());
+        if (project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).getDescripcio().equals("null")){
+
+            descriptionArea.setText("Afegeix una descripció");
+        }else{
+            descriptionArea.setText(project.getColumnes().get(popupTaskColumn).getTasques().get(popupTaskRow).getDescripcio());
+        }
+
         popup.add(descriptionArea);
 
         popup.add(deleteButton);
 
         popup.setPopupSize(new Dimension(225,370));
+
+        popup.grabFocus();
 
         popup.show(this, (int) projectColumns.get(columna).getLocationOnScreen().getX() + 150,
                 (int) projectColumns.get(columna).getLocationOnScreen().getY() + fila * 35 - 100);
