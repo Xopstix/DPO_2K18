@@ -1102,6 +1102,11 @@ public class MainView extends JFrame {
             projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
                     getEtiquetes().get(etiqueta).setNom(nom);
 
+            System.out.println(projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getEtiquetes().get(etiqueta).getNom());
+            System.out.println(projectManager.getYourProjects().get(findByIdYours(this.projectView.getProject())).
+                    getEtiquetes().get(etiqueta).getId_etiqueta());
+
         } else {
 
             projectManager.getSharedProjects().get(findByIdShared(this.projectView.getProject())).
@@ -1173,12 +1178,23 @@ public class MainView extends JFrame {
     public void useNewPM(ProjectManager projectManager) {
 
         System.out.println("new");
-        System.out.println(projectManager.getYourProjects().get(0).getColumnes().
-                get(projectManager.getYourProjects().get(0).getColumnes().size()-1)
-                .getTasques().get(0).getNom());
-        this.projectManager = projectManager;
-        refreshView();
 
+        this.projectManager = projectManager;
+        //System.out.println(projectManager.getYourProjects().get(0).getColumnes().
+                //get(projectManager.getYourProjects().get(0).getColumnes().size()-1)
+                //.getTasques().get(0).getNom());
+
+        if (this.projectView.getList() == 1){
+
+            projectManager.setProject(projectManager.getYourProjects().
+                    get(findByIdYours(this.projectView.getProject())));
+        } else {
+
+            projectManager.setProject(projectManager.getSharedProjects().
+                    get(findByIdYours(this.projectView.getProject())));
+        }
+
+        refreshView();
     }
 
     public void syncDescription(String description){
@@ -1254,7 +1270,6 @@ public class MainView extends JFrame {
         projectView.setVisible(true);
         projectView.revalidate();
         this.setVisible(false);
-        this.revalidate();
     }
 
     public void registerController(ClientController controllerClient, PopupController controllerPopUp,

@@ -135,6 +135,13 @@ public class ClientController implements ActionListener{
             for (int i = 0; i < mainView.getProjectView().getProject().getColumnes().size(); i++){
 
                 mainView.getProjectView().getProject().getColumnes().get(i).setOrdre(i);
+                System.out.println(mainView.getProjectView().getProject().getEtiquetes().get(0).getNom());
+
+                for (int j = 0; j < mainView.getProjectView().getProject().getColumnes().get(i).getTasques().size(); j++){
+
+                    mainView.getProjectView().getProject().getColumnes().get(i).getTasques().get(j).setOrdre(i);
+                }
+
             }
 
             projectManager.setProject(mainView.getProjectView().getProject());
@@ -384,11 +391,10 @@ public class ClientController implements ActionListener{
         this.mouseSelectionListenerMain = mouseSelectionListenerMain;
     }
 
-    public void pull(ProjectManager projectManager) {
+    public void doPull() {
 
         if (this.projectManager == projectManager){
 
-            System.out.println("same");
             mainView.useNewPM(projectManager);
         }
     }
