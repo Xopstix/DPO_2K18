@@ -193,7 +193,6 @@ public class ClientController implements ActionListener{
             try {
 
                 project = mainView.createProject();
-                projectManager.getYourProjects().add(project);
                 projectManager.setProject(project);
 
             } catch (IOException e1) {

@@ -90,7 +90,7 @@ public class ServerCommunication extends Thread{
                     //System.out.println("Imagen: " + projectManager.getProject().getBackground());
                     oos.writeObject(projectManager);
                     this.projectManager = (ProjectManager) ois.readObject();
-                    System.out.println(projectManager.getYourProjects().get(projectManager.getYourProjects().size()-1).getIdProyecto());
+                    System.out.println(projectManager.getYourProjects().get(projectManager.getYourProjects().size()-1).getName());
                     this.clientController.setProjectManager(this.projectManager);
                     this.clientController.setMainPM(projectManager);
                     msg = dis.readUTF();
