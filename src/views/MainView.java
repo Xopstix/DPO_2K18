@@ -737,6 +737,7 @@ public class MainView extends JFrame {
         if (columna.equals("Your")){
 
             this.projectView = new ProjectView(projectManager.getYourProjects().get(fila), 1);
+            System.out.println("creado");
 
         }else{
 
@@ -1179,6 +1180,16 @@ public class MainView extends JFrame {
         return 0;
     }
 
+    public void initFileChooser(){
+
+        File newBg = projectView.initFileChooser();
+        newBg.renameTo(new File("images/" + projectView.getList() +
+                projectView.getProject().getIdProyecto() + "_bg.jpg"));
+        newBg.delete();
+
+        refreshView();
+    }
+
     public int findByIdShared(Project project){
 
         for (int i = 0; i < this.projectManager.getSharedProjects().size(); i++){
@@ -1205,6 +1216,7 @@ public class MainView extends JFrame {
         projectView.registerController(clientController, mouseListener);
         projectView.setVisible(true);
         this.setVisible(false);
+        this.revalidate();
     }
 
     public void registerController(ClientController controllerClient, PopupController controllerPopUp,

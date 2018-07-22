@@ -265,12 +265,12 @@ public class ClientController implements ActionListener{
             mainView.deleteProject();
             ProjectManager auxManager = mainView.getProjectManager();
 
-            mainView = new MainView(auxManager);
-
+            mainView.setProjectManager(auxManager);
+            mainView.initHome();
             mainView.addProjects();
+
             mainView.registerController(this, popupController, mouseSelectionListenerMain);
             mainView.setClientController(this);
-
 
             mainView.revalidate();
             mainView.setVisible(true);
@@ -300,6 +300,11 @@ public class ClientController implements ActionListener{
         if (e.getActionCommand().equals("ETIQUETA")){
 
             mainView.fixEtiqueta(Integer.parseInt(((JTextField) e.getSource()).getName()), ((JTextField) e.getSource()).getText());
+        }
+
+        if (e.getActionCommand().equals("BACKGROUND")){
+
+            mainView.initFileChooser();
         }
     }
 

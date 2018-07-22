@@ -45,6 +45,7 @@ public class ProjectView extends JFrame{
     private JMenuItem menuItem2;
     private JMenuItem menuItem3;
     private JMenuItem menuItem4;
+    private JMenuItem menuItem5;
 
     private JPopupMenu popup;
     private int popupTaskColumn;
@@ -83,6 +84,10 @@ public class ProjectView extends JFrame{
 
     public void initComponentsProject() {
 
+        popupUser = new JPopupMenu();
+
+        System.out.println("creado item");
+
         menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
         menuItem1.setMnemonic(KeyEvent.VK_P);
@@ -104,6 +109,10 @@ public class ProjectView extends JFrame{
         menuItem4 = new JMenuItem("Logout", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
         menuItem4.setMnemonic(KeyEvent.VK_P);
+
+        menuItem5 = new JMenuItem("Change background", new ImageIcon(((new ImageIcon("icons/logout_icon.png"))
+                .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
+        menuItem5.setMnemonic(KeyEvent.VK_P);
 
         stringsUser = new ArrayList<>();
         dataUser = new ArrayList<>();
@@ -289,6 +298,7 @@ public class ProjectView extends JFrame{
         }
 
         titleTextField = new JTextField("Nou nom");
+
     }
 
     public void initVistaProject() {
@@ -297,36 +307,36 @@ public class ProjectView extends JFrame{
 
         JPanel totalPanel;
 
-        if(project.getBackground() == null) {
-            File image = new File("images/dgreen.jpg");
+        File image2 = new File("images/dgreen.jpg");
+
+        totalPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    g.drawImage(ImageIO.read(image2), 0, 0, null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        File existe = new File("images/" + this.type + this.project.getIdProyecto() + "_bg.jpg");
+        if(existe.exists()) {
+            File image = new File("images/" + this.type + this.project.getIdProyecto() + "_bg.jpg");
 
             totalPanel = new JPanel(new BorderLayout()) {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     try {
-                        g.drawImage(ImageIO.read(image),0, 0, null);
+                        g.drawImage(ImageIO.read(image), 0, 0, null);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             };
-        }
-        else{
-            File image = new File(project.getBackground()+".jpg");
-            totalPanel = new JPanel(new BorderLayout()) {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    super.paintComponent(g);
-                    try {
-                        g.drawImage(ImageIO.read(image),0, 0, null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-        }
 
+        }
 
         JPanel boxPanel = new JPanel(new BorderLayout());
 
@@ -629,10 +639,26 @@ public class ProjectView extends JFrame{
 
         popupUser.add(menuItem1);
         popupUser.add(menuItem2);
+        popupUser.add(menuItem5);
         popupUser.add(menuItem3);
         popupUser.add(menuItem4);
 
         popupUser.show(jbUser, -95, jbUser.getBounds().y + jbUser.getBounds().height);
+    }
+
+    public File initFileChooser(){
+
+        JFileChooser jfChooser = new JFileChooser();
+        jfChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        jfChooser.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
+        int result = jfChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jfChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            return selectedFile;
+        }
+
+        return null;
     }
 
     public void closePopupTitle() {
@@ -641,6 +667,8 @@ public class ProjectView extends JFrame{
     }
 
     public void initPopupColors(){
+
+        popup = new JPopupMenu();
 
         popup.add(colorChooserPanel);
 
@@ -810,6 +838,8 @@ public class ProjectView extends JFrame{
         menuItem4.setActionCommand("LOGOUT");
         menuItem4.addActionListener(clientController);
 
+        menuItem5. setActionCommand("BACKGROUND");
+        menuItem5.addActionListener(clientController);
         for (int i = 0; i < colorIcons.size(); i++){
 
             colorIcons.get(i).setActionCommand("COLORCHOSEN");

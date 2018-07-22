@@ -36,7 +36,7 @@ public class CustomMouseListenerMain implements MouseListener {
 
         if (((JList) e.getSource()).getName().equals("1")) {
 
-            System.out.println(((JList) e.getSource()).getSelectedIndex());
+            System.out.println("escucha");
             mainView.loadProject("Your", ((JList) e.getSource()).getSelectedIndex());
 
         } else {
