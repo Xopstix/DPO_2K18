@@ -1234,6 +1234,7 @@ public class MainView extends JFrame {
         CustomMouseListenerProject mouseListener = new CustomMouseListenerProject(projectView);
         projectView.registerController(clientController, mouseListener);
         projectView.setVisible(true);
+        projectView.revalidate();
         this.setVisible(false);
         this.revalidate();
     }

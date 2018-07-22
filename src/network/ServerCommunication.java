@@ -108,8 +108,10 @@ public class ServerCommunication extends Thread{
                     oos.writeObject(projectManager);
                     System.out.println("enviado");
                     this.projectManager = (ProjectManager) ois.readObject();
+                    clientController.setProjectManager(this.projectManager);
+                    clientController.pull();
                     msg = dis.readUTF();
-                    autentica(msg);
+                    //autentica(msg);
                     endConnection();
                 }
 

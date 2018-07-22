@@ -128,7 +128,6 @@ public class ClientController implements ActionListener{
                 e1.printStackTrace();
             }
 
-            mainView.setProjectManager(serverCommunication.getProjectManager());
             mainView.refreshView();
         }
 
@@ -334,7 +333,6 @@ public class ClientController implements ActionListener{
     public void setProjectManager(ProjectManager projectManager){
 
         this.projectManager = projectManager;
-        mainView.setProjectManager(projectManager);
     }
 
     public ServerCommunication getServerCommunication() {
