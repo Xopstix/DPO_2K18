@@ -103,6 +103,14 @@ public class ServerCommunication extends Thread{
                     autentica(msg);
                     endConnection();
                 }
+                if (mode == 4) {
+                    projectManager.setMode(4);
+                    oos.writeObject(projectManager);
+                    this.projectManager = (ProjectManager) ois.readObject();
+                    msg = dis.readUTF();
+                    autentica(msg);
+                    endConnection();
+                }
 
             }
 

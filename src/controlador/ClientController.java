@@ -119,6 +119,18 @@ public class ClientController implements ActionListener{
             }
         }
 
+        if (e.getActionCommand().equals("PULLME")) {
+
+            ServerCommunication serverCommunication = new ServerCommunication(projectManager, this,4);
+            try {
+                serverCommunication.startConnection();
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+            mainView.refreshView();
+        }
+
         if (e.getActionCommand().equals("LOGOUT")){ //Si se quiere salir del programa
 
             projectManager.setYourProjects(mainView.getYourNewOrder(projectManager.getYourProjects()));

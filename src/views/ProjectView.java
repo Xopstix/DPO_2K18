@@ -27,6 +27,8 @@ public class ProjectView extends JFrame{
 
     private JButton jbProjects;
     private JButton jbUser;
+    private JButton jbPush;
+    private JButton jbPull;
     private ArrayList<JList<String>> stringsUser;
     private ArrayList<JList<String>> projectColumns;
     private ArrayList<JButton> rightButtons;
@@ -86,8 +88,6 @@ public class ProjectView extends JFrame{
 
         popupUser = new JPopupMenu();
 
-        System.out.println("creado item");
-
         menuItem1 = new JMenuItem("Home", new ImageIcon(((new ImageIcon("icons/home_icon.png"))
                 .getImage()).getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH)));
         menuItem1.setMnemonic(KeyEvent.VK_P);
@@ -146,7 +146,20 @@ public class ProjectView extends JFrame{
         }
 
         jbProjects = new JButton("Projects");
+        jbProjects.setMinimumSize(new Dimension(80, 30));
+        jbProjects.setMaximumSize(new Dimension(80, 30));
+
         jbUser = new JButton("User");
+        jbUser.setMinimumSize(new Dimension(80, 40));
+        jbUser.setMaximumSize(new Dimension(80, 40));
+
+        jbPush = new JButton("Push");
+        jbPush.setMinimumSize(new Dimension(80, 40));
+        jbPush.setMaximumSize(new Dimension(80, 40));
+
+        jbPull = new JButton("Pull");
+        jbPull.setMinimumSize(new Dimension(80, 40));
+        jbPull.setMaximumSize(new Dimension(80, 40));
 
         popup = new JPopupMenu();
 
@@ -343,7 +356,15 @@ public class ProjectView extends JFrame{
         JPanel jpButtons = new JPanel(new BorderLayout());
         jpButtons.setOpaque(false);
         jpButtons.add(jbProjects, BorderLayout.LINE_START);
-        jpButtons.add(jbUser, BorderLayout.LINE_END);
+
+        JPanel jpButtonsRight = new JPanel(new FlowLayout());
+        jpButtonsRight.setOpaque(false);
+
+        jpButtonsRight.add(jbPull);
+        jpButtonsRight.add(jbPush);
+        jpButtonsRight.add(jbUser);
+
+        jpButtons.add(jpButtonsRight, BorderLayout.LINE_END);
 
         boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
 
@@ -777,6 +798,9 @@ public class ProjectView extends JFrame{
 
         jbProjects.setActionCommand("PROJECTS");
         jbProjects.addActionListener(controllerClient);
+
+        jbPull.setActionCommand("PULLME");
+        jbPull.addActionListener(controllerClient);
 
         this.customMouseListener = customMouseListener;
 

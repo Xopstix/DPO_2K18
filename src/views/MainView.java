@@ -737,7 +737,6 @@ public class MainView extends JFrame {
         if (columna.equals("Your")){
 
             this.projectView = new ProjectView(projectManager.getYourProjects().get(fila), 1);
-            System.out.println("creado");
 
         }else{
 
