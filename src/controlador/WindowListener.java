@@ -12,6 +12,7 @@ public class WindowListener implements java.awt.event.WindowListener {
 
     private ServerCommunication s;
 
+
     public WindowListener(ServerCommunication s){
         this.s = s;
     }

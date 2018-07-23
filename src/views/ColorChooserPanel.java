@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by xaviamorcastillo on 18/5/18.
  */
-
+//Classe finalment no usada -- residual -- ja que s'ha implementat amb botons d'imatges
 public class ColorChooserPanel extends AbstractColorChooserPanel implements ActionListener{
 
     private MainView mainView;

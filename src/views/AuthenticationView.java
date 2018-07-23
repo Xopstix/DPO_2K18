@@ -4,7 +4,6 @@ import controlador.ClientController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -17,6 +16,7 @@ import java.util.regex.Pattern;
  * Esta clase se encarga de gestionar lo que tiene que ver con la views de autenticación
  * Created by Marc on 13/3/18.
  */
+//Vista inicial per fer login i register
 public class AuthenticationView extends JFrame{
 
     //Paneles

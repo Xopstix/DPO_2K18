@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * Created by xaviamorcastillo on 21/5/18.
+ * Encarregada de escoltar quina cela se clica en una llista de la vista principal
  */
 public class CustomListSelectionListener implements ListSelectionListener {
 

@@ -6,6 +6,8 @@ import java.awt.*;
 /**
  * Created by xaviamorcastillo on 22/7/18.
  */
+
+//Classe usada per pintar les celes de les llistes transparents o de colors segons l'etiqueta
 public class CustomListCellRenderer extends DefaultListCellRenderer {
 
         private ProjectView projectView;

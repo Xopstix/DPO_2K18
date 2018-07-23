@@ -6,6 +6,7 @@ import java.awt.*;
 /**
  * Created by xaviamorcastillo on 19/4/18.
  */
+//Classe per pintar transparent les celes de les llistes
 public class TransparentListCellRenderer extends DefaultListCellRenderer {
 
     @Override

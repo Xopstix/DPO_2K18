@@ -802,7 +802,7 @@ public class MainView extends JFrame {
         this.setVisible(false);
     }
 
-
+    //Afegeix una tasca nova de l'usuari
     public void addTask(String task, int column){
 
         int id = this.projectView.getProject().getIdProyecto();
@@ -841,6 +841,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Afegeix una columna nova de l'usuari
     public void addColumn(String columnName){
 
         int id = this.projectView.getProject().getIdProyecto();
@@ -879,6 +880,7 @@ public class MainView extends JFrame {
         }
     }
 
+    //Ordena la llista de projectes propis i shared
     public ArrayList<Project> getYourNewOrder(ArrayList<Project> projects){
 
         ArrayList<Project> aux = new ArrayList<>();
@@ -927,6 +929,7 @@ public class MainView extends JFrame {
         this.clientController = clientController;
     }
 
+    //Selecciona la tasca com a seleccionada
     public void setChecked(int selected) {
 
         java.util.Date fecha = new Date();
@@ -981,6 +984,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Canvia el nom d'una tasca
     public void changeName(String text) {
 
         if (this.projectView.getList() == 1){
@@ -1002,6 +1006,7 @@ public class MainView extends JFrame {
         refreshView();
     }
 
+    //Esborra una columna
     public void deleteColumn(int column) {
 
         if (this.projectView.getList() == 1){
@@ -1019,6 +1024,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Esborra una tasca
     public void deleteTask() {
 
         if (this.projectView.getList() == 1){
@@ -1038,6 +1044,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Tanca el projecte i mostra la vista de projectes principal
     public void closeProject(){
 
         this.projectView.dispatchEvent(new WindowEvent(projectView, WindowEvent.WINDOW_CLOSING));
@@ -1045,6 +1052,7 @@ public class MainView extends JFrame {
         this.setVisible(true);
     }
 
+    //Mou les columnes amb les fletxes
     public void moveRight(int column) {
 
         if (this.projectView.getList() == 1){
@@ -1138,6 +1146,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Assigna una etiqueta a una tasca
     public void putEtiqueta (int color) {
 
         if (this.projectView.getList() == 1) {
@@ -1159,6 +1168,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Canvia el nom d'una etiqueta d'un projecte
     public void fixEtiqueta (int etiqueta, String nom){
 
         if (this.projectView.getList() == 1) {
@@ -1175,22 +1185,26 @@ public class MainView extends JFrame {
         refreshView();
     }
 
+    //Mostra el popup per canviar el nom d'una columna
     public void titlePopup(int i) {
 
         projectView.titlePopup(i);
     }
 
+    //Inicia el popup de user
     public void initPopupUser(){
 
         projectView.initPopupUser();
     }
 
+    //Inicia el popup per canviar etiquetes
     public void initPopupColors(){
 
         projectView.initPopupColors();
         projectView.initPopupColors();
     }
 
+    //Canvia el nom d'una columna
     public void newColumnTitle(String newName) {
 
         if (this.projectView.getList() == 1){
@@ -1208,6 +1222,7 @@ public class MainView extends JFrame {
 
     }
 
+    //Tanca popups quan s'ha realitzat depen que
     public void closePopupTitle() {
 
         this.projectView.closePopupTitle();
@@ -1218,6 +1233,7 @@ public class MainView extends JFrame {
         this.projectView.closePopupTask();
     }
 
+    //Esborra un projecte a petició
     public void deleteProject(){
 
         if (this.projectView.getList() == 1){
@@ -1231,7 +1247,7 @@ public class MainView extends JFrame {
         this.revalidate();
     }
 
-
+    //Actualitza a un nou projectManager
     public void useNewPM(ProjectManager projectManager) {
 
         System.out.println("new");
@@ -1241,6 +1257,7 @@ public class MainView extends JFrame {
         refreshView();
     }
 
+    //Actulitza una descripcio d'un atasca
     public void syncDescription(String description){
 
         if (this.projectView.getList() == 1) {
@@ -1264,6 +1281,7 @@ public class MainView extends JFrame {
         return this.projectView;
     }
 
+    //Troba el projecte en qüestio a la llsiat dessignada
     public int findByIdYours(Project project){
 
         for (int i = 0; i < this.projectManager.getYourProjects().size(); i++){
@@ -1275,16 +1293,6 @@ public class MainView extends JFrame {
         }
 
         return 0;
-    }
-
-    public void initFileChooser(){
-
-        File newBg = projectView.initFileChooser();
-        newBg.renameTo(new File("images/" + projectView.getList() +
-                projectView.getProject().getIdProyecto() + "_bg.jpg"));
-        newBg.delete();
-
-        refreshView();
     }
 
     public int findByIdShared(Project project){
@@ -1300,6 +1308,18 @@ public class MainView extends JFrame {
         return 0;
     }
 
+    //Inicia el file chooser per a escollir background
+    public void initFileChooser(){
+
+        File newBg = projectView.initFileChooser();
+        newBg.renameTo(new File("images/" + projectView.getList() +
+                projectView.getProject().getIdProyecto() + "_bg.jpg"));
+        newBg.delete();
+
+        refreshView();
+    }
+
+    //Refresca la mainview quan s'ha realitzat qualsevol canvi en el projectmanager
     public void refreshView(){
 
         projectView.getContentPane().removeAll();
@@ -1316,6 +1336,7 @@ public class MainView extends JFrame {
         this.setVisible(false);
     }
 
+    //registre del controlador i assignacio de actioncommands
     public void registerController(ClientController controllerClient, PopupController controllerPopUp,
                                    CustomMouseListenerMain customMouseListenerMain) {
 

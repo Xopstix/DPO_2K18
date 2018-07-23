@@ -70,6 +70,7 @@ public class ProjectView extends JFrame{
     private Project project;
     private int type;
 
+    //Constructor d'una vista de projecte
     public ProjectView(Project project, int type){
 
         this.project = project;
@@ -82,6 +83,7 @@ public class ProjectView extends JFrame{
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
+    //Inicia els JComponents de la vista per no poder registrar controllers i busos de dades auxiliars per crear-la
     public void initComponentsProject() {
 
         popupUser = new JPopupMenu();
@@ -343,6 +345,7 @@ public class ProjectView extends JFrame{
 
     }
 
+    //Disposa els JComponents sobre la vista
     public void initVistaProject() {
 
         this.setResizable(false);
@@ -609,6 +612,7 @@ public class ProjectView extends JFrame{
 
     }
 
+    //possibilita el drag and drop de les llistes assignant cstomtransferhandlers
     public void initDragDropProject() {
 
         for (int i = 0; i < dataUser.size(); i++) {
@@ -628,6 +632,7 @@ public class ProjectView extends JFrame{
         }
     }
 
+    //Show del popup quan se selecciona una tasca
     public void initPopupTasca(int columna, int fila){
 
         popup = new JPopupMenu();
@@ -671,12 +676,14 @@ public class ProjectView extends JFrame{
                 (int) projectColumns.get(columna).getLocationOnScreen().getY() + fila * 35 - 100);
     }
 
+    //Tanca el popup anterior quan s'ha realitat alguna accio
     public void closePopupTask(){
 
         System.out.println("yes");
         this.popup.setVisible(false);
     }
 
+    //Mostra el popup per canviar de titol d'alguna columna
     public void titlePopup(int column){
 
         popupTitle = new JPopupMenu();
@@ -697,6 +704,7 @@ public class ProjectView extends JFrame{
 
     }
 
+    //Inicia el popup d'opcions a la barra superior
     public void initPopupUser(){
 
         popupUser = new JPopupMenu();
@@ -710,6 +718,7 @@ public class ProjectView extends JFrame{
         popupUser.show(jbUser, -95, jbUser.getBounds().y + jbUser.getBounds().height);
     }
 
+    //Inicia el selector d'arxius per selccionar el fons
     public File initFileChooser(){
 
         JFileChooser jfChooser = new JFileChooser();
@@ -725,11 +734,13 @@ public class ProjectView extends JFrame{
         return null;
     }
 
+    //Tanca el popup
     public void closePopupTitle() {
 
         this.popupTitle.setVisible(false);
     }
 
+    //Popup per seleccionar etiquetes
     public void initPopupColors(){
 
         popup = new JPopupMenu();
@@ -741,6 +752,7 @@ public class ProjectView extends JFrame{
         popup.show(this, 960, 95);
     }
 
+    //Afegeix tasca a una columna
     public void addTask(String task, int column) {
 
         this.jbUser.grabFocus();
@@ -753,6 +765,7 @@ public class ProjectView extends JFrame{
         revalidate();
     }
 
+    //Selecciona una etiqueta per una tasca
     public void putEtiqueta (Color color){
 
         if (color == Color.green){
@@ -832,6 +845,7 @@ public class ProjectView extends JFrame{
         return dataUser;
     }
 
+    //Controladors i assignacio de action commands
     public void registerController(ClientController controllerClient, CustomMouseListenerProject customMouseListener) {
 
         this.clientController = controllerClient;

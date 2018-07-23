@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 
 /**
  * Created by xaviamorcastillo on 22/5/18.
+ * Escolta quina cela se clica de les llistes de la vista project
  */
 public class CustomMouseListenerProject implements MouseListener {
 
